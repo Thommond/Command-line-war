@@ -1,40 +1,68 @@
+# To make all the stats
+class Stat(object):
+    def __init__(self, name, amount):
+        self.name = name
+        self.amount = amount
+
+# for our player
 
 
-class Player_stats(object):
+class PlayerStat(Stat):
+    def __init__(self, name, points)
+    self.name = name
+    self.points = points
 
-    player_stats = {
-        intelligence: 10,
-        strength: 0,
-        luck:  0,
-        charisma: 0,  # player can set personal stat's that will assist him with the game
-        swiftness: 0,
-        health: 100,
-        gas_mask = 1,
-        rifle = 1,
-        rations = 10
-    }
-
-    def __init__(self):
-        print('somthing')
-
-    def check(self, player_stat, stat_name):
-        self.player_stat = player_stat
-        if player_stat = 'All':
-            player_stats[intelligence] = 100
-            player_stats[strength] = 100
-            player_stats[swiftness] = 100
-            player_stats[charisma] = 100
-            player_stats[luck] = 100
-            print('Your 100% bud!!!')
-
-        elif:
-            print(f'Alright {player_stat} will be added to {stat_name}')
-
-        else:
-            print("""The entered feild does not meet requirments. Your
-            addition to your stat must be 5 or 10 nothing else.""")
+# for player health
 
 
-class MachineGunnerBoss(object):
-    def __init__(self):
-        print('We need his health and death statement which will notify the completion of the level')
+class PlayerHealth(Stat):
+    def __init__(self, name, health):
+        self.name = name
+        self.health = health
+
+# for items like a rifle which the player uses and not is
+
+
+class Item(stat):
+    def __init__(self, name, amount):
+        self.name = name
+        self.amount = amount
+
+    def Intialcheck(self, amount):
+        self.name = name
+        self.amount = amount
+        # need to prevent people from typing in any value they want for their stats
+
+
+# creating an instance
+# the below will impact the choices of the player depending on their stats.
+# they can recieve warnings, get killed, be prevented from a choice and more
+# depending on their stats
+gas_mask = Item('gas mask', True)
+
+gun = Item('rifle', True)
+
+rations = Item('rations', 10)
+
+health = PlayerHealth('health', 100)
+
+swiftness = PlayerStat('swiftness', 0)
+
+luck = PlayerStat('luck', 0)
+
+strength = PlayerStat('Strength', 0)
+
+intelligence = PlayerStat('Intelligence', 0)
+
+charisma = PlayerStat('Charisma', 0)
+
+rank = PlayerStat('Pvt', 0)
+
+# for future enemies with their own stats
+
+
+class Enemies(object):
+    def __init__(self, name, damage, health)
+    self.name = name
+    self.damage = damage
+    self.health = health

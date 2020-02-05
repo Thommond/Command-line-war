@@ -1,5 +1,3 @@
-from sys import exit
-from sys import dedent
 
 
 class GameEngine():
@@ -25,16 +23,33 @@ class Mapper(object):
         "welcome base camp": WelcomeBaseCamp(),
         "Minor training": MinorTraining(),
         "Path to war": PathtoWar(),
-        "completed": Completed()
-        # start level two here!
-    }
+        "ship": Ship(),
+        "completed level one": CompletedOne(),  # End of level one Base camp
 
-    deaths = {
-        "Tank": Tank(),
-        "Rifle": Rifle(),
-        "Disease": Disease(),
-        "Starvation": Starvation(),
-        "Drown": Drown()
+        "arrival at normandy": NormandyBeach(),  # start of level two
+        "hell on beach": NormandyBeachHell(),
+        "quick and easy": NormandySafePlace(),
+        "damn machine gunner": DamnMachineGunner(),
+        "ambush": AmbushFoxHole(),  # two branch off this one
+        "captured": Captured(),
+        "torcher": Torcher(),  # three  branch off this one
+        "a friend": Friend(),  # starts first branch
+        "rescued": Rescued(),
+        "muddy": Muddy(),  # end of branch
+        "clever solder": Clever(),  # start of branch two
+        "escaped and free": EscapedFree(),
+        "enemy lines": EnemyLines(),
+        "evation": Evation(),  # this one is the other
+        "stay quiet": StayQuiet(),
+        "Attic": Attic(),
+        "rats": Rats(),
+        "the road": Road()
+        "to paris": ToParis(),  # end of level two
+
+
+        "completed": Completed(),  # completed the game
+        "death": Death()  # dead mavn
+        # start level two here!
     }
 
     def __init__(self, start_room):
@@ -43,9 +58,6 @@ class Mapper(object):
     def next_room(self, room_name):
         val = Mapper.rooms.get(room_name)
         return val
-
-    def death_room(self, death_name):
-        val = Mapper.death.get(death_name)
 
     def first_room(self):
         return self.next_room(self.start_room)
