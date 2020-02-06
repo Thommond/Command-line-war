@@ -12,7 +12,7 @@ class PlayerStat(Stat):
         self.name = name
         self.points = points
 
-# for player health
+    # for player health
 
 
 class PlayerHealth(Stat):

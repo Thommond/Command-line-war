@@ -11,13 +11,15 @@ class Room(object):
 
 
 class Death(Room):
-    print("You died a soliders death that is all that matters.")
-    exit(1)
+    def enter(self):
+        print("You died a soliders death that is all that matters.")
+        exit(1)
 
 
-class Dischared(Room):
-    print("You have been discharged you are pathetic!")
-    exit(1)
+class Discharged(Room):
+    def enter(self):
+        print("You have been discharged you are pathetic!")
+        exit(1)
 
 
 class LevelOneIntro(Room):
@@ -41,7 +43,7 @@ class LevelOneIntro(Room):
             Europe like a cockroch colony. You will be assigned
             to Unit 179. """))
 
-            print('Any thoughs before we move on?')
+            print(dedent('Any thoughts before we move on?'))
 
             thoughts = input('# ')
 
@@ -109,6 +111,7 @@ class SgtsOffice(Room):
         if items.luck.points + items.strength.points + items.intelligence.points + items.swiftness.points + items.charisma.points > 30:
             print(dedent("""You sly dog!!! I see you tried to enter more than a total
             of 30 points! Try again!"""))
+            return "sgt's office"
 
         else:
 
@@ -192,7 +195,7 @@ class MinorTraining(Room):
 
         """))
 
-        if items.swiftness.point >= 20:
+        if items.swiftness.points >= 20:
             print("""Oh, wow you were one of the first done. I think you
             would be a great rifle men.
 
@@ -210,11 +213,10 @@ class MinorTraining(Room):
 
         else:
 
-            if items.swiftness.points >= 15:
-                print(dedent("""Well at least you were average. So here is
+            print(dedent("""Well at least you were average. So here is
                 your neccessities 10 rations, and 1 gernade"""))
 
-                print(dedent("""So now that is done an over with time to move on.
+            print(dedent("""So now that is done an over with time to move on.
                 to strength training.
 
                 What type of strength training would you like to do?
@@ -225,23 +227,23 @@ class MinorTraining(Room):
 
                 C.Avoid strength training.
                 """
-                             ))
+                         ))
 
-                choice = input("# ")
+            choice = input("# ")
 
-                if choice == 'A' and items.strength.points >= 15:
-                    print(dedent("""
+            if choice == 'A' and items.strength.points >= 15:
+                print(dedent("""
                     "Wow! You are quite the pull up master 40 in one
                     go. I think you excel in this field buddy. Your my
                     new favorite. Haaaaa" said the sgt.
 
                     """))
 
-                    items.charisma.points += 5
+                items.charisma.points += 5
 
-                    items.luck.points += 5
+                items.luck.points += 5
 
-                    print(dedent("""Well you are ahead of the game so now lets get
+                print(dedent("""Well you are ahead of the game so now lets get
                     into some wits. Germans will test you to the limits even the
                     those who are not solders.
 
@@ -256,13 +258,13 @@ class MinorTraining(Room):
 
                     D. Answer: Halte Clappa! """))
 
-                    choice = input("# ")
+                choice = input("# ")
 
-                    if choice == "NINE!":
-                        items.charisma.points += 5
-                        items.intelligence.points += 5
+                if choice == "NINE!":
+                    items.charisma.points += 5
+                    items.intelligence.points += 5
 
-                        print(dedent("""Smart man you must know a little german.
+                    print(dedent("""Smart man you must know a little german.
                         I asked if you hated water. Now germans will be a bit
                         less forgiving if some one was to answer the wrong answer.
 
@@ -280,38 +282,192 @@ class MinorTraining(Room):
 
                         D. Nissan Ultima """))
 
-                        choice = input("# ")
+                    choice = input("# ")
 
-                        if choice == 'A':
-                            print(dedent("""Great vehicle but not a best seller, good guess though. It's
+                    if choice == 'A':
+                        print(dedent("""Great vehicle but not a best seller, good guess though. It's
                             okay this is not actually part of you evation."""))
 
-                            return 'Path_to_war'
+                        return 'Path_to_war'
 
-                        elif choice == 'B':
-                            print(("""You pathtic baffoon! Hummer stoped all manufacuring since 2009.
+                    elif choice == 'B':
+                        print(("""You pathtic baffoon! Hummer stoped all manufacuring since 2009.
                                 Just because your answer you have been discharged. """))
 
-                            return 'discharged'
+                        return 'discharged'
 
-                        elif choice == 'C':
-                            print(dedent(
-                                "Well done! You know your triva. It is time for deployment."))
+                    elif choice == 'C':
+                        print(dedent(
+                            "Well done! You know your triva. It is time for deployment."))
 
-                            return 'Path_to_war'
+                        return 'Path_to_war'
 
-                        elif choice == 'D':
-                            print(dedent("""Well Nissan has never had a good best seller. It was a
+                    elif choice == 'D':
+                        print(dedent("""Well Nissan has never had a good best seller. It was a
                             great guess but no not it. At least you tried. You can say your
                             sgt had a sence of humour unlike most of my peers."""))
 
-                            return 'Path_to_war'
+                        return 'Path_to_war'
 
-                        else:
-                            print(dedent("""You are not as bright as I though you were. There is only
+                    else:
+                        print(dedent("""You are not as bright as I though you were. There is only
                         four answers a, b, c, and d. So choose one of them solider!"""))
 
-                            return 'Minor_training'
+                        return 'Minor_training'
+
+            elif choice == 'B':
+                print(dedent("""Nice, you are my new favorite."""))
+
+                items.charisma.points += 5
+                items.strength.points += 10
+                print(dedent("""Well you are ahead of the game so now lets get
+                    into some wits. Germans will test you to the limits even the
+                    those who are not solders.
+
+                    If a german asks you "Du bist ein wasser hatean?" what do
+                    you say?
+
+                    A. Stay quiet
+
+                    B. Answer: NINE!
+
+                    C. Answer: Ja.
+
+                    D. Answer: Halte Clappa! """))
+
+                choice = input("# ")
+
+                if choice == "NINE!":
+                    items.charisma.points += 5
+                    items.intelligence.points += 5
+
+                    print(dedent("""Smart man you must know a little german.
+                        I asked if you hated water. Now germans will be a bit
+                        less forgiving if some one was to answer the wrong answer.
+
+                        Now, enough of this your deployment date is soon so I need you
+                        to make one last choice. Just for the fun of it.
+
+                        What is the most purchased car of 2019?
+
+
+                        A. Jeep Wrangler
+
+                        B. Hummer odessey
+
+                        C. Toyota Camery
+
+                        D. Nissan Ultima """))
+
+                    choice = input("# ")
+
+                    if choice == 'A':
+                        print(dedent("""Great vehicle but not a best seller, good guess though. It's
+                            okay this is not actually part of you evation."""))
+
+                        return 'Path_to_war'
+
+                    elif choice == 'B':
+                        print(("""You pathtic baffoon! Hummer stoped all manufacuring since 2009.
+                                Just because your answer you have been discharged. """))
+
+                        return 'discharged'
+
+                    elif choice == 'C':
+                        print(dedent(
+                            "Well done! You know your triva. It is time for deployment."))
+
+                        return 'Path_to_war'
+
+                    elif choice == 'D':
+                        print(dedent("""Well Nissan has never had a good best seller. It was a
+                            great guess but no not it. At least you tried. You can say your
+                            sgt had a sence of humour unlike most of my peers."""))
+
+                        return 'Path_to_war'
+
+                    else:
+                        print(dedent("""You are not as bright as I though you were. There is only
+                        four answers a, b, c, and d. So choose one of them solider!"""))
+
+                        return 'Minor_training'
+
+            elif choice == 'C':
+                print(dedent("""Well, Your lazy as hell I can't have a
+                solider like that."""))
+                return 'discharged'
+
+                print(dedent("""Well you are ahead of the game so now lets get
+                    into some wits. Germans will test you to the limits even the
+                    those who are not solders.
+
+                    If a german asks you "Du bist ein wasser hatean?" what do
+                    you say?
+
+                    A. Stay quiet
+
+                    B. Answer: NINE!
+
+                    C. Answer: Ja.
+
+                    D. Answer: Halte Clappa! """))
+
+                choice = input("# ")
+
+                if choice == "NINE!":
+                    items.charisma.points += 5
+                    items.intelligence.points += 5
+
+                    print(dedent("""Smart man you must know a little german.
+                        I asked if you hated water. Now germans will be a bit
+                        less forgiving if some one was to answer the wrong answer.
+
+                        Now, enough of this your deployment date is soon so I need you
+                        to make one last choice. Just for the fun of it.
+
+                        What is the most purchased car of 2019?
+
+
+                        A. Jeep Wrangler
+
+                        B. Hummer odessey
+
+                        C. Toyota Camery
+
+                        D. Nissan Ultima """))
+
+                    choice = input("# ")
+
+                    if choice == 'A':
+                        print(dedent("""Great vehicle but not a best seller, good guess though. It's
+                            okay this is not actually part of you evation."""))
+
+                        return 'Path_to_war'
+
+                    elif choice == 'B':
+                        print(("""You pathtic baffoon! Hummer stoped all manufacuring since 2009.
+                                Just because your answer you have been discharged. """))
+
+                        return 'discharged'
+
+                    elif choice == 'C':
+                        print(dedent(
+                            "Well done! You know your triva. It is time for deployment."))
+
+                        return 'Path_to_war'
+
+                    elif choice == 'D':
+                        print(dedent("""Well Nissan has never had a good best seller. It was a
+                            great guess but no not it. At least you tried. You can say your
+                            sgt had a sence of humour unlike most of my peers."""))
+
+                        return 'Path_to_war'
+
+                    else:
+                        print(dedent("""You are not as bright as I though you were. There is only
+                        four answers a, b, c, and d. So choose one of them solider!"""))
+
+                        return 'Minor_training'
 
 
 class PathToWar(Room):
@@ -556,33 +712,6 @@ class Atomic_Jepoardy(Room):  # bonus round
 
     """
 
-    Board_Questions = {
-        Imp_2: """Who was the priminister of britian in 1942?""",
-        Imp_4: """He was a vegitarian and a german.""",
-        Imp_6: """The most ruthless ww2 general and came up with the pearl harbor attack.""",
-        Countries_2: "This country surrendered to Nazi germany in 40 days.",
-        Countries_4: "The country to turn the tied of the war into allied favor.",
-        Countries_6: "This country only was in the war to get even with russia.",
-        Dates_2: """What date did the Nazi's surrender?""",
-        Dates_4: """What date did the american's enter Normandy?""",
-        Dates_6: """What date did ww2 start?"""
-    }
-
-    Number_correct = 0
-
-    Board_Answers = {
-        Imp_2: """Who is Winston Churchill""",
-        Imp_2: """Who is Adolf Hitler""",
-        Imp_3: """Who is Isoroku Yamamoto""",
-        Countries_2: "What is France",
-        Countries_4: "What is Russia",
-        Countries_6: "What is Finland",
-        Dates_2: "What is October 10th 1945",
-        Dates_4: "What is June 6th 1944",
-        Dates_6: "What is September 1st 1939"
-
-    }
-
     def enter(self):
         print(dedent(
             """This will take up a lot of space make sure you have a full size screen! Okay?"""))
@@ -594,6 +723,9 @@ class Atomic_Jepoardy(Room):  # bonus round
 
             print(dedent(Board))
 
+            print("Sorry not completed yet still under construction!")
+            exit(1)
+
 
 class Map(object):
 
@@ -603,7 +735,7 @@ class Map(object):
         "welcome_base_camp": WelcomeBaseCamp(),
         "Minor_training": MinorTraining(),
         "Path_to_war": PathToWar(),
-        "ship": Ship(),
+        "Ship": Ship(),
         "completed_level_one": CompletedOne(),  # End of level one Base camp
 
         "arrival at normandy": NormandyBeach(),  # start of level two
@@ -628,10 +760,10 @@ class Map(object):
 
 
         "completed": Completed(),   # completed the game
-        "Atomic_Jepoardy": Atomic(),  # bonus round
+        "Atomic_Jepoardy": Atomic_Jepoardy(),  # bonus round
 
         "Death": Death(),
-        "Discharged": Discharged()
+        "discharged": Discharged()
     }
 
     def __init__(self, start_room):
