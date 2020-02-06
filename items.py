@@ -8,9 +8,9 @@ class Stat(object):
 
 
 class PlayerStat(Stat):
-    def __init__(self, name, points)
-    self.name = name
-    self.points = points
+    def __init__(self, name, points):
+        self.name = name
+        self.points = points
 
 # for player health
 
@@ -23,7 +23,7 @@ class PlayerHealth(Stat):
 # for items like a rifle which the player uses and not is
 
 
-class Item(stat):
+class Item(Stat):
     def __init__(self, name, amount):
         self.name = name
         self.amount = amount
@@ -62,7 +62,7 @@ rank = PlayerStat('Pvt', 0)
 
 
 class Enemies(object):
-    def __init__(self, name, damage, health)
-    self.name = name
-    self.damage = damage
-    self.health = health
+    def __init__(self, name, damage, health):
+        self.name = name
+        self.damage = damage
+        self.health = health
