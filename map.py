@@ -1,28 +1,29 @@
-from sys import exit
+from sys import exit  # importing neccessities
 from textwrap import dedent
+import map
 import items
 
 
-class Room(object):
+class Room(object):  # a parent of all rooms
 
     def enter(self):
         print("This is the start of creating many rooms")
         exit(1)
 
 
-class Death(Room):
+class Death(Room):  # child of room go hear when you are killed in the game
     def enter(self):
         print("You died a soliders death that is all that matters.")
         exit(1)
 
 
-class Discharged(Room):
+class Discharged(Room):  # child of room go hear when you have been dismissed in the game
     def enter(self):
         print("You have been discharged you are pathetic!")
         exit(1)
 
 
-class LevelOneIntro(Room):
+class LevelOneIntro(Room):  # child of room first room of the entire game
     def enter(self):
         print(dedent("""
         Welcome! Solder what is your name?
@@ -56,7 +57,7 @@ class LevelOneIntro(Room):
                 return 'level_one_intro'
 
 
-class SgtsOffice(Room):
+class SgtsOffice(Room):  # selecting the stats of the game in this room
     def enter(self):
         print(dedent("""Hey, you come on in! You have
         been drafted and their is a few things we have to
@@ -90,7 +91,7 @@ class SgtsOffice(Room):
         print("""So Strength is first. Please enter the value. It has to be more than five.
         an equal to thirty in the end""")
 
-        items.strength.points += int(input("# "))
+        items.strength.points += int(input("# "))  # repeated here
 
         print("Next is Swiftness. Rules apply always.")
 
@@ -135,7 +136,7 @@ class SgtsOffice(Room):
                 return 'welcome_base_camp'
 
             else:
-                print('What? you say yes if yes and no to try again.')
+                print(dedent('What? you say yes if yes and no to try again.'))
                 return "sgt's_office"
 
 
@@ -157,17 +158,17 @@ class WelcomeBaseCamp(Room):
 
         if choice == 'A':
             gun = items.Item('rifle', True)
-            print("""Okay solder 8 weeks will be over in no time. You will
-            have plenty of friends and plenty of skills when we are done.""")
+            print(dedent("""Okay solder 8 weeks will be over in no time. You will
+            have plenty of friends and plenty of skills when we are done."""))
 
-            return 'Minor_training'
+            return 'minor_training'
 
         elif choice == 'B':
             gun = items.Item('sniper', True)
             print(dedent("""Oh, we are kind of short on snipers so looks like your getting shipped
             in a week instead."""))
 
-            return 'Path_to_war'
+            return 'path_to_war'
 
         elif choice == 'C':
             gun = items.Item('machine gun', True)
@@ -176,7 +177,7 @@ class WelcomeBaseCamp(Room):
 
             items.luck.points += 5
 
-            return 'Minor_training'
+            return 'minor_training'
 
         else:
             return 'welcome_base_camp'
@@ -196,11 +197,11 @@ class MinorTraining(Room):
         """))
 
         if items.swiftness.points >= 20:
-            print("""Oh, wow you were one of the first done. I think you
+            print(dedent("""Oh, wow you were one of the first done. I think you
             would be a great rifle men.
 
             You may last more than a week boy, I wish you luck when is your
-            deployment date?""")
+            deployment date?"""))
 
             choice = input("# ")
 
@@ -288,10 +289,10 @@ class MinorTraining(Room):
                         print(dedent("""Great vehicle but not a best seller, good guess though. It's
                             okay this is not actually part of you evation."""))
 
-                        return 'Path_to_war'
+                        return 'path_to_war'
 
                     elif choice == 'B':
-                        print(("""You pathtic baffoon! Hummer stoped all manufacuring since 2009.
+                        print(dedent("""You pathtic baffoon! Hummer stoped all manufacuring since 2009.
                                 Just because your answer you have been discharged. """))
 
                         return 'discharged'
@@ -300,20 +301,20 @@ class MinorTraining(Room):
                         print(dedent(
                             "Well done! You know your triva. It is time for deployment."))
 
-                        return 'Path_to_war'
+                        return 'path_to_war'
 
                     elif choice == 'D':
                         print(dedent("""Well Nissan has never had a good best seller. It was a
                             great guess but no not it. At least you tried. You can say your
                             sgt had a sence of humour unlike most of my peers."""))
 
-                        return 'Path_to_war'
+                        return 'path_to_war'
 
                     else:
                         print(dedent("""You are not as bright as I though you were. There is only
                         four answers a, b, c, and d. So choose one of them solider!"""))
 
-                        return 'Minor_training'
+                        return 'minor_training'
 
             elif choice == 'B':
                 print(dedent("""Nice, you are my new favorite."""))
@@ -365,10 +366,10 @@ class MinorTraining(Room):
                         print(dedent("""Great vehicle but not a best seller, good guess though. It's
                             okay this is not actually part of you evation."""))
 
-                        return 'Path_to_war'
+                        return 'path_to_war'
 
                     elif choice == 'B':
-                        print(("""You pathtic baffoon! Hummer stoped all manufacuring since 2009.
+                        print(dedent("""You pathtic baffoon! Hummer stoped all manufacuring since 2009.
                                 Just because your answer you have been discharged. """))
 
                         return 'discharged'
@@ -377,20 +378,20 @@ class MinorTraining(Room):
                         print(dedent(
                             "Well done! You know your triva. It is time for deployment."))
 
-                        return 'Path_to_war'
+                        return 'path_to_war'
 
                     elif choice == 'D':
                         print(dedent("""Well Nissan has never had a good best seller. It was a
                             great guess but no not it. At least you tried. You can say your
                             sgt had a sence of humour unlike most of my peers."""))
 
-                        return 'Path_to_war'
+                        return 'path_to_war'
 
                     else:
                         print(dedent("""You are not as bright as I though you were. There is only
                         four answers a, b, c, and d. So choose one of them solider!"""))
 
-                        return 'Minor_training'
+                        return 'minor_training'
 
             elif choice == 'C':
                 print(dedent("""Well, Your lazy as hell I can't have a
@@ -442,7 +443,7 @@ class MinorTraining(Room):
                         print(dedent("""Great vehicle but not a best seller, good guess though. It's
                             okay this is not actually part of you evation."""))
 
-                        return 'Path_to_war'
+                        return 'path_to_war'
 
                     elif choice == 'B':
                         print(("""You pathtic baffoon! Hummer stoped all manufacuring since 2009.
@@ -454,23 +455,26 @@ class MinorTraining(Room):
                         print(dedent(
                             "Well done! You know your triva. It is time for deployment."))
 
-                        return 'Path_to_war'
+                        return 'path_to_war'
 
                     elif choice == 'D':
                         print(dedent("""Well Nissan has never had a good best seller. It was a
                             great guess but no not it. At least you tried. You can say your
                             sgt had a sence of humour unlike most of my peers."""))
 
-                        return 'Path_to_war'
+                        return 'path_to_war'
 
                     else:
                         print(dedent("""You are not as bright as I though you were. There is only
                         four answers a, b, c, and d. So choose one of them solider!"""))
 
-                        return 'Minor_training'
+                        return 'minor_training'
+
+            else:
+                return 'minor_training'
 
 
-class PathToWar(Room):
+class WarPath(Room):
     def enter(self):
         print(dedent("""Okay, Your deployment date is here!
 
@@ -493,36 +497,36 @@ class PathToWar(Room):
             print(dedent("""Brave and strong I like you my friend
             however, I just saw we are full with the first wave we will put you
             in the second"""))
-            return 'Ship'
+            return 'ship'
 
         elif choice == 'B':
             print(dedent("""Good choice afterall our first
             wave is filled to the brim"""))
             items.intelligence.points += 5
-            return 'Ship'
+            return 'ship'
 
         elif choice == 'C':
             print("""Looks like we have ourselves a coward
             it is second deployment for you!""")
             items.charisma.points -= 5
-            return 'Ship'
+            return 'ship'
 
 
 class Ship(Room):
     def enter(self):
-        print("""You can see the beaches, the day is lovely clear and bright.
+        print(dedent("""You can see the beaches, the day is lovely clear and bright.
         However you start to hear the gun fire the screams in the distance. Your
         legs start to shake uncontrolably, you don't know what to do. You look at your
         commanding officer he signals the ship captian for all engines ahead. You hear
         the sgt scream "Alright boy's this is make or break!!". The boat is almost yards
         from the beach now the door opens...
-        """)
-        return 'Completed'
+        """))
+        return 'completed'
 
 
 class CompletedOne(Room):
     def enter(self):
-        print("""Congrats You completed your first level!
+        print(dedent("""Congrats You completed your first level!
         So in celebration you get to add 10 more points to your
         total count of stats! So what will it be?
 
@@ -533,33 +537,33 @@ class CompletedOne(Room):
         Remeber you only get to choose two!
 
         Make sure to answer like Ex:  A and B
-        """)
+        """))
 
         print(dedent("""So Strength is first. Please enter the value. It has to be more than five.
         an equal to ten in addition to your stats at the end"""))
 
-        strength_add = int(input("# "))
+        strength_add = int(input("# "))  # repeated the repeat
 
         items.strength.points += strength_add
-        print('Next is Swiftness. Rules apply always.')
+        print(dedent('Next is Swiftness. Rules apply always.'))
 
         swiftness_add = int(input("# "))
 
         items.swiftness.points += swiftness_add
 
-        print("Now is Charisma.")
+        print(dedent("Now is Charisma."))
 
         charisma_add = int(input("# "))
 
         items.charisma.points += charisma_add
 
-        print("Time for intelligence.")
+        print(dedent("Time for intelligence."))
 
         intelligence_add = int(input("# "))
 
         items.intelligence.points += intelligence_add
 
-        print('Last but not least it is time for Luck.')
+        print(dedent('Last but not least it is time for Luck.'))
 
         luck_add == int(input("# "))
 
@@ -570,20 +574,20 @@ class CompletedOne(Room):
             you greedy bastard!"""))
 
         else:
-            print("Anything else before we move on?")
+            print(dedent("Anything else before we move on?"))
 
-            answer == input("#")
+            answer = input("# ")
 
             if answer == 'All':
-                print("Oh, your to cool.")
-                return 'Completed'
+                print(dedent("Oh, your to cool."))
+                return 'completed'
 
             else:
                 print(dedent("""Nope not a combo kid try again!"""))
-                return 'CompletedOne'
+                return 'completed_level_one'
 
 
-class NormandyBeach(Room):
+class NormandyBeach(Room):  # these below are empty currently and have no function
     def enter(self):
         pass
 
@@ -683,17 +687,17 @@ class ToParis(Room):
         pass
 
 
-class Completed(Room):  # end game except for bonus rounnd
+class Completed(Room):  # end game except for bonus round
     def enter(self):
-        print("Well you beat the game! Thank great!")
+        print(dedent("Well you beat the game! Thats great!"))
 
-        print("Any last words before we end?")
+        print(dedent("Any last words before we end?"))
 
         choice = input("# ")
 
         if choice == 'All':  # or if all stats are 100
             print("You get to go to a bonus round!")
-            return 'Atomic_Jepoardy'
+            return 'atomic_jepoardy'
 
         else:
             print("""Well at least you finished the game.
@@ -701,7 +705,7 @@ class Completed(Room):  # end game except for bonus rounnd
             exit(1)
 
 
-class Atomic_Jepoardy(Room):  # bonus round
+class Jepoardy(Room):  # bonus round
 
     Board = """
 
@@ -719,23 +723,26 @@ class Atomic_Jepoardy(Room):  # bonus round
         choice == input("# ")
 
         if choice == 'Okay':
+            print(dedent("Sorry not completed yet still under construction!"))
+            exit(1)
             print(dedent("Let us begin!"))
 
             print(dedent(Board))
 
-            print("Sorry not completed yet still under construction!")
-            exit(1)
+        else:
+            print(dedent("What? Just say Okay !"))
+            return 'atomic_jepoardy'
 
 
-class Map(object):
+class Map(object):  # all rooms in the game and communicates with the engine for the game functionality
 
     rooms = {
         "level_one_intro": LevelOneIntro(),  # start of level one
         "sgt's_office": SgtsOffice(),
         "welcome_base_camp": WelcomeBaseCamp(),
-        "Minor_training": MinorTraining(),
-        "Path_to_war": PathToWar(),
-        "Ship": Ship(),
+        "minor_training": MinorTraining(),
+        "path_to_war": WarPath(),
+        "ship": Ship(),
         "completed_level_one": CompletedOne(),  # End of level one Base camp
 
         "arrival at normandy": NormandyBeach(),  # start of level two
@@ -753,16 +760,16 @@ class Map(object):
         "enemy_lines": EnemyLines(),
         "evation": Evation(),  # this one is the other
         "stay_quiet": StayQuiet(),
-        "Attic": Attic(),
+        "attic": Attic(),
         "rats": Rats(),
         "the_road": Road(),
         "to_paris": ToParis(),  # end of level two
 
 
         "completed": Completed(),   # completed the game
-        "Atomic_Jepoardy": Atomic_Jepoardy(),  # bonus round
+        "atomic_jepoardy": Jepoardy(),  # bonus round
 
-        "Death": Death(),
+        "death": Death(),
         "discharged": Discharged()
     }
 

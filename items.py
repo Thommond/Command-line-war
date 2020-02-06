@@ -25,11 +25,10 @@ class PlayerHealth(Stat):
 
 class Item(Stat):
     def __init__(self, name, amount):
-        self.name = name
+
         self.amount = amount
 
-    def Intialcheck(self, amount):
-        self.name = name
+    def intial_check(self, amount):
         self.amount = amount
         # need to prevent people from typing in any value they want for their stats
 

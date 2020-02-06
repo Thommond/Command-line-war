@@ -1,5 +1,5 @@
 
-class GameEngine(object):
+class GameEngine(object):  # run the game
     def __init__(self, room_map):
         self.room_map = room_map
 
