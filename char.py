@@ -5,6 +5,7 @@ class Stat(object):
         self.amount = amount
 
 
+# make a dictionary?
 health = Stat('health', 100)
 
 swiftness = Stat('swiftness', 0)

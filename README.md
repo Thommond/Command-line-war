@@ -1,11 +1,28 @@
-# A war command line game
+## Command line war
 
-This game is a command line based world war two game.
-Majority of the game will be build from classes or object
-oriented programming. The goal is to have a complex level
-based game.
+This is a text adventure command line game. You play
+a soldier in the midst of world war two. Your goal is
+to play through the levels until you get home safe to your
+family.
 
-This game will have two main worlds, Europe and Asia.
-Your character will move through the levels answering yes
-or no questions, multiple choice and random based games.
-The goal is to get home to America in one piece.
+## Usage
+
+This simple text adventure game is only for the
+fun of text adventure.
+
+## installation
+
+You can clone this repo or fork it to add your own levels,
+improve the stats system and much more.
+
+```bash
+git clone git@github.Thommond/Command-line-war/.git
+```
+
+## Contribution
+
+This game is open to any constructive ideas or changes
+that you feel could be added. By all means strike up a
+conversation in the issues.
+
+Pull requests are always welcome!!

@@ -8,7 +8,8 @@ import char
 class Room(object):  # a parent of all rooms
 
     def enter(self):
-        print("This is the start of creating many rooms")
+        print(dedent("""Sorry this level is still under construction. We
+        apoligize for any inconvience we have caused you. Have a good day! """))
         exit(1)
 
 
@@ -85,8 +86,19 @@ class SgtsOffice(Room):  # selecting the stats of the game in this room
 
         5. Your goal is to fight the good fight. Make it out in one
         peice and home to your family.
+
+        Yeah, I know that was a lot did you get it all?
         """))
 
+        choice = input()
+
+        if choice == 'yes':
+            return "sgt's_office_stats"
+
+
+class SgtsOfficeStats(Room):
+
+    def enter(self):
         char.strength.amount = 0
         char.swiftness.amount = 0
         char.charisma.amount = 0
@@ -94,27 +106,6 @@ class SgtsOffice(Room):  # selecting the stats of the game in this room
         char.luck.amount = 0
 
         print(dedent("So It is time to choose your stats!"))
-
-        print("""So Strength is first. Please enter the value. It has to be more than five.
-        an equal to thirty in the end""")
-
-        char.strength.amount += int(input("# "))  # repeated here
-
-        print("Next is Swiftness. Rules apply always.")
-
-        char.swiftness.amount += int(input("# "))
-
-        print("Now is Charisma.")
-
-        char.charisma.amount += int(input("# "))
-
-        print("Time for intelligence.")
-
-        char.intelligence.amount += int(input("# "))
-
-        print('Last but not least it is time for Luck.')
-
-        char.luck.amount += int(input("# "))
 
         if char.luck.amount + char.strength.amount + char.intelligence.amount + char.swiftness.amount + char.charisma.amount > 30:
             print(dedent("""You sly dog!!! I see you tried to enter more than a total
@@ -124,7 +115,7 @@ class SgtsOffice(Room):  # selecting the stats of the game in this room
 
             print('Good Try again!')
 
-            return "sgt's_office"
+            return "sgt's_office_stats"
 
         else:
 
@@ -138,7 +129,8 @@ class SgtsOffice(Room):  # selecting the stats of the game in this room
                 return 'welcome_base_camp'
 
             elif choice == "All":
-                print("Okay sounds good to me! Your stats are now 100 for good.")
+                print(dedent("""Okay sounds good to me! Your stats are now 100, but if you are not smart you
+                could still loose some points."""))
                 char.strength.amount = 100
                 char.charisma.amount = 100
                 char.intelligence.amount = 100
@@ -149,7 +141,7 @@ class SgtsOffice(Room):  # selecting the stats of the game in this room
 
             else:
                 print(dedent('What? you say yes if yes and no to try again.'))
-                return "sgt's_office"
+                return "sgt's_office_stats"
 
 
 class WelcomeBaseCamp(Room):
@@ -204,7 +196,7 @@ class MinorTraining(Room):
         and water and last but not least social do and don'ts.
 
         So let's get started then run 10 miles with your pack on. I will give you an hour and a half
-        at the latest. If you have 20 swiftness you will be sent down another path.
+        at the latest. *If you have 20 swiftness you will be sent down another path.*
 
         """))
 
@@ -391,36 +383,9 @@ class CompletedOne(Room):
         print(dedent("""So Strength is first. Please enter the value. It has to be more than five.
         an equal to ten in addition to your stats at the end"""))
 
-        strength_add = int(input("# "))  # repeated the repeat
-
-        char.strength.amount += strength_add
-        print(dedent('Next is Swiftness. Rules apply always.'))
-
-        swiftness_add = int(input("# "))
-
-        char.swiftness.amount += swiftness_add
-
-        print(dedent("Now is Charisma."))
-
-        charisma_add = int(input("# "))
-
-        char.charisma.amount += charisma_add
-
-        print(dedent("Time for intelligence."))
-
-        intelligence_add = int(input("# "))
-
-        char.intelligence.amount += intelligence_add
-
-        print(dedent('Last but not least it is time for Luck.'))
-
-        luck_add == int(input("# "))
-
-        char.luck.amount += luck_add
-
-        if luck_add + intelligenc_add + swiftness_add + strength_add + charisma_add > 10:
-            print(dedent("""No you can't have more than 10 points to add to your stats
-            you greedy bastard! I warned you earlier get discharged!"""))
+        if luck_add + intelligence_add + swiftness_add + strength_add + charisma_add > 10:
+            print(dedent(f"""No you can't have more than {amount} points to add to your stats
+            you greedy bastard! I warned you earlier you are now discharged!"""))
 
             return 'discharged'
 
@@ -430,112 +395,12 @@ class CompletedOne(Room):
             answer = input("# ")
 
             if answer == 'All':
-                print(dedent("Oh, your to cool."))
+                print(dedent("Oh, your too cool."))
                 return 'completed'
 
             else:
                 print(dedent("""Nope not a combo kid try again!"""))
                 return 'completed_level_one'
-
-
-class NormandyBeach(Room):  # these below are empty currently and have no function
-    def enter(self):
-        pass
-
-
-class NormandyBeachHell(Room):
-    def enter(self):
-        pass
-
-
-class NormandySafePlace(Room):
-    def enter(self):
-        pass
-
-
-class DamnMachineGunner(Room):
-    def enter(self):
-        pass
-
-
-class AmbushFoxHole(Room):
-    def enter(self):
-        pass
-
-
-class Evation(Room):
-    def enter(self):
-        pass
-
-
-class Captured(Room):
-    def enter(self):
-        pass
-
-
-class StayQuiet(Room):
-    def enter(self):
-        pass
-
-
-class Torcher(Room):
-    def enter(self):
-        pass
-
-
-class Friend(Room):
-    def enter(self):
-        pass
-
-
-class Rescued(Room):
-    def enter(self):
-        pass
-
-
-class Muddy(Room):
-    def enter(self):
-        pass
-
-
-class Clever(Room):
-    def enter(self):
-        pass
-
-
-class EscapedFree(Room):
-    def enter(self):
-        pass
-
-
-class EnemyLines(Room):
-    def enter(self):
-        pass
-
-
-class StayQuiet(Room):
-    def enter(self):
-        pass
-
-
-class Attic(Room):
-    def enter(self):
-        pass
-
-
-class Rats(Room):
-    def enter(self):
-        pass
-
-
-class Road(Room):
-    def enter(self):
-        pass
-
-
-class ToParis(Room):
-    def enter(self):
-        pass
 
 
 class Completed(Room):  # end game except for bonus round
@@ -574,8 +439,9 @@ class Jepoardy(Room):  # bonus round
         choice == input("# ")
 
         if choice == 'Okay':
-            print(dedent("Sorry not completed yet still under construction!"))
-            exit(1)
+
+            return 'room'
+
             print(dedent("Let us begin!"))
 
             print(dedent(Board))
@@ -588,40 +454,43 @@ class Jepoardy(Room):  # bonus round
 class Map(object):  # all rooms in the game and communicates with the engine for the game functionality
 
     rooms = {
+        "room": Room(),  # used to warn player of construction and parent of all other rooms
         "level_one_intro": LevelOneIntro(),  # start of level one
         "sgt's_office": SgtsOffice(),
+        "sgt's_office_stats": SgtsOfficeStats(),
         "welcome_base_camp": WelcomeBaseCamp(),
         "minor_training": MinorTraining(),
         "path_to_war": WarPath(),
         "ship": Ship(),
-        "completed_level_one": CompletedOne(),  # End of level one Base camp
+        "completed_level_one": CompletedOne(),  # End of level one
 
-        "arrival at normandy": NormandyBeach(),  # start of level two
-        "hell_on_beach": NormandyBeachHell(),
-        "quick_and_easy": NormandySafePlace(),
-        "damn_machine_gunner": DamnMachineGunner(),
-        "ambush": AmbushFoxHole(),  # two branch off this one
-        "captured": Captured(),
-        "torcher": Torcher(),  # three  branch off this one
-        "afriend": Friend(),  # starts first branch
-        "rescued": Rescued(),
-        "muddy": Muddy(),  # end of branch
-        "clever_soldier": Clever(),  # start of branch two
-        "escaped_and_free": EscapedFree(),
-        "enemy_lines": EnemyLines(),
-        "evation": Evation(),  # this one is the other
-        "stay_quiet": StayQuiet(),
-        "attic": Attic(),
-        "rats": Rats(),
-        "the_road": Road(),
-        "to_paris": ToParis(),  # end of level two
-
-
+        # start of level two (currently under construction) they are here for the
+        # names to be remebered for later construction
+        #    "arrival at normandy": NormandyBeach(),
+        #    "hell_on_beach": NormandyBeachHell(),
+        #    "quick_and_easy": NormandySafePlace(),
+        #    "damn_machine_gunner": DamnMachineGunner(),
+        #    "ambush": AmbushFoxHole(),
+        #    "captured": Captured(),
+        #    "torcher": Torcher(),
+        #    "afriend": Friend(),
+        #    "rescued": Rescued(),
+        #    "muddy": Muddy(),
+        #    "clever_soldier": Clever(),
+        #    "escaped_and_free": EscapedFree(),
+        #    "enemy_lines": EnemyLines(),
+        #    "evation": Evation(),
+        #    "stay_quiet": StayQuiet(),
+        #    "attic": Attic(),
+        #    "rats": Rats(),
+        #    "the_road": Road(),
+        #    "to_paris": ToParis(),  # end of level two
+        "stats_of_player": StatsOfPlayer(),
         "completed": Completed(),   # completed the game
         "atomic_jepoardy": Jepoardy(),  # bonus round
 
-        "death": Death(),
-        "discharged": Discharged()
+        "death": Death(),  # dead
+        "discharged": Discharged()  # dead in the game but different name
     }
 
     def __init__(self, start_room):
