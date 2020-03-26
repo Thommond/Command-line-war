@@ -95,17 +95,31 @@ class SgtsOffice(Room):  # selecting the stats of the game in this room
         if choice == 'yes':
             return "sgt's_office_stats"
 
+        else:
+            print("hey that not right say 'yes' ")
+
+            return "sgt's_office"
+
 
 class SgtsOfficeStats(Room):
 
     def enter(self):
-        char.strength.amount = 0
-        char.swiftness.amount = 0
-        char.charisma.amount = 0
-        char.intelligence.amount = 0
-        char.luck.amount = 0
+        print(dedent("""So It is time to choose your stats!
+        First is strength then swiftness, luck, intelligence and
+        charisma. You will enter a value of your stats in that order.
+        The total stats cannot equal more than 30. Okay lets go.
 
-        print(dedent("So It is time to choose your stats!"))
+        """))
+
+        char.strength.amount = int(input())
+
+        char.swiftness.amount = int(input())
+
+        char.luck.amount = int(input())
+
+        char.intelligence.amount = int(input())
+
+        char.charisma.amount = int(input())
 
         if char.luck.amount + char.strength.amount + char.intelligence.amount + char.swiftness.amount + char.charisma.amount > 30:
             print(dedent("""You sly dog!!! I see you tried to enter more than a total
@@ -141,7 +155,8 @@ class SgtsOfficeStats(Room):
 
             else:
                 print(dedent('What? you say yes if yes and no to try again.'))
-                return "sgt's_office_stats"
+                print(dedent('I am sending you back to '))
+                return "sgt's_office"
 
 
 class WelcomeBaseCamp(Room):
@@ -371,11 +386,7 @@ class CompletedOne(Room):
         So in celebration you get to add 10 more points to your
         total count of stats! So what will it be?
 
-        A. strength  B.charisma  C.swiftness
-
-        D.luck  E. intellignece
-
-        Remeber you only get to choose two!
+        five for each choice
 
         Make sure to answer like Ex:  A and B
         """))
@@ -485,7 +496,6 @@ class Map(object):  # all rooms in the game and communicates with the engine for
         #    "rats": Rats(),
         #    "the_road": Road(),
         #    "to_paris": ToParis(),  # end of level two
-        "stats_of_player": StatsOfPlayer(),
         "completed": Completed(),   # completed the game
         "atomic_jepoardy": Jepoardy(),  # bonus round
 
