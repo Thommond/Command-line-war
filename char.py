@@ -1,21 +1,38 @@
-# To make all the stats
-class Stat(object):
-    def __init__(self, name, amount):
+from random import randint
+from textwrap import dedent
+
+# Player class manages the players info such as name and what items he/she has.
+class Player(object):
+    def __init__(self, name):
         self.name = name
-        self.amount = amount
+        health = 100
+        player_items = {
 
+        gas_mask: False,
+        rifle: True,
 
-# make a dictionary?
-health = Stat('health', 100)
+        }
 
-swiftness = Stat('swiftness', 0)
+    def inventory(newItem):
+        """Inventory checks to make sure the player does not have more than 3 items"""
+        if len(player_items) == 3:
+            return dedent("You already have 3 items in your inventory, looks like you will need to get rid of an item to get {}".format(newItem))
 
-luck = Stat('luck', 0)
+    def eating(health_addition):
+        """Calculating player health additions depending the food"""
 
-strength = Stat('Strength', 0)
+        if health == 100:
+            return dedent("You are at full health you do not need nourishment from a {}!".format(health_addition))
 
-intelligence = Stat('Intelligence', 0)
+        else:
+            health += health_addition
+            if health > 100:
+                health = 100
 
-charisma = Stat('Charisma', 0)
+            return dedent("Your health is now {}".format(health))
 
-rank = Stat('Pvt', 0)
+    def battle(attackers_weapon_damage, attackers_health):
+
+        """Manages the battle and checks if player is dead or enemy is dead."""
+
+        pass

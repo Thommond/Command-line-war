@@ -1,16 +1,32 @@
 
-# for items like a rifle which the player uses and not is
+from textwrap import dedent
+
+class Items(Object):
+    """Items can create and manage the state of generic game items like
+    the gask mask."""
+    def __init__(self, quality)
 
 
-class Item(object):
-    def __init__(self, name, amount):
-        self.name = name
-        self.amount = amount
+class Weapons(Items):
+    """ Weapons can be used by the player to fend off enimes and various other tasks."""
 
+    def __init__(self, damage, quality):
+        self.damage = damage
+        super().__init__(quality, quality)
 
-        # creating an instance of the item class for Items such as rifle
-gas_mask = Item('gas mask', True)
+    def check_weapons_quality():
+        """Notifies player of their weapons quality status and passes values to batte in the player class."""
+        if quality > 3:
+            print(dedent('Quality is low remember to either repair or replace your weapons soon!'))
 
-gun = Item('rifle', True)
+        if quality == 0:
+            print(dedent('Your weapon is broken!!'))
+            return 'broke'
 
-rations = Item('rations', 10)
+class Food(Items):
+    """Food heals or gives extra abilites to a player."""
+
+    def __init__(self, health_addition, quality, ability):
+        self.health_addition = health_addition
+        super().__init__(quality, quality)
+        self.ability = False

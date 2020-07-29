@@ -1,6 +1,5 @@
 from sys import exit  # importing neccessities
 from textwrap import dedent
-import map
 import items
 import char
 
@@ -13,13 +12,13 @@ class Room(object):  # a parent of all rooms
         exit(1)
 
 
-class Death(Room):  # child of room go hear when you are killed in the game
+class Death(Room):  # when you are killed in the game
     def enter(self):
         print("You died a soldiers death that is all that matters.")
         exit(1)
 
 
-class Discharged(Room):  # child of room go hear when you have been dismissed in the game
+class Discharged(Room): # when you have been dismissed in the game
     def enter(self):
         print("You have been discharged you are pathetic!")
         exit(1)
@@ -30,10 +29,9 @@ class LevelOneIntro(Room):  # child of room first room of the entire game
         print(dedent("""
         Welcome! soldier what is your name?
         """))
+        user = char.Player(input('# '))
 
-        name = input("# ")
-
-        if name == 'Brian':
+        if user.name == 'Brian':
             return "completed"
 
         else:
@@ -111,15 +109,8 @@ class SgtsOfficeStats(Room):
 
         """))
 
-        char.strength.amount = int(input())
 
-        char.swiftness.amount = int(input())
-
-        char.luck.amount = int(input())
-
-        char.intelligence.amount = int(input())
-
-        char.charisma.amount = int(input())
+        char.strength = int()
 
         if char.luck.amount + char.strength.amount + char.intelligence.amount + char.swiftness.amount + char.charisma.amount > 30:
             print(dedent("""You sly dog!!! I see you tried to enter more than a total
@@ -386,7 +377,11 @@ class CompletedOne(Room):
         So in celebration you get to add 10 more points to your
         total count of stats! So what will it be?
 
-        five for each choice
+        A. strength  B.charisma  C.swiftness
+
+        D.luck  E. intellignece
+
+        Remeber you only get to choose two!
 
         Make sure to answer like Ex:  A and B
         """))
