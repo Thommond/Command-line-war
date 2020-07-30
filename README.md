@@ -10,6 +10,17 @@ family.
 This simple text adventure game is only for the
 fun of text adventure.
 
+Simply go in the command line
+
+```bash
+cd Command-line-war
+
+python3 game.py
+```
+
+And the game should initiate, note no progress will be saved after completion or
+exiting the game.
+
 ## installation
 
 You can clone this repo or fork it to add your own levels,
