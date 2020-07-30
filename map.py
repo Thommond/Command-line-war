@@ -83,7 +83,7 @@ class Menu(object):
         C. Inventory
 
         D. Quit the game (Note: No progress will be saved.)
-        
+
         """))
 
         choice = input('# ')
@@ -149,10 +149,16 @@ class Menu(object):
         else:
             return 'menu_enter'
 
-    def where_is_player():
+    def where_is_player(current_room_in_player_history):
         """Menu can be returned anywhere buy we need to keep track of where players room in the game is,
         this method communicates with user (Player instance) and menu_options (Menu instance)"""
+        location_of_player = {
 
+        }
+        # Returning the index value which will be a string map can use to go back to the room they were at.
+        for index in location_of_player:
+            if current_room_in_player_history == index.keys():
+                return index.values()
 
 
 class LevelOneIntro(Room):  # child of room first room of the entire game
