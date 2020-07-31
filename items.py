@@ -70,7 +70,7 @@ bazooka = Weapons(25, 1, 100)
 
 # Food
 
-rations = Foods(5, 1, 1)
+rations = Foods(5, 10, 1)
 
 bag_of_rice = Foods(15, 1, 2)
 

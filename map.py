@@ -1,30 +1,58 @@
 from sys import exit  # importing neccessities
 from textwrap import dedent
+from random import randint
 import items
-import char
+from char import Player
 
+####################################
+#### Map Class is at the bottom ####
+####################################
 
+# Needed global variables
+user = Player()
+
+def message_pop_up(message):
+    print(dedent("""
+    ######## MESSAGE ########
+    #########################
+    #########################
+               {}
+    #########################
+    #########################
+    """.format(message)))
+
+# Not play through rooms for deaths or endings
 class Room(object):
     """Parent of all room objects and used for underconstruction features."""
 
     def enter(self):
-        print(dedent("""Sorry this level is still under construction. We
-        apoligize for any inconvience we have caused you. Have a good day! """))
+
+        print(dedent("""
+        Sorry this level is still under construction. We
+        apoligize for any inconvience we have caused you. Have a good day!
+        """))
         exit(1)
 
-class Endings(Room):
-     """All ending scenarios in one class as methods"""
+class Death(Room):
 
-     def death():
+    def enter(self):
+
         print("You died a soldiers death that is all that matters.")
         exit(1)
 
-     def discharged():
-        print(dedent("""You got discharged from the military!!
-        You got caught breaking the rules and you loose the privlage to serve."""))
+class Discharged(Room):
+
+    def enter(self):
+
+        print(dedent("""
+        You got discharged from the military!!
+        You got caught breaking the rules and you loose the privlage to serve.
+        """))
         exit(1)
 
-     def completed_game():
+class Completed():
+
+    def enter(self):
 
         if randint(1, 10) == 3:
             ending_scene = """get shot by a crafty german sniper on the way back to base camp. Your
@@ -51,10 +79,11 @@ class Endings(Room):
             ending_scene = """are sent home with gratitude and pride. Finally your fight is over
             and your family only had to wait for 3 months."""
 
-        print(dedent("""You have been through it all. You prepared for war, played some
+        print(dedent("""
+        You have been through it all. You prepared for war, played some
         games and got the nerves. You have stormed the beachs of France, battled men and
         helped men. And after all your struggles and all your efforts you {}""".format(ending_scene)))
-
+        exit(1)
 
 class Battle(object):
     """Battles class manages each attack for each battle of the game."""
@@ -69,7 +98,10 @@ class Battle(object):
 
         print("{}'s health is down to {} because of an attack by {}.'".format(victims_name, victims_health, attackers_name ))
 
-class Menu(object):
+########################
+## Menu Options rooms ##
+########################
+class Menu(Room):
 
     def enter(self):
         print(dedent("""
@@ -82,34 +114,104 @@ class Menu(object):
 
         C. Inventory
 
-        D. Quit the game (Note: No progress will be saved.)
+        D. Quit the game (Note: No progress will be saved.
+
+        E. Back to game
 
         """))
 
         choice = input('# ')
 
         if 'A' in choice:
-            return "menu_rules"
-        if 'B' in choice:
+            return 'menu_rules'
+
+        elif 'B' in choice:
             return "shop"
-        if 'C' in choice:
+
+        elif 'C' in choice:
             return "inventory_check"
-        if 'D' in choice:
+
+        elif 'D' in choice:
             return "quit"
+
+        elif 'E' in choice:
+            # TODO: Make it so player goes to the begining of
+            #the room which they left off.
+            return 'room'
+
         else:
+            message_pop_up(" You have to choose from the letters to get an option")
             return "menu_enter"
 
-    def shopping(self):
-        print(dedent("""Welcome to the American depot soldier, or
+
+    def where_is_player(current_room_in_player_history):
+        """Menu can be returned anywhere buy we need to keep track of where players room in the game is,
+        this method communicates with user (Player instance) and menu_options (Menu instance)"""
+        location_of_player = {
+
+        }
+        # Returning the index value which will be a string map can use to go back to the room they were at.
+        for index in location_of_player:
+            if current_room_in_player_history == index.keys():
+                return index.values()
+
+class Shop(Room):
+    def enter(self):
+
+        print(dedent("""
+        Welcome to the American depot soldier, or
         what they call jimmy's bartering stand. I can repair weapons, trade,
         and much more. What do you need?
+
+        A. Repair an item.
+
+        B. Buy a item
+
+        C. Sell items for rations
+
+        D. Back to menu
+
         """))
+        choice = input("# ")
 
-    def inventory_checking(self, inventory_of_player):
-        print(dedent("""Time to take a look in my bag. I have {}""".format(inventory_of_player)))
+        if 'A' in choice:
+            print(dedent('Okay what weapon do you need repaired?'))
+            # TODO: make a repair room
+            return 'room'
+        elif 'B' in choice:
+            print(dedent('Okay what item would you like to buy?'))
+            # TODO: make a store room
+            return 'room'
+        elif 'C' in choice:
+            print(dedent('Okay, what item or items would you like to sell?'))
+            # TODO: Make a sell room
+            return 'room'
+        elif 'D' in choice:
+            print(dedent('Redirecting back to menu.'))
+            return "menu_enter"
 
-    def rules(self):
-        print(dedent("""So here is the recap about some game rules.
+        else:
+            message_pop_up("""
+            Please choose an option.
+            """)
+            return "shop"
+
+
+class Inventory(Room):
+    """Tells users there inventory at the requested time."""
+
+    def enter(self):
+        inventory = ", ".join(user.player_inventory())
+        print(dedent("""Time to take a look in my bag. I have a {} and thats it.""".format(inventory)))
+
+        return "menu_enter"
+
+class Rules(Room):
+    """Displays the rules of the game."""
+    def enter(self):
+
+        print(dedent("""
+        So here is the recap about some game rules.
 
         1. You are only allowed 7 item in your inventory, and food is included, but
         quantity of each item is not limited.
@@ -141,24 +243,48 @@ class Menu(object):
             2. Some things are randomized so do not be afraid to take a chance.
 
             3. Remember if you beat the game or not progress will not be saved.
+
+            (Note: type yes to read the rules again, if you do not want to then simply press enter.)
             """
             ))
+            choice = input("# ")
 
-            return 'menu_enter'
+            if 'yes' in choice:
+
+                return 'menu_rules'
+
+            else:
+                return 'menu_enter'
+
 
         else:
+            print("Okay, thanks for reading the rules, you are now back at menu.")
             return 'menu_enter'
 
-    def where_is_player(current_room_in_player_history):
-        """Menu can be returned anywhere buy we need to keep track of where players room in the game is,
-        this method communicates with user (Player instance) and menu_options (Menu instance)"""
-        location_of_player = {
+class Quit(Room):
 
-        }
-        # Returning the index value which will be a string map can use to go back to the room they were at.
-        for index in location_of_player:
-            if current_room_in_player_history == index.keys():
-                return index.values()
+    def enter(self):
+
+        message_pop_up("""Are you sure you want to quit? You made it so far! Remember
+        no progress will be saved.""")
+
+        choice = input("# ")
+
+        if 'yes' in choice:
+            print(dedent("Good bye."))
+            exit(0)
+
+        else:
+            print(dedent('To quit please type "yes" into the terminal'))
+            return 'quit'
+
+#########################
+## End of Menu options ##
+#########################
+
+
+## Start of play through rooms! ##
+#--------------------------------#
 
 
 class LevelOneIntro(Room):  # child of room first room of the entire game
@@ -167,9 +293,9 @@ class LevelOneIntro(Room):  # child of room first room of the entire game
         Welcome! soldier what is your name?
         """))
 
-        choice = input('# ')
+        choice = input('')
 
-        user = Player(choice)
+        user.name = choice
 
         if user.name == 'Brian':
             return "completed"
@@ -183,12 +309,6 @@ class LevelOneIntro(Room):  # child of room first room of the entire game
             ground agaist the Nazi's. The Nazi's have infested
             Europe like a cockroch colony. You will be assigned
             to Unit 179. """))
-
-            print(dedent('Any thoughts before we move on?'))
-
-            thoughts = input('# ')
-
-            print(dedent("Okay, well you will now be sent to sgt's office for info and assignment."))
 
             return "sgt's_office"
 
@@ -211,31 +331,35 @@ class SgtsOffice(Room):  # selecting the stats of the game in this room
         ammo just go to your menu. You can also find out your health, info about the enemies types you meant, and
         more at the Menu.
 
-        To get to menu you can simply text "Menu" in the command line then choose where in the menu you would like to
-        go by texting that option.
+        To get to menu you can simply text "menu" in the command line then choose where in the menu you would like to
+        go by texting that option. The menu option is avaliable at the begining of each room before you make a choice.
 
-        For more info you can go to the Sgt tips portion of the menu.
+        For more info you can go to the Rules portion of the menu.
 
         Yeah, I know that was a lot did you get it all?
-        """)) # TODO: Add menu, and all additions to menu so users can always access.
+        """))
 
         choice = input('# ')
 
-        if choice == 'yes':
+        if 'menu' in choice:
+            return 'menu_enter'
+
+        if 'yes' in choice:
+
             return "path_to_war"
 
         else:
-            print(dedent("hey that's not right say 'yes' "))
+            print(dedent("hey that's not right say 'yes' to contine or 'menu to go to the menu'"))
 
             return "sgt's_office"
 
-class WarPath(object):
+class WarPath(Room):
     """ You get to choose your last recreational activity as a soldier before
     storming the beachs at normandy, France."""
 
     def enter(self):
         print(dedent(
-        """Everything is in it's place, you are of to war. In one short day you and all
+        """Everything is in it's place, you are off to war. In one short day you and all
         your fellow soldiers will be loaded on to ship and headed for the invastion on normandy.
 
         You see a few things around your barracks, a group men playing cards, your sgt and others
@@ -255,27 +379,38 @@ class WarPath(object):
 
         choice = input('# ')
 
-        if 'A' in choice:
+        if 'menu' in choice:
+            return 'menu_enter'
+
+        elif 'A' in choice:
             # Random opportunity's in poker ordered by most likely to least likely
             if randint(1, 4) == 3:
                 print(dedent("""You played some poker, you won a thing or two, but got carried away. In the final round
                 you bet it all. You fell right into the bluff of a fellow private and lost it all. You lost 7 rations."""))
+                items.rations.quantity -= 7
+                print(dedent("You now have only {} rations.".format(items.rations.quantity)))
 
             elif randint(1, 4) == 1:
                 print(dedent("""You did pretty good for poker, you played fair and gained 5 rations"""))
+                items.rations.quantity += 5
+                print(dedent("You now have {} rations.".format(items.rations.quantity)))
 
             elif randint(1, 100) == 33:
                 print(dedent("""Uh Oh! Your sgt caught you playing poker under the table,
                 the group blames you. You are in big trouble."""))
+
                 return 'discharged'
 
             elif randint(1, 1000) == 378:
                 print(dedent("""Wow!!! Looks like you were in an all stakes game with a bazooka
                 gunner. You won it all! You now have a bazooka in you midst."""))
+                # TODO: Add bazooka to inventory of player if they win
 
             else:
                 print(dedent("""your not to good at poker, you lost 2 rations for a bad round then you
                 called it a night."""))
+                items.rations.quantity -= 2
+                print(dedent("You now have only {} rations".format(items.rations.quantity)))
 
         elif 'B' in choice:
 
@@ -283,41 +418,60 @@ class WarPath(object):
             took it a bit to far. You said some things you wish you didn't to Sgt and he took
             a ration away."""))
 
-            char.rations
+            items.rations.quantity -= 1
 
         elif 'C' in choice:
             print(dedent("""You curl up on your bed and deciede to relax for the next few hours. Your
             rest was quiet and comfortable. You are ready for battle."""))
+
 
         elif 'D' in choice:
             print(dedent("""You shoot almost five bullets right on the nose of the bullseye. The troop
             was so impress some gave you a few bullets. Your quality of your rifle was increased by 10 quality
             points."""))
 
+            items.rifle.quality += 10
+
         return  'ship'
 
-class Ship(object):
+class Ship(Room):
     """On the 3 day trip to normandy beach final training and
     preperation before storming the beachs."""
     def enter(self):
         print(dedent("""
         All of you and your troop are loaded on to a ship labeled the USS great leap. For a 3 day journey
-        to Nazi occupied France.
-
+        to Nazi occupied France. You are training on deck, going through drills and wishing you were home.
+        But, you have a duty and that is to America.
         """))
+        choice = input('# ')
+        if menu in choice:
+            return 'menu_enter'
+        # TODO: finish this room and get started with others
+        else:
+            return 'room'
 
 
 
 
-class Map(object):  # all rooms in the game and communicates with the engine for the game functionality
-
-    types_of_endings = Endings()
-
-    menu_options = Menu()
+##########################################
+#### Map Class runs through all rooms ####
+####^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^######
+class Map(object):
 
     rooms = {
-        # For underconstruction peices of the game
         "room": Room(),
+
+        # Menu options
+        "menu_enter": Menu(),
+        "menu_rules": Rules(),
+        "shop": Shop(),
+        "inventory_check": Inventory(),
+        "quit": Quit(),
+
+        # Types of endings to the game.
+        "completed": Completed(),
+        "death": Death(),
+        "discharged": Discharged(),
 
         # Start of level one
         "level_one_intro": LevelOneIntro(),
@@ -331,7 +485,6 @@ class Map(object):  # all rooms in the game and communicates with the engine for
 
         # start of level two (currently under construction) they are here for the
         # names to be remebered for later construction
-        #   \
         #    "damn_machine_gunner": DamnMachineGunner(),
         #    "ambush": AmbushFoxHole(),
         #    "captured": Captured(),
@@ -348,18 +501,6 @@ class Map(object):  # all rooms in the game and communicates with the engine for
         #    "rats": Rats(),
         #    "the_road": Road(),
         #    "to_paris": ToParis(),  # end of level two
-
-        # Menu options
-        "menu_enter": menu_options.enter(),
-        "menu_rules": menu_options.rules(),
-        "shop": menu_options.shopping(),
-        "inventory_check": menu_options.inventory_checking(",".join(char.character.player_inventory.keys())),
-        "quit": menu_options.quiting(),
-
-        # Types of endings to the game.
-        "completed": types_of_endings.completed(),
-        "death": types_of_endings.death(),
-        "discharged": types_of_endings.discharged()
     }
 
     def __init__(self, start_room):
