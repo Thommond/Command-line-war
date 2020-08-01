@@ -35,20 +35,24 @@ def attack_check(attacker, victim):
         print(dedent("You tried to attack with a broken {}".format(attackers_weapon.name)))
         print(dedent("Choose a different weapon"))
 
+    else:
+        return False
 
 
-def attack(attacker, victim):
+def attack(attacker, weapon, victim):
 
     # One in one twenty chance player or enemy will deal double damage.
     if randint(1, 20) == 11:
-        victim.health -= (attacker.weapon.damage * 2)
+        victim.health -= (weapon.damage * 2)
         print("{}'s health is down to {} because of an attack by {}.'".format(victims_name, victims_health, attackers_name ))
 
-    elif randint(1, 100) == 37:
-        attackers.weapon.quality = 0
-        print("Click")
-        print("Click")
-        print("Oh no looks like {} weapon broke!!".format(attacker.name))
+    if weapon.name != "hands":
+
+        if randint(1, 100) == 37:
+            attackers.weapon.quality = 0
+            print("Click")
+            print("Click")
+            print("Oh no looks like {} weapon broke!!".format(attacker.name))
 
     else:
         victims.health -= attacker.weapon.damage
@@ -56,7 +60,7 @@ def attack(attacker, victim):
         print("{}'s health is down to {} because of an attack by {}.'".format(victims_name, victims_health, attackers_name ))
 
 ###                            ###
-###  Endings rooms to the game ###
+###  Ending rooms to the game ###
 ###                            ###
 
 class Room(object):
@@ -579,22 +583,42 @@ class Ship(Room):
             return 'menu_enter'
 
         elif 'eat' in choice:
-            print('Okay, what do you want to eat? Here is what you got.')
+            pass
 
         elif 'A' in choice:
             print(dedent("""
             You had the crowds attention for a a little while, but Jimmy did
             not want to listen to your words.
             """))
-            attack(ship_mate)
+            attack(ship_mate, hands)
+            attack(user, hands)
+            attack(ship_mate, hands)
+            attack(user, hands)
+            attack(ship_mate, hands)
 
         elif 'B' in choice:
-            pass
-        elif 'C' in choice:
-            pass
-        elif 'D' in choice:
-            pass
+            print(dedent(
+            """
+            You say "Hey, Jimmy". You kick his shin and he falls to the ground.
+            Everyone looks at you. Jimmy stares with rage.
+            """
+            ))
 
+            attack(ship_mate)
+
+        elif 'C' in choice:
+            print(dedent("""
+            You take a seat on the side of the deck and watch Jimmy completly pound
+            on Timothys face. Everyone else left in a hurry when they saw sgt. But you
+            stayed. Your sgt's response is...
+            """))
+
+            input('# ')
+
+            return 'discharged'
+        elif 'D' in choice:
+
+        return "room"
 
 
 

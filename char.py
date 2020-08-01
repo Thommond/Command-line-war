@@ -6,13 +6,11 @@ import items
 class Player(object):
 
     player_inventory = {
-        "food": {
-        "rations": {
-        "amount": items.rations.quantity,
-        "ration_rate": items.rations.ration_rate,
-        "health_addition": items.rations.
-        }
-        }
+
+    "rations": items.rations,
+    "rifle": items.rifle,
+    "gas_mask": items.gas_mask,
+
     }
 
 
