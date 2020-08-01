@@ -16,10 +16,22 @@ def message_pop_up(message):
     ######## MESSAGE ########
     #########################
     #########################
-               {}
+    {}
     #########################
     #########################
     """.format(message)))
+
+def commands(user_command):
+    commands = {
+    "eat": True,
+    "menu": False
+    #etc.
+    # TODO: Like map but gives functions so it will complete a task
+    # every time a command is meant.
+    }
+    for command in commands:
+        if user_command == command.keys():
+            return command.values()
 
 # Not play through rooms for deaths or endings
 class Room(object):
@@ -101,6 +113,7 @@ class Battle(object):
 ########################
 ## Menu Options rooms ##
 ########################
+
 class Menu(Room):
 
     def enter(self):
@@ -114,7 +127,7 @@ class Menu(Room):
 
         C. Inventory
 
-        D. Quit the game (Note: No progress will be saved.
+        D. Quit the game (Note: No progress will be save.)
 
         E. Back to game
 
@@ -135,25 +148,13 @@ class Menu(Room):
             return "quit"
 
         elif 'E' in choice:
-            # TODO: Make it so player goes to the begining of
-            #the room which they left off.
-            return 'room'
+
+            return user.saved_room
 
         else:
             message_pop_up(" You have to choose from the letters to get an option")
             return "menu_enter"
 
-
-    def where_is_player(current_room_in_player_history):
-        """Menu can be returned anywhere buy we need to keep track of where players room in the game is,
-        this method communicates with user (Player instance) and menu_options (Menu instance)"""
-        location_of_player = {
-
-        }
-        # Returning the index value which will be a string map can use to go back to the room they were at.
-        for index in location_of_player:
-            if current_room_in_player_history == index.keys():
-                return index.values()
 
 class Shop(Room):
     def enter(self):
@@ -172,6 +173,7 @@ class Shop(Room):
         D. Back to menu
 
         """))
+
         choice = input("# ")
 
         if 'A' in choice:
@@ -201,7 +203,7 @@ class Inventory(Room):
     """Tells users there inventory at the requested time."""
 
     def enter(self):
-        inventory = ", ".join(user.player_inventory())
+        inventory = ", ".join(user.player_inventory.keys())
         print(dedent("""Time to take a look in my bag. I have a {} and thats it.""".format(inventory)))
 
         return "menu_enter"
@@ -303,17 +305,22 @@ class LevelOneIntro(Room):  # child of room first room of the entire game
         else:
 
             print(dedent("Okay, {} you have been drafted!".format(user.name)))
-            print(dedent("""Your family is worried sick. World war
+            print(dedent("""
+            Your family is worried sick. World war
             two is raging across europe, you turned 18 just
             weeks ago. The military needs extra troops on the
             ground agaist the Nazi's. The Nazi's have infested
             Europe like a cockroch colony. You will be assigned
-            to Unit 179. """))
+            to Unit 179.
+            """))
 
             return "sgt's_office"
 
 class SgtsOffice(Room):  # selecting the stats of the game in this room
     def enter(self):
+
+        user.saved_room = "sgt's_office"
+
         print(dedent("""
         Welcome soldier I am here to give you the ropes.
 
@@ -358,8 +365,12 @@ class WarPath(Room):
     storming the beachs at normandy, France."""
 
     def enter(self):
+
+        user.saved_room = 'ship' 
+
         print(dedent(
-        """Everything is in it's place, you are off to war. In one short day you and all
+        """
+        Everything is in it's place, you are off to war. In one short day you and all
         your fellow soldiers will be loaded on to ship and headed for the invastion on normandy.
 
         You see a few things around your barracks, a group men playing cards, your sgt and others
@@ -380,57 +391,72 @@ class WarPath(Room):
         choice = input('# ')
 
         if 'menu' in choice:
+
             return 'menu_enter'
 
         elif 'A' in choice:
             # Random opportunity's in poker ordered by most likely to least likely
             if randint(1, 4) == 3:
-                print(dedent("""You played some poker, you won a thing or two, but got carried away. In the final round
+                print(dedent("""
+                You played some poker, you won a thing or two, but got carried away. In the final round
                 you bet it all. You fell right into the bluff of a fellow private and lost it all. You lost 7 rations."""))
                 items.rations.quantity -= 7
                 print(dedent("You now have only {} rations.".format(items.rations.quantity)))
 
             elif randint(1, 4) == 1:
-                print(dedent("""You did pretty good for poker, you played fair and gained 5 rations"""))
+                print(dedent("""
+                You did pretty good for poker, you played fair and gained 5 rations"""))
                 items.rations.quantity += 5
                 print(dedent("You now have {} rations.".format(items.rations.quantity)))
 
             elif randint(1, 100) == 33:
-                print(dedent("""Uh Oh! Your sgt caught you playing poker under the table,
+                print(dedent("""
+                Uh Oh! Your sgt caught you playing poker under the table,
                 the group blames you. You are in big trouble."""))
 
                 return 'discharged'
 
             elif randint(1, 1000) == 378:
-                print(dedent("""Wow!!! Looks like you were in an all stakes game with a bazooka
+                print(dedent("""
+                Wow!!! Looks like you were in an all stakes game with a bazooka
                 gunner. You won it all! You now have a bazooka in you midst."""))
                 # TODO: Add bazooka to inventory of player if they win
 
             else:
-                print(dedent("""your not to good at poker, you lost 2 rations for a bad round then you
+                print(dedent("""
+                Your not to good at poker, you lost 2 rations for a bad round then you
                 called it a night."""))
                 items.rations.quantity -= 2
                 print(dedent("You now have only {} rations".format(items.rations.quantity)))
 
         elif 'B' in choice:
 
-            print(dedent("""You talked a bit and had fun talking shop with the Sgt, but you
+            print(dedent("""
+            You talked a bit and had fun talking shop with the Sgt, but you
             took it a bit to far. You said some things you wish you didn't to Sgt and he took
             a ration away."""))
 
             items.rations.quantity -= 1
 
         elif 'C' in choice:
-            print(dedent("""You curl up on your bed and deciede to relax for the next few hours. Your
+            print(dedent("""
+            You curl up on your bed and deciede to relax for the next few hours. Your
             rest was quiet and comfortable. You are ready for battle."""))
 
 
         elif 'D' in choice:
-            print(dedent("""You shoot almost five bullets right on the nose of the bullseye. The troop
+            print(dedent("""
+            You shoot almost five bullets right on the nose of the bullseye. The troop
             was so impress some gave you a few bullets. Your quality of your rifle was increased by 10 quality
             points."""))
 
             items.rifle.quality += 10
+            print(dedent(
+            "Your rifles quality is now {}, great choice.".format(items.rifle.quality)
+            ))
+        else:
+            message_pop_up('Please select a choice from the letters.')
+            return 'path_to_war'
 
         return  'ship'
 
@@ -444,7 +470,8 @@ class Ship(Room):
         But, you have a duty and that is to America.
         """))
         choice = input('# ')
-        if menu in choice:
+
+        if 'menu' in choice:
             return 'menu_enter'
         # TODO: finish this room and get started with others
         else:
@@ -456,6 +483,7 @@ class Ship(Room):
 ##########################################
 #### Map Class runs through all rooms ####
 ####^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^######
+
 class Map(object):
 
     rooms = {
@@ -473,34 +501,30 @@ class Map(object):
         "death": Death(),
         "discharged": Discharged(),
 
-        # Start of level one
         "level_one_intro": LevelOneIntro(),
         "sgt's_office": SgtsOffice(),
         "path_to_war": WarPath(),
         "ship": Ship(),
-        # "arrival at normandy": NormandyBeach(),
+        # "arrival at normandy": NormandyBeach(), # first battle
         # "hell_on_beach": NormandyBeachHell(),
-        # "quick_and_easy": NormandySafePlace(),
-        # "completed_level_one": CompletedOne(),  # End of level one
-
-        # start of level two (currently under construction) they are here for the
-        # names to be remebered for later construction
-        #    "damn_machine_gunner": DamnMachineGunner(),
-        #    "ambush": AmbushFoxHole(),
-        #    "captured": Captured(),
-        #    "torcher": Torcher(),
-        #    "afriend": Friend(),
-        #    "rescued": Rescued(),
-        #    "muddy": Muddy(),
-        #    "clever_soldier": Clever(),
-        #    "escaped_and_free": EscapedFree(),
-        #    "enemy_lines": EnemyLines(),
-        #    "evation": Evation(),
-        #    "stay_quiet": StayQuiet(),
-        #    "attic": Attic(),
-        #    "rats": Rats(),
-        #    "the_road": Road(),
-        #    "to_paris": ToParis(),  # end of level two
+        # "quick_and_easy": NormandySafePlace(), # a battle
+        # "damn_machine_gunner": DamnMachineGunner(), # a battle
+        # "ambush": AmbushFoxHole(), # a battle
+        # "captured": Captured(),
+        # "torcher": Torcher(), # a possible battle
+        # "afriend": Friend(),
+        # "rescued": Rescued(), # a battle
+        # "muddy": Muddy(),
+        # "clever_soldier": Clever(),
+        # "escaped_and_free": EscapedFree(),
+        # "enemy_lines": EnemyLines(), # a battle
+        # "evation": Evation(),
+        # "stay_quiet": StayQuiet(), # possible battle
+        # "attic": Attic(),
+        # "rats": Rats(),
+        # "the_road": Road(), # boss battle
+        # "to_paris": ToParis(),
+        # ending here for now
     }
 
     def __init__(self, start_room):
