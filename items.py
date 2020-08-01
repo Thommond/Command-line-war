@@ -40,7 +40,7 @@ class Foods(Items):
         if self.ability == True:
             print(sentence_of_ability)
 
-# The following instances of the class are for weapons, items and Food used in the game.
+# Classical items
 
 gas_mask = Items(10, 10)
 
@@ -49,7 +49,6 @@ boots = Items(10, 15)
 bullet_plate = Items(30, 25)
 
 helmet = Items(15, 20)
-
 
 #   Weapons
 rifle = Weapons(2.5, 20, 4)

@@ -3,7 +3,7 @@ import map
 
 
 # WW2 mania! #
-
+# A command line ww2 story. #
 
 map = map.Map('level_one_intro')  # initializing map class
 
