@@ -9,9 +9,13 @@ import items
 #### Map Class is at the bottom ####
 ####################################
 
-# Characters
 user = Player("level_one_intro", 100)
-ship_mate = Enemy(items.hands, 10, 'Jimmy')
+
+list_of_weapons = {
+    "weapons": {"rifle": items.rifle },
+    "items": {"gas_mask": items.gas_mask},
+    "food": {"rations": items.rations },
+        };
 
 # Useful global functions
 
@@ -25,42 +29,9 @@ def message_pop_up(message):
     ###########################
     """.format(message)))
 
-def attack_check(attacker, victim):
-
-    if victim.health <= 0:
-        print('It is over the battle is won')
-        print('{} is dead, nothing but a cold corpse.'.format(victim.name))
-
-    if attacker.weapon.quality <= 0:
-        print(dedent("You tried to attack with a broken {}".format(attackers_weapon.name)))
-        print(dedent("Choose a different weapon"))
-
-    else:
-        return False
-
-
-def attack(attacker, weapon, victim):
-
-    # One in one twenty chance player or enemy will deal double damage.
-    if randint(1, 20) == 11:
-        victim.health -= (weapon.damage * 2)
-        print("{}'s health is down to {} because of an attack by {}.'".format(victims_name, victims_health, attackers_name ))
-
-    if weapon.name != "hands":
-
-        if randint(1, 100) == 37:
-            attackers.weapon.quality = 0
-            print("Click")
-            print("Click")
-            print("Oh no looks like {} weapon broke!!".format(attacker.name))
-
-    else:
-        victims.health -= attacker.weapon.damage
-
-        print("{}'s health is down to {} because of an attack by {}.'".format(victims_name, victims_health, attackers_name ))
 
 ###                            ###
-###  Ending rooms to the game ###
+###  Ending rooms to the game  ###
 ###                            ###
 
 class Room(object):
@@ -321,9 +292,7 @@ class LevelOneIntro(Room):  # child of room first room of the entire game
         Welcome! soldier what is your name?
         """))
 
-        choice = input('')
-
-        user.name = choice
+        user.name = input('# ')
 
         if user.name == 'Brian':
             return "completed"
@@ -579,6 +548,8 @@ class Ship(Room):
 
         choice = input('# ')
 
+        ship_mate = Enemy(items.hands, 10, "Jimmy")
+
         if 'menu' in choice:
             return 'menu_enter'
 
@@ -588,13 +559,11 @@ class Ship(Room):
         elif 'A' in choice:
             print(dedent("""
             You had the crowds attention for a a little while, but Jimmy did
-            not want to listen to your words.
+            not want to listen to your words. He knocked you out cold. You loose 10
+            health.
             """))
-            attack(ship_mate, hands)
-            attack(user, hands)
-            attack(ship_mate, hands)
-            attack(user, hands)
-            attack(ship_mate, hands)
+            user.health -= 10
+            print(dedent("Your health is now {}".format(user.health)))
 
         elif 'B' in choice:
             print(dedent(
@@ -604,7 +573,13 @@ class Ship(Room):
             """
             ))
 
-            attack(ship_mate)
+            ship_mate.attack(user)
+
+            choice = input('# ')
+
+            ww2_mania_battles.attack_choice()
+
+
 
         elif 'C' in choice:
             print(dedent("""
@@ -616,13 +591,39 @@ class Ship(Room):
             input('# ')
 
             return 'discharged'
+
+
         elif 'D' in choice:
 
-        return "room"
+            print(dedent(
+            """
+            You hurry back to your room. Just in time to catch Kyle in action, harboring
+            two glocks. You say "Hey, kyle I know we are not suppose to have those looks
+            like there is one for me and you."
+            """
+            ))
+
+            input('# ')
+
+            print(dedent(
+            """
+            "Okay, {} I will give you one. But hush up these guns are not invented yet."
+            """))
+
+            user.player_inventory["glock"] = items.glock
+
+        return "arrival_at_normandy"
+
+class NormandyBeach(Room):
+    """First landing at france. Our player has to navigate through
+    decisions of death."""
+
+    def enter(self):
+        user.saved_room = 'arrival_at_normandy'
+
+        return 'room'
 
 
-
-        # TODO: finish this room and get started with others
 
 
 
@@ -652,7 +653,7 @@ class Map(object):
         "sgt's_office": SgtsOffice(),
         "path_to_war": WarPath(),
         "ship": Ship(),
-        # "arrival at normandy": NormandyBeach(), # first battle
+        "arrival_at_normandy": NormandyBeach(),
         # "hell_on_beach": NormandyBeachHell(),
         # "quick_and_easy": NormandySafePlace(),
         # "damn_machine_gunner": DamnMachineGunner(), # a battle
