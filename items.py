@@ -9,16 +9,18 @@ class Items(object):
         self.quality = quality
         self.ration_rate = ration_rate
 
-
 class Weapons(Items):
-    """Weapons can be used by the player to fend off enimes and various other tasks."""
+    """Weapons can be used by the player to fend off
+    enimes and various other tasks."""
 
     def __init__(self, damage, name, quality, ration_rate):
         self.damage = damage
         super().__init__(name, quality, ration_rate)
 
     def check_weapons_quality():
-        """Notifies player of their weapons quality status and passes values to batte in the player class."""
+        """Notifies player of their weapons quality
+        status and passes values to batte in the player class."""
+
         if quality > 3:
             print(dedent('Quality is low remember to either repair or replace your weapons soon!'))
 
@@ -40,6 +42,9 @@ class Foods(Items):
     def abilities(sentence_of_ability):
         if self.ability == True:
             print(sentence_of_ability)
+
+
+# Store inventory and fint_item check
 
 # Classical items
 
@@ -75,3 +80,54 @@ rations = Foods(5, 10, "rations", 1)
 chocolate = Foods(20, 1, "chocolate", 5)
 
 Meth = Foods(30, 1, "meth", 7)
+
+list_of_items = {
+    "weapons": [
+
+    {"rifle": rifle},
+    {"sniper": german_sniper }
+    ],
+    "items": [
+
+    {"gas_mask": gas_mask},
+     {"boots": boots}
+     ],
+    "food": [
+
+    {"rations": rations },
+    {"meth": Meth}
+    ]
+};
+
+def find_item(choice_of_item, list_items):
+
+    """Loops through all items to make sure player string input is a
+    actual item from the game. And checks if
+    they have that item in the inventory."""
+
+    for key in list_items:
+
+        for item_list in key:
+
+            for item_dict in item_list:
+
+                if choice_of_item == item_dict:
+
+                    for item in user.player_inventory:
+
+                        if choice_of_item == item:
+
+                            return choice_of_item
+
+                        else:
+                            return False
+                else:
+                    return False
+
+def find_item_check(user_choice):
+
+    weapon_ = user.find_item(choice, list_of_items)
+
+    if weapon_ == False:
+        message_pop_up("""Looks like that is not a weapon or it is not
+        in your inventory. Please go to menu and see your current inventory.""")

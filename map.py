@@ -11,12 +11,6 @@ import items
 
 user = Player("level_one_intro", 100)
 
-list_of_weapons = {
-    "weapons": {"rifle": items.rifle },
-    "items": {"gas_mask": items.gas_mask},
-    "food": {"rations": items.rations },
-        };
-
 # Useful global functions
 
 def message_pop_up(message):
@@ -548,7 +542,7 @@ class Ship(Room):
 
         choice = input('# ')
 
-        ship_mate = Enemy(items.hands, 10, "Jimmy")
+        ship_mate = Enemy(10, "Jimmy")
 
         if 'menu' in choice:
             return 'menu_enter'
@@ -562,8 +556,8 @@ class Ship(Room):
             not want to listen to your words. He knocked you out cold. You loose 10
             health.
             """))
+
             user.health -= 10
-            print(dedent("Your health is now {}".format(user.health)))
 
         elif 'B' in choice:
             print(dedent(
@@ -573,13 +567,17 @@ class Ship(Room):
             """
             ))
 
-            ship_mate.attack(user)
+            while ship_mate.health or user.health != 0:
 
-            choice = input('# ')
+                ship_mate.attack(items.hands, user)
 
-            ww2_mania_battles.attack_choice()
+                choice = input('# ')
 
+                user.attack_choice(choice, ship_mate, item.hands)
 
+                choice = input('# ')
+
+                is_it_an_item? =  items.find_item(choice)
 
         elif 'C' in choice:
             print(dedent("""
@@ -591,7 +589,6 @@ class Ship(Room):
             input('# ')
 
             return 'discharged'
-
 
         elif 'D' in choice:
 
@@ -619,13 +616,10 @@ class NormandyBeach(Room):
     decisions of death."""
 
     def enter(self):
+
         user.saved_room = 'arrival_at_normandy'
 
         return 'room'
-
-
-
-
 
 
 ##########################################
