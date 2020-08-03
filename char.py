@@ -81,14 +81,17 @@ class Player(object):
     def attack_choice(self, user_choice, enemy, enemy_weapon):
         # Checking users choice (To limit if/else clogging map.py)
         if 'A' in user_choice:
-            print("""What weapon do you want to use?'""")
+            return "What weapon do you want to use?"
 
         elif 'B' in user_choice:
-            if randint(1, 4):
+            if randint(1, 4) == 3:
                 return False
 
             else:
-                print(dedent("Well looks like your escape attempt failed."))
+                return "Well looks like your escape attempt failed."
+
+        else:
+            message_pop_up()
 
 class Enemy(Player):
 

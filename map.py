@@ -13,7 +13,7 @@ user = Player("level_one_intro", 100)
 
 # Useful global functions
 
-def message_pop_up(message):
+def message_pop_up(message="Please select an option below and type in the terminal."):
     print(dedent("""
     ######## IMPORTANT ########
     ###########################
@@ -135,7 +135,7 @@ class Menu(Room):
             return user.saved_room
 
         else:
-            message_pop_up(" You have to choose from the letters to get an option")
+            message_pop_up()
             return "menu_enter"
 
 
@@ -177,9 +177,7 @@ class Shop(Room):
             return "menu_enter"
 
         else:
-            message_pop_up("""
-            Please choose an option.
-            """)
+            message_pop_up()
             return "shop"
 
 
@@ -244,6 +242,7 @@ class Rules(Room):
                 return 'menu_rules'
 
             else:
+                message_pop_up()
                 return 'menu_enter'
 
 
@@ -268,7 +267,7 @@ class Quit(Room):
             print(dedent('Redirecting back to menu......'))
             return 'menu_enter'
         else:
-            print(dedent('To quit please type "yes" into the terminal'))
+            message_pop_up()
             return 'quit'
 
 #########################
@@ -378,8 +377,7 @@ class SgtsOffice(Room):
             return "path_to_war"
 
         else:
-            print(dedent("hey that's not right say 'yes' to contine or 'menu to go to the menu'"))
-
+            message_pop_up()
             return "sgt's_office"
 
 class WarPath(Room):
@@ -478,7 +476,7 @@ class WarPath(Room):
             "Your rifles quality is now {}, great choice.".format(items.rifle.quality)
             ))
         else:
-            message_pop_up('Please select a choice from the letters.')
+            message_pop_up()
             return 'path_to_war'
 
         return  'ship'
@@ -559,6 +557,8 @@ class Ship(Room):
 
             user.health -= 10
 
+            print(dedent("Your health is now {}".format(user.health)))
+
         elif 'B' in choice:
             print(dedent(
             """
@@ -573,22 +573,34 @@ class Ship(Room):
 
                 choice = input('# ')
 
-                user_choices = attack_choice(choice, ship_mate, item.hands)
+                user_choices = user.attack_choice(choice, ship_mate, items.hands)
 
-                if 'what' in user_choices:
+                if user_choices != False:
+                    print(user_choices)
+
+                if user_choices == False:
+                    print("You have escaped {}".format(ship_mate.name))
+                    break
+
+                if 'What' in user_choices:
 
                     choice = input('# ')
 
-                    if find_item_check(choice) != False
+                    if items.find_item(choice, user, "weapon") != False:
+
+                        item = items.find_item(choice, user, "weapon")
+                        print(dedent("Okay, you weapon choice is {}".format(choice)))
+                        user.attack(item, ship_mate)
+
 
                     else:
                         message_pop_up("""Looks like that is not a weapon or it is not
-                        in your inventory. Please go to menu and see your current inventory.""")
-                        
+                        in your inventory.""")
 
-
-
-
+            print(dedent("""
+            Wow quite a fight. But play time is over you are almost
+            at your destination.
+            """))
 
         elif 'C' in choice:
             print(dedent("""
@@ -620,6 +632,10 @@ class Ship(Room):
 
             user.player_inventory["glock"] = items.glock
 
+            print(dedent('You now have a {} in your inventory.'.format(items.glock.name)))
+
+        else:
+            message_pop_up()
         return "arrival_at_normandy"
 
 class NormandyBeach(Room):
