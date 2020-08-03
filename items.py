@@ -129,5 +129,4 @@ def find_item_check(user_choice):
     weapon_ = user.find_item(choice, list_of_items)
 
     if weapon_ == False:
-        message_pop_up("""Looks like that is not a weapon or it is not
-        in your inventory. Please go to menu and see your current inventory.""")
+        return False

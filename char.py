@@ -85,11 +85,11 @@ class Player(object):
 
         elif 'B' in user_choice:
             if randint(1, 4):
-                print(dedent("You have evaded the enemy"))
+                return False
+
             else:
                 print(dedent("Well looks like your escape attempt failed."))
-                enemy.attack(enemy_weapon, user)
-                
+
 class Enemy(Player):
 
     """Enemies are characters the player battles, they clash with

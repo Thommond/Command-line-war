@@ -573,11 +573,22 @@ class Ship(Room):
 
                 choice = input('# ')
 
-                user.attack_choice(choice, ship_mate, item.hands)
+                user_choices = attack_choice(choice, ship_mate, item.hands)
 
-                choice = input('# ')
+                if 'what' in user_choices:
 
-                is_it_an_item? =  items.find_item(choice)
+                    choice = input('# ')
+
+                    if find_item_check(choice) != False
+
+                    else:
+                        message_pop_up("""Looks like that is not a weapon or it is not
+                        in your inventory. Please go to menu and see your current inventory.""")
+                        
+
+
+
+
 
         elif 'C' in choice:
             print(dedent("""
