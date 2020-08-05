@@ -102,7 +102,7 @@ list_of_items = {
     }
 };
 
-def find_item(choice_of_item, user, type):
+def find_item(choice_of_item, user, desired_type):
 
     """Loops through all items to make sure player string input is a
     actual item from the game. And checks if
@@ -112,23 +112,21 @@ def find_item(choice_of_item, user, type):
         for item in category:
 
             if choice_of_item == item:
-                pass
 
+                print('Getting that item...')
+
+                for an_item in user.player_inventory:
+                    if choice_of_item == an_item:
+                        for an_item in user.player_inventory.values():
+
+                            if desired_type == an_item.type:
+                                print('hello?')
+                                return info
+
+                            else:
+                                return False
+
+                        else:
+                            return False
             else:
                 return False
-
-    for item in user.player_inventory:
-        print(item)
-        if choice_of_item == item:
-            print(item)
-            for item in user.player_inventory.values():
-
-                if desired_type == item.type:
-
-                    return info
-
-
-                else:
-                    return False
-        else:
-            return False

@@ -586,16 +586,18 @@ class Ship(Room):
 
                     choice = input('# ')
 
-                    if items.find_item(choice, user, "weapon") != False:
+                    if items.find_item(choice, user, "weapon") == False:
+                        message_pop_up(
+                        """
+                        Looks like that is not a weapon or it is not
+                        in your inventory.
+                        """)
 
+                    else:
                         item = items.find_item(choice, user, "weapon")
                         print(dedent("Okay, you weapon choice is {}".format(choice)))
                         user.attack(item, ship_mate)
 
-
-                    else:
-                        message_pop_up("""Looks like that is not a weapon or it is not
-                        in your inventory.""")
 
             print(dedent("""
             Wow quite a fight. But play time is over you are almost
