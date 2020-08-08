@@ -1,5 +1,6 @@
 from random import randint
 from textwrap import dedent
+import map
 import items
 
 
@@ -51,32 +52,26 @@ class Player(object):
         # Checking if weapon broke / 1 out of 20 chance if not hands as weapon
         if weapon.quality == 0 or range(1, 20) == 12 and weapon.name != 'hands':
             print(dedent("Oh no looks like {}'s {} broke!!".format(self.name, weapon.name)))
+            # TODO: Have a my_weapon argument where values change from default.
 
         # One in one twenty chance player or enemy will deal double damage.
         if randint(1, 10) == 4:
             victim.health -= (weapon.damage * 2)
             print("Oh no double damage!")
             print("{}'s health is down to {} because of an attack by {} with {} as their weapon.".format(victim.name, victim.health, self.name, weapon.name))
-            print(dedent("""
-            Looks like {} attacked you. What will you do?
-
-            A. Attack back using a weapon from your inventory.
-
-            B. Try to escape.
-            """.format(self.name)))
 
         else:
             victim.health -= weapon.damage
-
             print(dedent("{}'s health is down to {} because of an attack by {} with {} as their weapon'".format(victim.name, victim.health, self.name, weapon.name)))
 
-            print(dedent("""
-            Looks like {} attacked you. What will you do?
+        print(dedent("""
+        Looks like {} attacked you. What will you do?
 
-            A. Attack back using a weapon from your inventory.
+        A. Attack back using a weapon from your inventory.
 
-            B. Try to escape.
-            """.format(self.name)))
+        B. Try to escape.
+        """)).format(self.name)
+
 
     def attack_choice(self, user_choice, enemy, enemy_weapon):
         # Checking users choice (To limit if/else clogging map.py)
@@ -91,7 +86,7 @@ class Player(object):
                 return "Well looks like your escape attempt failed."
 
         else:
-            message_pop_up()
+            map.message_pop_up()
 
 class Enemy(Player):
 

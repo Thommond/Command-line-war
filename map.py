@@ -595,7 +595,6 @@ class Ship(Room):
 
                     else:
                         item = items.find_item(choice, user, "weapon")
-                        print(dedent("Okay, you weapon choice is {}".format(choice)))
                         user.attack(item, ship_mate)
 
 
