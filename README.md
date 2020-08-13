@@ -1,4 +1,4 @@
-## Command line war
+# Command line war
 
 This is a text adventure command line game. You play
 a soldier in the midst of world war two. Your goal is
