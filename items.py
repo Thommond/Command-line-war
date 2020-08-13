@@ -113,7 +113,6 @@ def find_item(choice_of_item, user, desired_type):
     for category in list_of_items.values():
         for item in category:
             if choice_of_item == item and item in user.player_inventory:
-                print('Your item choice is {}'.format(item))
 
                 for item in category.values():
                     if desired_type == item.type:

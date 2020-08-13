@@ -159,7 +159,8 @@ class Shop(Room):
         """))
 
         choice = input("# ")
-
+        # TODO: With inventory already created, make rooms which allow
+        # user to repair weapons and look at item details.
         if 'A' in choice:
             print(dedent('Okay what weapon do you need repaired?'))
             # TODO: make a repair room
@@ -540,7 +541,7 @@ class Ship(Room):
 
         choice = input('# ')
 
-        ship_mate = Enemy(10, "Jimmy")
+        ship_mate = Enemy(5, "Jimmy")
 
         if 'menu' in choice:
             return 'menu_enter'
@@ -566,8 +567,9 @@ class Ship(Room):
             Everyone looks at you. Jimmy stares with rage.
             """
             ))
-
-            while ship_mate.health or user.health != 0:
+            # TODO: Put in fluid funciton to limit redunant code and length of
+            # classes.
+            while ship_mate.health or user.health > 0:
 
                 ship_mate.attack(items.hands, user)
 
@@ -581,7 +583,7 @@ class Ship(Room):
                 if user_choices == False:
                     print("You have escaped {}".format(ship_mate.name))
                     break
-
+                # TODO: does not run do to nonetype of user_choices
                 if 'What' in user_choices:
 
                     choice = input('# ')
@@ -595,6 +597,7 @@ class Ship(Room):
 
                     else:
                         item = items.find_item(choice, user, "weapon")
+                        print('Your item choice is {}'.format(item.name))
                         user.attack(item, ship_mate)
 
 

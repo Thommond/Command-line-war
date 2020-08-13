@@ -41,14 +41,6 @@ class Player(object):
 
     def attack(self, weapon, victim):
 
-        # Making sure victim is not dead
-        if victim.health <= 0:
-            if victim == user:
-                return 'death'
-            else:
-                print('It is over the battle is won')
-                print('{} is dead, nothing but a cold corpse.'.format(victim.name))
-
         # Checking if weapon broke / 1 out of 20 chance if not hands as weapon
         if weapon.quality == 0 or range(1, 20) == 12 and weapon.name != 'hands':
             print(dedent("Oh no looks like {}'s {} broke!!".format(self.name, weapon.name)))
@@ -62,15 +54,16 @@ class Player(object):
 
         else:
             victim.health -= weapon.damage
-            print(dedent("{}'s health is down to {} because of an attack by {} with {} as their weapon'".format(victim.name, victim.health, self.name, weapon.name)))
-
+            print(dedent("{}'s health is down to {} because of an attack by {} with {} as their weapon".format(victim.name, victim.health, self.name, weapon.name)))
+        # TODO: Right now it prints with enemy attack aswell make so it only
+        # prints with the user.
         print(dedent("""
         Looks like {} attacked you. What will you do?
 
         A. Attack back using a weapon from your inventory.
 
         B. Try to escape.
-        """)).format(self.name)
+        """.format(self.name)))
 
 
     def attack_choice(self, user_choice, enemy, enemy_weapon):
@@ -84,7 +77,8 @@ class Player(object):
 
             else:
                 return "Well looks like your escape attempt failed."
-
+        # TODO: Returns none due to not functioning in loop. Fix by making repeatable
+        # like attack.
         else:
             map.message_pop_up()
 
