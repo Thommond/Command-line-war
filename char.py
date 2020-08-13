@@ -77,10 +77,12 @@ class Player(object):
 
             else:
                 return "Well looks like your escape attempt failed."
-        # TODO: Returns none due to not functioning in loop. Fix by making repeatable
-        # like attack.
         else:
-            map.message_pop_up()
+            return """
+            ##########################
+            Please select an option...
+            ##########################
+         """
 
 class Enemy(Player):
 

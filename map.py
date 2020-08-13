@@ -23,7 +23,48 @@ def message_pop_up(message="Please select an option below and type in the termin
     ###########################
     """.format(message)))
 
+# Merges all battle methods into each and every battle for the player.
+def battles(enemy, enemy_weapon, message ):
 
+    while enemy.health and user.health > 0:
+
+        enemy.attack(enemy_weapon, user)
+
+        choice = input('# ')
+
+        user_choices = user.attack_choice(choice, enemy, enemy_weapon)
+
+        if user_choices != False:
+            print(user_choices)
+
+        if user_choices == False:
+            print("You have escaped {}".format(enemy.name))
+            break
+        # TODO: does not run do to nonetype of user_choices
+        if 'What' in user_choices:
+
+            choice = input('# ')
+
+            if items.find_item(choice, user, "weapon") == False:
+                message_pop_up(
+                """
+                Looks like that is not a weapon or it is not
+                in your inventory.
+                """)
+
+            else:
+                item = items.find_item(choice, user, "weapon")
+                print('Your item choice is {}'.format(item.name))
+                user.attack(item, enemy)
+
+    if user.health <= 0:
+        return 'death'
+    elif enemy.health <= 0:
+        print(dedent(message))
+
+    else:
+        message_pop_up("""Error notify the creator of this issue. In the mean time sorry
+        for your inconvience.""")
 ###                            ###
 ###  Ending rooms to the game  ###
 ###                            ###
@@ -569,42 +610,11 @@ class Ship(Room):
             ))
             # TODO: Put in fluid funciton to limit redunant code and length of
             # classes.
-            while ship_mate.health or user.health > 0:
+            battles(
+            ship_mate, items.hands, """Wow quite a fight. But play time is over you are almost
+                    at your destination. Jimmy stood no chance."""
+            )
 
-                ship_mate.attack(items.hands, user)
-
-                choice = input('# ')
-
-                user_choices = user.attack_choice(choice, ship_mate, items.hands)
-
-                if user_choices != False:
-                    print(user_choices)
-
-                if user_choices == False:
-                    print("You have escaped {}".format(ship_mate.name))
-                    break
-                # TODO: does not run do to nonetype of user_choices
-                if 'What' in user_choices:
-
-                    choice = input('# ')
-
-                    if items.find_item(choice, user, "weapon") == False:
-                        message_pop_up(
-                        """
-                        Looks like that is not a weapon or it is not
-                        in your inventory.
-                        """)
-
-                    else:
-                        item = items.find_item(choice, user, "weapon")
-                        print('Your item choice is {}'.format(item.name))
-                        user.attack(item, ship_mate)
-
-
-            print(dedent("""
-            Wow quite a fight. But play time is over you are almost
-            at your destination.
-            """))
 
         elif 'C' in choice:
             print(dedent("""
