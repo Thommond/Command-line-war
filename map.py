@@ -10,6 +10,7 @@ import items
 ####################################
 
 user = Player("level_one_intro", 100)
+error = False
 
 # Useful global functions
 
@@ -26,7 +27,9 @@ def message_pop_up(message="Please select an option below and type in the termin
 # Merges all battle methods into each and every battle for the player.
 def battles(enemy, enemy_weapon, message ):
 
-    while enemy.health and user.health > 0:
+    error = False
+
+    while enemy.health > 0 and user.health > 0:
 
         enemy.attack(enemy_weapon, user)
 
@@ -34,13 +37,20 @@ def battles(enemy, enemy_weapon, message ):
 
         user_choices = user.attack_choice(choice, enemy, enemy_weapon)
 
+        if user_choices == None:
+            error = True
+            message_pop_up("""Due to your choice of neither A or B the room was
+            reset, sorry for your inconvience. """)
+            break
+
         if user_choices != False:
             print(user_choices)
 
         if user_choices == False:
-            print("You have escaped {}".format(enemy.name))
+
+            escaped = "You have escaped {}".format(enemy.name)
             break
-        # TODO: does not run do to nonetype of user_choices
+
         if 'What' in user_choices:
 
             choice = input('# ')
@@ -57,11 +67,14 @@ def battles(enemy, enemy_weapon, message ):
                 print('Your item choice is {}'.format(item.name))
                 user.attack(item, enemy)
 
+    if error == True:
+        return user.saved_room
     if user.health <= 0:
         return 'death'
     elif enemy.health <= 0:
         print(dedent(message))
-
+    elif escaped:
+        print(escaped)
     else:
         message_pop_up("""Error notify the creator of this issue. In the mean time sorry
         for your inconvience.""")
@@ -104,7 +117,7 @@ class Completed():
         rando = randint(1, 10)
 
         if rando == 3:
-            ending_scene = """get shot by a crafty german sniper on the way back to base camp. Your
+            ending_scene = """Duck!!!! Oh shit..... you get shot by a crafty german sniper on the way back to base camp. Your
             cold dead corpse never leaves the french country side. Your wife will never know if you
             are KIA or POW.
 
@@ -200,27 +213,47 @@ class Shop(Room):
         """))
 
         choice = input("# ")
-        # TODO: With inventory already created, make rooms which allow
-        # user to repair weapons and look at item details.
+
         if 'A' in choice:
-            print(dedent('Okay what weapon do you need repaired?'))
-            # TODO: make a repair room
-            return 'room'
+            return 'repair'
+
         elif 'B' in choice:
-            print(dedent('Okay what item would you like to buy?'))
-            # TODO: make a store room
-            return 'room'
+            return 'buying'
+
         elif 'C' in choice:
-            print(dedent('Okay, what item or items would you like to sell?'))
-            # TODO: Make a sell room
-            return 'room'
+            return 'selling'
+
         elif 'D' in choice:
-            print(dedent('Redirecting back to menu.'))
+            return 'drop'
+
+        elif 'E' in choice:
             return "menu_enter"
 
         else:
             message_pop_up()
             return "shop"
+
+#--------------------------------#
+### Rooms below are shop rooms ###
+#--------------------------------#
+
+class Repair(Room):
+    """Users can repair their weapons here obviously."""
+    def enter(self):
+        print("What item would you like to repair?")
+
+        choice = input('# ')
+
+        print('Okay what type of item is it? (weapon or item. Food cannot be repaired)')
+
+        type = input('# ')
+
+        user_item = find_item(choice, user, type)
+
+        repair_item(user_item)
+
+
+
 
 
 class Inventory(Room):
@@ -317,8 +350,8 @@ class Quit(Room):
 #########################
 
 
-## Start of play through rooms! ##
-#--------------------------------#
+## Start of the play through rooms! ##
+#------------------------------------#
 
 
 class LevelOneIntro(Room):  # child of room first room of the entire game
@@ -608,12 +641,14 @@ class Ship(Room):
             Everyone looks at you. Jimmy stares with rage.
             """
             ))
-            # TODO: Put in fluid funciton to limit redunant code and length of
-            # classes.
+
             battles(
-            ship_mate, items.hands, """Wow quite a fight. But play time is over you are almost
-                    at your destination. Jimmy stood no chance."""
+            ship_mate, items.hands, """
+            Everyone looks at Jimmy's dead corpse. They all start
+            charging at you, and pin you to the floor. "You don't kill our own men!!!" some one screamed.
+            """
             )
+            return 'discharged'
 
 
         elif 'C' in choice:
@@ -650,6 +685,8 @@ class Ship(Room):
 
         else:
             message_pop_up()
+            return 'ship'
+
         return "arrival_at_normandy"
 
 class NormandyBeach(Room):
