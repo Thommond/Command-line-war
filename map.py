@@ -4,7 +4,6 @@ from random import randint
 from char import Player, Enemy
 import items
 
-
 ####################################
 #### Map Class is at the bottom ####
 ####################################
@@ -12,7 +11,7 @@ import items
 user = Player("level_one_intro", 100)
 error = False
 
-# Useful global functions
+# For error handling to catch users attention
 
 def message_pop_up(message="Please select an option below and type in the terminal."):
     print(dedent("""
@@ -67,6 +66,7 @@ def battles(enemy, enemy_weapon, message ):
                 print('Your item choice is {}'.format(item.name))
                 user.attack(item, enemy)
 
+    # Going through outcomes of the battle based on importance
     if error == True:
         return user.saved_room
     if user.health <= 0:
@@ -78,9 +78,10 @@ def battles(enemy, enemy_weapon, message ):
     else:
         message_pop_up("""Error notify the creator of this issue. In the mean time sorry
         for your inconvience.""")
-###                            ###
-###  Ending rooms to the game  ###
-###                            ###
+
+###                                ###
+###  Possible Endings to the game  ###
+###                                ###
 
 class Room(object):
     """Parent of all room objects and used for underconstruction features."""
@@ -233,9 +234,9 @@ class Shop(Room):
             message_pop_up()
             return "shop"
 
-#--------------------------------#
-### Rooms below are shop rooms ###
-#--------------------------------#
+#----------------------------------------------#
+### Rooms below are related to the Shop room ###
+#----------------------------------------------#
 
 class Repair(Room):
     """Users can repair their weapons here obviously."""
@@ -252,10 +253,6 @@ class Repair(Room):
 
         repair_item(user_item)
 
-
-
-
-
 class Inventory(Room):
     """Tells users there inventory at the requested time."""
 
@@ -266,6 +263,11 @@ class Inventory(Room):
         Time to take a look in my bag. I have a {} and thats it.""".format(inventory)))
 
         return "menu_enter"
+
+
+###____________________________________###
+### Rules and regulations of game play ###
+###____________________________________###
 
 class Rules(Room):
     """Displays the rules of the game."""
@@ -325,6 +327,8 @@ class Rules(Room):
             print("Okay, thanks for reading the rules, you are now back at menu.")
             return 'menu_enter'
 
+## Quiting has to be an option (I guess)
+
 class Quit(Room):
 
     def enter(self):
@@ -381,6 +385,7 @@ class LevelOneIntro(Room):  # child of room first room of the entire game
 
 class SgtsOffice(Room):
     def enter(self):
+        # Forced introduction with optional choice to go to rules
 
         """Introduction to the game. Telling the rules to the player
         so they get the jist. (That is why it is quite lengthy)"""
@@ -491,15 +496,15 @@ class WarPath(Room):
 
         elif 'A' in choice:
             # Random opportunity's in poker ordered by most likely to least likely
-            rando = randint(1, 4)
-            if rando == 3:
+
+            if randint(1, 4) == 3:
                 print(dedent("""
                 You played some poker, you won a thing or two, but got carried away. In the final round
                 you bet it all. You fell right into the bluff of a fellow private and lost it all. You lost 7 rations."""))
                 items.rations.quantity -= 7
                 print(dedent("You now have only {} rations.".format(items.rations.quantity)))
 
-            elif rando == 1:
+            elif randint(1, 4) == 1:
                 print(dedent("""
                 You did pretty good for poker, you played fair and gained 5 rations"""))
                 items.rations.quantity += 5
@@ -512,11 +517,12 @@ class WarPath(Room):
 
                 return 'discharged'
 
-            elif randint(1, 1000) == 378:
+            elif randint(1, 3) == 2:
                 print(dedent("""
                 Wow!!! Looks like you were in an all stakes game with a bazooka
                 gunner. You won it all! You now have a bazooka in you midst."""))
-                # TODO: Add bazooka to inventory
+
+                user.add_to_inventory(items.bazooka)
 
             else:
                 print(dedent("""
@@ -550,6 +556,7 @@ class WarPath(Room):
             print(dedent(
             "Your rifles quality is now {}, great choice.".format(items.rifle.quality)
             ))
+
         else:
             message_pop_up()
             return 'path_to_war'
@@ -744,7 +751,7 @@ class Map(object):
         # "rats": Rats(),
         # "the_road": Road(), # boss battle
         # "to_paris": ToParis(),
-        # ending here for now
+        # "murika" Murika() #Ending
     }
 
     def __init__(self, start_room):

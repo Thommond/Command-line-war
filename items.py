@@ -20,7 +20,7 @@ class Weapons(Items):
 
     def check_weapons_quality():
         """Notifies player of their weapons quality
-        status and passes values to batte in the player class."""
+        status and passes values to battle in the player class."""
 
         if quality > 3:
             return 'Quality is low remember to either repair or replace your weapons soon!'

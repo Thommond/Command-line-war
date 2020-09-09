@@ -5,15 +5,17 @@ import items
 
 
 # Player class manages the players info such as name and what items he/she has.
+
+player_inventory = {
+
+"rations": items.rations,
+"rifle": items.rifle,
+"gas_mask": items.gas_mask,
+"hands": items.hands,
+
+}
+
 class Player(object):
-
-    player_inventory = {
-
-    "rations": items.rations,
-    "rifle": items.rifle,
-    "gas_mask": items.gas_mask,
-
-    }
 
     def __init__(self, saved_room, health, name=False):
         self.saved_room = saved_room
@@ -21,24 +23,36 @@ class Player(object):
         self.name = name
 
     def add_to_inventory(self, newItem):
-        """Inventory checks to make sure the player does not have more than 7 items"""
+
+        """Inventory checks to make sure
+        the player does not have more than 7 items"""
+
         if len(player_inventory) == 7:
-            return dedent("You already have the maximum of 7 items in your inventory, looks like you will need to get rid of an item to get {}".format(newItem))
+            return map.message_pop_up("""You already have the maximum of 7 items in your inventory,
+            looks like you will need to get rid of an item to get {}""".format(newItem))
+
+        else:
+            player_inventory[newItem.name] = newItem
+            print(dedent("""Nice {} has been added to your inventory!""".format(newItem.name)))
 
     def add_to_player_health(self, health_addition):
-        """Calculating player health additions depending the food"""
+
+        """Calculating player health
+        additions depending the food"""
 
         if self.health == 100:
             return print(dedent("You are at full health you do not need nourishment from a {}!".format(health_addition)))
 
         else:
-
+            # Add the health addition
             self.health += health_addition
+
             if self.health > 100:
                 self.health = 100
 
             return print(dedent("Your health is now {}".format(self.health)))
 
+    # TODO: Make sure to increase and decrease weapon quality each attack.
     def attack(self, weapon, victim):
 
         # Checking if weapon broke / 1 out of 20 chance if not hands as weapon
