@@ -57,13 +57,16 @@ class Player(object):
             print(dedent("{}'s health is down to {} because of an attack by {} with {} as their weapon".format(victim.name, victim.health, self.name, weapon.name)))
         # TODO: Right now it prints with enemy attack aswell make so it only
         # prints with the user.
-        print(dedent("""
-        Looks like {} attacked you. What will you do?
+        if map.user == victim:
+            print(dedent("""
+            Looks like {} attacked you. What will you do?
 
-        A. Attack back using a weapon from your inventory.
+            A. Attack back using a weapon from your inventory.
 
-        B. Try to escape.
-        """.format(self.name)))
+            B. Try to escape.
+            """.format(self.name)))
+        else:
+            print('...')
 
 
     def attack_choice(self, user_choice, enemy, enemy_weapon):
@@ -78,11 +81,8 @@ class Player(object):
             else:
                 return "Well looks like your escape attempt failed."
         else:
-            return """
-            ##########################
-            Please select an option...
-            ##########################
-         """
+            return "Please choose either 'A' or 'B'"
+
 
 class Enemy(Player):
 

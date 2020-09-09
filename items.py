@@ -122,3 +122,28 @@ def find_item(choice_of_item, user, desired_type):
                         return False
             else:
                 return False
+
+def repair_item(item_to_repair):
+
+    if item_to_repair.repair_cost == False:
+        message_pop_up('This item cannot be repaired.')
+
+    else:
+
+        print('So you want to repair the {}, for {}?'.format(item_to_repair, item_to_repair.repair_cost))
+
+        choice = input('# ')
+
+        if 'y' in choice:
+
+            # Repair the item quality.
+            pass
+
+        elif 'n' in choice:
+            print('Okay, going back to shop.')
+
+            return 'shop'
+
+        else:
+
+            message_pop_up()
