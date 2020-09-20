@@ -159,34 +159,28 @@ class Menu(Room):
         #####################################################################
         Welcome to the menu! How can I help you soldier?
 
-        A. Rules and regulations
+        A. Bartering stand and Repairs
 
-        B. Bartering stand and Repairs
+        B. Inventory
 
-        C. Inventory
+        C. Quit the game (Note: No progress will be save.)
 
-        D. Quit the game (Note: No progress will be save.)
-
-        E. Back to game
+        D. Back to game
 
         """))
 
         choice = input('# ')
 
         if 'A' in choice:
-            return 'menu_rules'
-
-        elif 'B' in choice:
             return "shop"
 
-        elif 'C' in choice:
+        elif 'B' in choice:
             return "inventory_check"
 
-        elif 'D' in choice:
+        elif 'C' in choice:
             return "quit"
 
-        elif 'E' in choice:
-
+        elif 'D' in choice:
             return user.saved_room
 
         else:
@@ -264,69 +258,6 @@ class Inventory(Room):
 
         return "menu_enter"
 
-
-###____________________________________###
-### Rules and regulations of game play ###
-###____________________________________###
-
-class Rules(Room):
-    """Displays the rules of the game."""
-    def enter(self):
-
-        print(dedent("""
-        #####################################################################
-        So here is the recap about some game rules.
-
-        1. You are only allowed 7 item in your inventory, and food is included, but
-        quantity of each item is not limited.
-
-        2. You can shop in the store and rations are used as currency.
-
-        3. Each weapon does damage and that will be displayed on each weapon.
-
-        4. Every item has it's ration value so you can sell it to the shop for
-        rations if you need an item.
-
-        5. Once you make a choice you cannot go back unless you replay, so choose
-        wisely.
-
-        Notes: (Not rules but helpful info) Say "yes" to continue to tips or "no"
-        to exit rules and go back to menu.
-        """))
-
-        choice = input('# ')
-
-        if 'yes' in choice:
-            print(dedent(
-            """
-            #####################################################################
-            Here is some helpful info...
-
-            1. Battles are math so always keep an eye on
-            weapon damage, quality of the weapon and other inventory.
-
-            2. Some things are randomized so do not be afraid to take a chance.
-
-            3. Remember if you beat the game or not progress will not be saved.
-
-            (Note: type yes to read the rules again, if you do not want to then simply press enter.)
-            """
-            ))
-            choice = input("# ")
-
-            if 'yes' in choice:
-
-                return 'menu_rules'
-
-            else:
-                message_pop_up()
-                return 'menu_enter'
-
-
-        else:
-            print("Okay, thanks for reading the rules, you are now back at menu.")
-            return 'menu_enter'
-
 ## Quiting has to be an option (I guess)
 
 class Quit(Room):
@@ -394,10 +325,13 @@ class SgtsOffice(Room):
 
         print(dedent("""
         Welcome soldier I am here to give you the ropes.
-        (Enter to continue)
+        (Enter to continue or 'skip' to skip.)
         """))
 
-        input('# ')
+        choice = input('# ')
+
+        if 'skip' in choice:
+            return 'path_to_war'
 
         print(dedent("""
         First things first, you want to make it out alive and safe home to your family.
@@ -718,7 +652,6 @@ class Map(object):
 
         # Menu options
         "menu_enter": Menu(),
-        "menu_rules": Rules(),
         "shop": Shop(),
         "inventory_check": Inventory(),
         "quit": Quit(),

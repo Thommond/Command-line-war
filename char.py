@@ -6,21 +6,19 @@ import items
 
 # Player class manages the players info such as name and what items he/she has.
 
-player_inventory = {
-
-"rations": items.rations,
-"rifle": items.rifle,
-"gas_mask": items.gas_mask,
-"hands": items.hands,
-
-}
-
 class Player(object):
 
     def __init__(self, saved_room, health, name=False):
         self.saved_room = saved_room
         self.health = health
         self.name = name
+
+    player_inventory = {
+        "rations": items.rations.quantity,
+        "rifle": items.rifle.ration_rate,
+        "gas_mask": items.gas_mask,
+        "hands": items.hands,
+    }
 
     def add_to_inventory(self, newItem):
 
@@ -52,7 +50,6 @@ class Player(object):
 
             return print(dedent("Your health is now {}".format(self.health)))
 
-    # TODO: Make sure to increase and decrease weapon quality each attack.
     def attack(self, weapon, victim):
 
         # Checking if weapon broke / 1 out of 20 chance if not hands as weapon
@@ -69,8 +66,7 @@ class Player(object):
         else:
             victim.health -= weapon.damage
             print(dedent("{}'s health is down to {} because of an attack by {} with {} as their weapon".format(victim.name, victim.health, self.name, weapon.name)))
-        # TODO: Right now it prints with enemy attack aswell make so it only
-        # prints with the user.
+
         if map.user == victim:
             print(dedent("""
             Looks like {} attacked you. What will you do?
@@ -80,6 +76,7 @@ class Player(object):
             B. Try to escape.
             """.format(self.name)))
         else:
+            weapon.quality -= 1
             print('...')
 
 

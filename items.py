@@ -88,7 +88,8 @@ list_of_items = {
     "weapons": {
 
     "rifle": rifle,
-    "sniper": german_sniper
+    "sniper": german_sniper,
+    "hands": hands
     },
 
     "items": {
@@ -110,18 +111,19 @@ def find_item(choice_of_item, user, desired_type):
     actual item from the game. And checks if
     they have that item in the inventory."""
 
+    # # TODO: Currently only works with rifle needs to be fixed.
     for category in list_of_items.values():
-        for item in category:
-            if choice_of_item == item and item in user.player_inventory:
-
-                for item in category.values():
+        if choice_of_item in category and choice_of_item in user.player_inventory:
+            for item in category.values():
+                if item.name == choice_of_item:
                     if desired_type == item.type:
                         return item
 
                     else:
                         return False
-            else:
-                return False
+        else:
+            return False
+
 
 def repair_item(item_to_repair):
 
