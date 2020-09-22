@@ -3,16 +3,15 @@ from textwrap import dedent
 import map
 import items
 
-
-# Player class manages the players info such as name and what items he/she has.
-
 class Player(object):
-
+    """The player class manages all methods and attributes with
+    the main character the user is playing."""
     def __init__(self, saved_room, health, name=False):
         self.saved_room = saved_room
         self.health = health
         self.name = name
 
+    # What the player currently is "holding"
     player_inventory = {
         "rations": items.rations.quantity,
         "rifle": items.rifle.ration_rate,
@@ -25,12 +24,12 @@ class Player(object):
         """Inventory checks to make sure
         the player does not have more than 7 items"""
 
-        if len(player_inventory) == 7:
+        if len(self.player_inventory) == 7:
             return map.message_pop_up("""You already have the maximum of 7 items in your inventory,
             looks like you will need to get rid of an item to get {}""".format(newItem))
 
         else:
-            player_inventory[newItem.name] = newItem
+            selfl.player_inventory[newItem.name] = newItem
             print(dedent("""Nice {} has been added to your inventory!""".format(newItem.name)))
 
     def add_to_player_health(self, health_addition):
@@ -55,7 +54,6 @@ class Player(object):
         # Checking if weapon broke / 1 out of 20 chance if not hands as weapon
         if weapon.quality == 0 or range(1, 20) == 12 and weapon.name != 'hands':
             print(dedent("Oh no looks like {}'s {} broke!!".format(self.name, weapon.name)))
-            # TODO: Have a my_weapon argument where values change from default.
 
         # One in one twenty chance player or enemy will deal double damage.
         if randint(1, 10) == 4:
@@ -77,11 +75,14 @@ class Player(object):
             """.format(self.name)))
         else:
             weapon.quality -= 1
+            print('Weapon quality decreased by one too {}'.format(weapon.quality))
             print('...')
 
 
     def attack_choice(self, user_choice, enemy, enemy_weapon):
-        # Checking users choice (To limit if/else clogging map.py)
+        """Checking the users choice to
+         limit if/else nesting"""
+
         if 'A' in user_choice:
             return "What weapon do you want to use?"
 

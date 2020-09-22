@@ -51,38 +51,39 @@ class Foods(Items):
 
 # Classical items
 
-gas_mask = Items("gas_mask", 10, 10)
+gas_mask = Items("gas_mask", 10, 10, "item")
 
 boots = Items("boots", 10, 15)
 
-bullet_plate = Items("bullet_plate", 30, 25)
+bullet_plate = Items("bullet_plate", 30, 25, "item")
 
-helmet = Items("helmet", 15, 20)
+helmet = Items("helmet", 15, 20, "item")
 
 #   Weapons
 rifle = Weapons(2.5, "rifle", 20, 4, "weapon")
 
-hands = Weapons(.5, "hands", 100, 0)
+hands = Weapons(.5, "hands", 100, 0, "weapon")
 
-german_sniper = Weapons(10, "sniper", 12, 20)
+german_sniper = Weapons(10, "sniper", 12, 20, "weapon")
 
-mp40 = Weapons(5, "mp40", 18, 15)
+mp40 = Weapons(5, "mp40", 18, 15, "weapon")
 
-glock = Weapons(3, "glock", 30, 8)
+glock = Weapons(3, "glock", 30, 8, "weapon")
 
-german_pistol = Weapons(4, "g-pistol", 25, 10)
+german_pistol = Weapons(4, "g-pistol", 25, 10, "weapon")
 
-machine_gun = Weapons(5, "machine_gun", 5, 25)
+machine_gun = Weapons(5, "machine_gun", 5, 25, "weapon")
 
-bazooka = Weapons(25, "bazooka", 1, 100)
+bazooka = Weapons(25, "bazooka", 1, 100, "weapon")
 
 # Food
 
-rations = Foods(5, 10, "rations", 1)
+rations = Foods(5, 10, "rations", 1, "food")
 
-chocolate = Foods(20, 1, "chocolate", 5)
+chocolate = Foods(20, 1, "chocolate", 5, "food")
 
-meth = Foods(30, 1, "meth", 7)
+meth = Foods(30, 1, "meth", 7, "food")
+
 
 list_of_items = {
     "weapons": {
@@ -107,25 +108,27 @@ list_of_items = {
 
 def find_item(choice_of_item, user, desired_type):
 
-    """Loops through all items to make sure player string input is a
-    actual item from the game. And checks if
-    they have that item in the inventory."""
+    """Loops through all items to make sure p
+    layer string input is an actual item from the game.
+    And checks if they have that item in the inventory.
+    Finally returns the item if it matches the desired type."""
 
-    # # TODO: Currently only works with rifle needs to be fixed.
     for category in list_of_items.values():
-        if choice_of_item in category and choice_of_item in user.player_inventory:
+        if choice_of_item in user.player_inventory:
             for item in category.values():
                 if item.name == choice_of_item:
-                    if desired_type == item.type:
+                    if item.type == desired_type:
+                        print(item.type)
                         return item
-
-                    else:
-                        return False
         else:
             return False
 
+    return "Looks like that is not a item at all."
 
 def repair_item(item_to_repair):
+
+    """Updating the users weapon or
+        items to restore to default."""
 
     if item_to_repair.repair_cost == False:
         message_pop_up('This item cannot be repaired.')
