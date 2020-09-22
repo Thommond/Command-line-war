@@ -24,8 +24,8 @@ def message_pop_up(message="Please select an option below and type in the termin
     """.format(message)))
 
 # Merges all battle methods into each and every battle for the player.
-def battles(enemy, enemy_weapon, message ):
-
+def battles(enemy, enemy_weapon, message):
+    # TODO: Change val in player inventory not default
     error = False
 
     while enemy.health > 0 and user.health > 0:
@@ -118,14 +118,14 @@ class Completed():
         rando = randint(1, 10)
 
         if rando == 3:
-            ending_scene = """Duck!!!! Oh shit..... you get shot by a crafty german sniper on the way back to base camp. Your
+            ending_scene = """get shot by a crafty german sniper on the way back to base camp. Your
             cold dead corpse never leaves the french country side. Your wife will never know if you
             are KIA or POW.
 
             THE END"""
 
         elif rando == 2:
-            ending_scene = """your last battle was fought near the effiel tower, you took a few hits
+            ending_scene = """fought near the effiel tower, you took a few hits
             and are now listed as medically warrented to go home. You will finally get to see your baby
             boy.
 

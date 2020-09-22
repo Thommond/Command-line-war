@@ -18,18 +18,24 @@ class Weapons(Items):
         self.damage = damage
         super().__init__(name, quality, ration_rate, type)
 
-    def check_weapons_quality():
+    def check_quality(item):
         """Notifies player of their weapons quality
         status and passes values to battle in the player class."""
 
-        if quality > 3:
-            return 'Quality is low remember to either repair or replace your weapons soon!'
+        if item.quality == None:
+            return "This item does not have a quality."
 
-        if quality == 0:
+        elif item.quality == 0:
             return 'Your weapon is broke!!'
 
+        elif item.quality > 3:
+            return """Quality is {} remember to either repair or
+            replace your weapons soon!""".format(weapon.quality)
+
         else:
-            return 'Looks like your weapon is a-okay and ready for your next battle!'
+            return """Looks like your weapon is a-okay.
+            Your weapon quality is {}""".format(item.quality)
+
 
 class Foods(Items):
     """Food heals or gives extra abilites to a player."""
@@ -118,31 +124,65 @@ def find_item(choice_of_item, user, desired_type):
             for item in category.values():
                 if item.name == choice_of_item:
                     if item.type == desired_type:
-                        print(item.type)
+
                         return item
         else:
             return False
 
-    return "Looks like that is not a item at all."
+    return False
+
+def get_player_item_val(choice_of_item, user):
+
+    for i in user.player_inventory:
+
+        if i == choice_of_item:
+            return i
 
 def repair_item(item_to_repair):
 
-    """Updating the users weapon or
-        items to restore to default."""
+    # TODO: Change val in player inventory not default
 
-    if item_to_repair.repair_cost == False:
-        message_pop_up('This item cannot be repaired.')
+    """Updating the users weapon or
+    items to restore to default."""
+
+    print("""
+    What type of item are you repairing?
+    A. item
+
+    B. weapon
+
+    (Type out the value Ex: weapon Do not put the letter value Ex: A)
+    """)
+
+    choice = input('# ')
+
+    item2 = find_item(item_to_repair, user, choice)
+
+    if item2 == False:
+        print('Looks like that is not an item or weapon try again.')
+        return 'shop'
+
+    elif item2.type == "food":
+        message_pop_up('This item cannot be repaired this usually means you selected a food.')
 
     else:
+        cost = item_to_repair.ration_rate / 4
 
-        print('So you want to repair the {}, for {}?'.format(item_to_repair, item_to_repair.repair_cost))
+        print('So you want to repair the {}, for {}?'.format(item_to_repair, cost))
 
         choice = input('# ')
 
         if 'y' in choice:
 
-            # Repair the item quality.
-            pass
+            item = find_item("rations", user, "food")
+
+            if item.quantity >= cost:
+
+                item.quantity -= cost
+                cost == item2.quality
+
+            else:
+                print('Sorry you do not have enough rations.')
 
         elif 'n' in choice:
             print('Okay, going back to shop.')
@@ -150,5 +190,5 @@ def repair_item(item_to_repair):
             return 'shop'
 
         else:
-
-            message_pop_up()
+            message_pop_up('Please choose to repair or not repair your weapon.')
+            return 'shop'
