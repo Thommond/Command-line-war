@@ -29,7 +29,7 @@ class Player(object):
             looks like you will need to get rid of an item to get {}""".format(newItem))
 
         else:
-            selfl.player_inventory[newItem.name] = newItem
+            self.player_inventory[newItem.name] = newItem
             print(dedent("""Nice {} has been added to your inventory!""".format(newItem.name)))
 
     def add_to_player_health(self, health_addition):

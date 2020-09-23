@@ -210,7 +210,8 @@ class Shop(Room):
         choice = input("# ")
 
         if 'A' in choice:
-            return 'repair'
+            repair = items.repair_item(user)
+            return 'shop'
 
         elif 'B' in choice:
             return 'buying'
@@ -231,21 +232,6 @@ class Shop(Room):
 #----------------------------------------------#
 ### Rooms below are related to the Shop room ###
 #----------------------------------------------#
-
-class Repair(Room):
-    """Users can repair their weapons here obviously."""
-    def enter(self):
-        print("What item would you like to repair?")
-
-        choice = input('# ')
-
-        print('Okay what type of item is it? (weapon or item. Food cannot be repaired)')
-
-        type = input('# ')
-
-        user_item = find_item(choice, user, type)
-
-        repair_item(user_item)
 
 class Inventory(Room):
     """Tells users there inventory at the requested time."""

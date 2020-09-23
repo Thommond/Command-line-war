@@ -1,4 +1,4 @@
-
+import map
 from textwrap import dedent
 
 class Items(object):
@@ -136,9 +136,12 @@ def get_player_item_val(choice_of_item, user):
     for i in user.player_inventory:
 
         if i == choice_of_item:
-            return i
+            return user.player_inventory[choice_of_item]
 
-def repair_item(item_to_repair):
+        else:
+            return False
+
+def repair_item(user):
 
     # TODO: Change val in player inventory not default
 
@@ -146,6 +149,15 @@ def repair_item(item_to_repair):
     items to restore to default."""
 
     print("""
+    Please type in the item's name of which you
+    would like to repair first. Then the items type, for example "weapon".
+    """)
+
+    item_name = input('# ')
+
+    print("""
+    Okay, thanks.
+
     What type of item are you repairing?
     A. item
 
@@ -154,32 +166,31 @@ def repair_item(item_to_repair):
     (Type out the value Ex: weapon Do not put the letter value Ex: A)
     """)
 
-    choice = input('# ')
+    item_type = input('# ')
 
-    item2 = find_item(item_to_repair, user, choice)
+    item2 = find_item(item_name, user, item_type)
 
     if item2 == False:
         print('Looks like that is not an item or weapon try again.')
-        return 'shop'
 
     elif item2.type == "food":
-        message_pop_up('This item cannot be repaired this usually means you selected a food.')
+        map.message_pop_up('This item cannot be repaired this usually means you selected a food.')
 
     else:
-        cost = item_to_repair.ration_rate / 4
 
-        print('So you want to repair the {}, for {}?'.format(item_to_repair, cost))
+        cost = int(item2.ration_rate / 4)
+        print('So you want to repair the {}, for {}?'.format(item_name, cost))
 
         choice = input('# ')
 
         if 'y' in choice:
+            rations = get_player_item_val("rations", user)
+            item = get_player_item_val(item_name, user)
 
-            item = find_item("rations", user, "food")
-
-            if item.quantity >= cost:
-
-                item.quantity -= cost
-                cost == item2.quality
+            if rations >= cost:
+                rations -= cost
+                item = item2.quality
+                print('Your {} has been repaired at cost of {} and now has a quality of {}. You have now have {} rations.'.format(item_name, cost, item, rations))
 
             else:
                 print('Sorry you do not have enough rations.')
@@ -187,8 +198,5 @@ def repair_item(item_to_repair):
         elif 'n' in choice:
             print('Okay, going back to shop.')
 
-            return 'shop'
-
         else:
-            message_pop_up('Please choose to repair or not repair your weapon.')
-            return 'shop'
+            map.message_pop_up('Please choose to repair or not repair your weapon.')
