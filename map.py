@@ -4,7 +4,6 @@ from random import randint
 from char import Player, Enemy
 import items
 
-
 ####################################
 #### Map Class is at the bottom ####
 ####################################
@@ -12,7 +11,7 @@ import items
 user = Player("level_one_intro", 100)
 error = False
 
-# Useful global functions
+# For error handling to catch users attention
 
 def message_pop_up(message="Please select an option below and type in the terminal."):
     print(dedent("""
@@ -25,8 +24,8 @@ def message_pop_up(message="Please select an option below and type in the termin
     """.format(message)))
 
 # Merges all battle methods into each and every battle for the player.
-def battles(enemy, enemy_weapon, message ):
-
+def battles(enemy, enemy_weapon, message):
+    # TODO: Change val in player inventory not default
     error = False
 
     while enemy.health > 0 and user.health > 0:
@@ -67,6 +66,7 @@ def battles(enemy, enemy_weapon, message ):
                 print('Your item choice is {}'.format(item.name))
                 user.attack(item, enemy)
 
+    # Going through outcomes of the battle based on importance
     if error == True:
         return user.saved_room
     if user.health <= 0:
@@ -78,9 +78,10 @@ def battles(enemy, enemy_weapon, message ):
     else:
         message_pop_up("""Error notify the creator of this issue. In the mean time sorry
         for your inconvience.""")
-###                            ###
-###  Ending rooms to the game  ###
-###                            ###
+
+###                                ###
+###  Possible Endings to the game  ###
+###                                ###
 
 class Room(object):
     """Parent of all room objects and used for underconstruction features."""
@@ -117,14 +118,14 @@ class Completed():
         rando = randint(1, 10)
 
         if rando == 3:
-            ending_scene = """Duck!!!! Oh shit..... you get shot by a crafty german sniper on the way back to base camp. Your
+            ending_scene = """get shot by a crafty german sniper on the way back to base camp. Your
             cold dead corpse never leaves the french country side. Your wife will never know if you
             are KIA or POW.
 
             THE END"""
 
         elif rando == 2:
-            ending_scene = """your last battle was fought near the effiel tower, you took a few hits
+            ending_scene = """fought near the effiel tower, you took a few hits
             and are now listed as medically warrented to go home. You will finally get to see your baby
             boy.
 
@@ -158,40 +159,33 @@ class Menu(Room):
         #####################################################################
         Welcome to the menu! How can I help you soldier?
 
-        A. Rules and regulations
+        A. Bartering stand and Repairs
 
-        B. Bartering stand and Repairs
+        B. Check what is in your Inventory
 
-        C. Inventory
+        C. Quit the game (Note: No progress will be save.)
 
-        D. Quit the game (Note: No progress will be save.)
-
-        E. Back to game
+        D. Back to game
 
         """))
 
         choice = input('# ')
 
         if 'A' in choice:
-            return 'menu_rules'
-
-        elif 'B' in choice:
             return "shop"
 
-        elif 'C' in choice:
+        elif 'B' in choice:
             return "inventory_check"
 
-        elif 'D' in choice:
+        elif 'C' in choice:
             return "quit"
 
-        elif 'E' in choice:
-
+        elif 'D' in choice:
             return user.saved_room
 
         else:
             message_pop_up()
             return "menu_enter"
-
 
 class Shop(Room):
     def enter(self):
@@ -204,126 +198,35 @@ class Shop(Room):
 
         A. Repair an item.
 
-        B. Buy a item
+        B. Buy or Sell
 
-        C. Sell items for rations
-
-        D. Back to menu
+        C. Back to menu
 
         """))
 
         choice = input("# ")
 
         if 'A' in choice:
-            return 'repair'
+            repair = items.repair_item(user)
+            return 'shop'
 
         elif 'B' in choice:
-            return 'buying'
+            return 'buy_sell'
 
         elif 'C' in choice:
-            return 'selling'
-
-        elif 'D' in choice:
-            return 'drop'
-
-        elif 'E' in choice:
             return "menu_enter"
 
         else:
             message_pop_up()
             return "shop"
 
-#--------------------------------#
-### Rooms below are shop rooms ###
-#--------------------------------#
-
-class Repair(Room):
-    """Users can repair their weapons here obviously."""
+class inventory(object):
+    """Displaying the inventory and other
+    actions related to invetory here."""
     def enter(self):
-        print("What item would you like to repair?")
+        pass
 
-        choice = input('# ')
-
-        print('Okay what type of item is it? (weapon or item. Food cannot be repaired)')
-
-        type = input('# ')
-
-        user_item = find_item(choice, user, type)
-
-        repair_item(user_item)
-
-
-
-
-
-class Inventory(Room):
-    """Tells users there inventory at the requested time."""
-
-    def enter(self):
-        inventory = ", ".join(user.player_inventory.keys())
-        print(dedent("""
-        #####################################################################
-        Time to take a look in my bag. I have a {} and thats it.""".format(inventory)))
-
-        return "menu_enter"
-
-class Rules(Room):
-    """Displays the rules of the game."""
-    def enter(self):
-
-        print(dedent("""
-        #####################################################################
-        So here is the recap about some game rules.
-
-        1. You are only allowed 7 item in your inventory, and food is included, but
-        quantity of each item is not limited.
-
-        2. You can shop in the store and rations are used as currency.
-
-        3. Each weapon does damage and that will be displayed on each weapon.
-
-        4. Every item has it's ration value so you can sell it to the shop for
-        rations if you need an item.
-
-        5. Once you make a choice you cannot go back unless you replay, so choose
-        wisely.
-
-        Notes: (Not rules but helpful info) Say "yes" to continue to tips or "no"
-        to exit rules and go back to menu.
-        """))
-
-        choice = input('# ')
-
-        if 'yes' in choice:
-            print(dedent(
-            """
-            #####################################################################
-            Here is some helpful info...
-
-            1. Battles are math so always keep an eye on
-            weapon damage, quality of the weapon and other inventory.
-
-            2. Some things are randomized so do not be afraid to take a chance.
-
-            3. Remember if you beat the game or not progress will not be saved.
-
-            (Note: type yes to read the rules again, if you do not want to then simply press enter.)
-            """
-            ))
-            choice = input("# ")
-
-            if 'yes' in choice:
-
-                return 'menu_rules'
-
-            else:
-                message_pop_up()
-                return 'menu_enter'
-
-
-        else:
-            print("Okay, thanks for reading the rules, you are now back at menu.")
-            return 'menu_enter'
+## Quiting has to be an option (I guess)
 
 class Quit(Room):
 
@@ -344,6 +247,15 @@ class Quit(Room):
         else:
             message_pop_up()
             return 'quit'
+
+#----------------------------------------------#
+### Rooms below are related to the Shop room ###
+#----------------------------------------------#
+
+class display(object):
+    """Where users can buy items"""
+
+
 
 #########################
 ## End of Menu options ##
@@ -381,6 +293,7 @@ class LevelOneIntro(Room):  # child of room first room of the entire game
 
 class SgtsOffice(Room):
     def enter(self):
+        # Forced introduction with optional choice to go to rules
 
         """Introduction to the game. Telling the rules to the player
         so they get the jist. (That is why it is quite lengthy)"""
@@ -389,10 +302,13 @@ class SgtsOffice(Room):
 
         print(dedent("""
         Welcome soldier I am here to give you the ropes.
-        (Enter to continue)
+        (Enter to continue or 'skip' to skip.)
         """))
 
-        input('# ')
+        choice = input('# ')
+
+        if 'skip' in choice:
+            return 'path_to_war'
 
         print(dedent("""
         First things first, you want to make it out alive and safe home to your family.
@@ -491,15 +407,15 @@ class WarPath(Room):
 
         elif 'A' in choice:
             # Random opportunity's in poker ordered by most likely to least likely
-            rando = randint(1, 4)
-            if rando == 3:
+
+            if randint(1, 4) == 3:
                 print(dedent("""
                 You played some poker, you won a thing or two, but got carried away. In the final round
                 you bet it all. You fell right into the bluff of a fellow private and lost it all. You lost 7 rations."""))
                 items.rations.quantity -= 7
                 print(dedent("You now have only {} rations.".format(items.rations.quantity)))
 
-            elif rando == 1:
+            elif randint(1, 4) == 1:
                 print(dedent("""
                 You did pretty good for poker, you played fair and gained 5 rations"""))
                 items.rations.quantity += 5
@@ -512,11 +428,12 @@ class WarPath(Room):
 
                 return 'discharged'
 
-            elif randint(1, 1000) == 378:
+            elif randint(1, 3) == 2:
                 print(dedent("""
                 Wow!!! Looks like you were in an all stakes game with a bazooka
                 gunner. You won it all! You now have a bazooka in you midst."""))
-                # TODO: Add bazooka to inventory
+
+                user.add_to_inventory(items.bazooka)
 
             else:
                 print(dedent("""
@@ -550,6 +467,7 @@ class WarPath(Room):
             print(dedent(
             "Your rifles quality is now {}, great choice.".format(items.rifle.quality)
             ))
+
         else:
             message_pop_up()
             return 'path_to_war'
@@ -711,9 +629,7 @@ class Map(object):
 
         # Menu options
         "menu_enter": Menu(),
-        "menu_rules": Rules(),
         "shop": Shop(),
-        "inventory_check": Inventory(),
         "quit": Quit(),
 
         # Types of endings to the game.
@@ -744,7 +660,7 @@ class Map(object):
         # "rats": Rats(),
         # "the_road": Road(), # boss battle
         # "to_paris": ToParis(),
-        # ending here for now
+        # "murika" Murika() #Ending
     }
 
     def __init__(self, start_room):

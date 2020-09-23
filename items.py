@@ -1,4 +1,4 @@
-
+import map
 from textwrap import dedent
 
 class Items(object):
@@ -18,18 +18,24 @@ class Weapons(Items):
         self.damage = damage
         super().__init__(name, quality, ration_rate, type)
 
-    def check_weapons_quality():
+    def check_quality(item):
         """Notifies player of their weapons quality
-        status and passes values to batte in the player class."""
+        status and passes values to battle in the player class."""
 
-        if quality > 3:
-            return 'Quality is low remember to either repair or replace your weapons soon!'
+        if item.quality == None:
+            return "This item does not have a quality."
 
-        if quality == 0:
+        elif item.quality == 0:
             return 'Your weapon is broke!!'
 
+        elif item.quality > 3:
+            return """Quality is {} remember to either repair or
+            replace your weapons soon!""".format(weapon.quality)
+
         else:
-            return 'Looks like your weapon is a-okay and ready for your next battle!'
+            return """Looks like your weapon is a-okay.
+            Your weapon quality is {}""".format(item.quality)
+
 
 class Foods(Items):
     """Food heals or gives extra abilites to a player."""
@@ -51,44 +57,46 @@ class Foods(Items):
 
 # Classical items
 
-gas_mask = Items("gas_mask", 10, 10)
+gas_mask = Items("gas_mask", 10, 10, "item")
 
 boots = Items("boots", 10, 15)
 
-bullet_plate = Items("bullet_plate", 30, 25)
+bullet_plate = Items("bullet_plate", 30, 25, "item")
 
-helmet = Items("helmet", 15, 20)
+helmet = Items("helmet", 15, 20, "item")
 
 #   Weapons
 rifle = Weapons(2.5, "rifle", 20, 4, "weapon")
 
-hands = Weapons(.5, "hands", 100, 0)
+hands = Weapons(.5, "hands", 100, 0, "weapon")
 
-german_sniper = Weapons(10, "sniper", 12, 20)
+german_sniper = Weapons(10, "sniper", 12, 20, "weapon")
 
-mp40 = Weapons(5, "mp40", 18, 15)
+mp40 = Weapons(5, "mp40", 18, 15, "weapon")
 
-glock = Weapons(3, "glock", 30, 8)
+glock = Weapons(3, "glock", 30, 8, "weapon")
 
-german_pistol = Weapons(4, "g-pistol", 25, 10)
+german_pistol = Weapons(4, "g-pistol", 25, 10, "weapon")
 
-machine_gun = Weapons(5, "machine_gun", 5, 25)
+machine_gun = Weapons(5, "machine_gun", 5, 25, "weapon")
 
-bazooka = Weapons(25, "bazooka", 1, 100)
+bazooka = Weapons(25, "bazooka", 1, 100, "weapon")
 
 # Food
 
-rations = Foods(5, 10, "rations", 1)
+rations = Foods(5, 10, "rations", 1, "food")
 
-chocolate = Foods(20, 1, "chocolate", 5)
+chocolate = Foods(20, 1, "chocolate", 5, "food")
 
-meth = Foods(30, 1, "meth", 7)
+meth = Foods(30, 1, "meth", 7, "food")
+
 
 list_of_items = {
     "weapons": {
 
     "rifle": rifle,
-    "sniper": german_sniper
+    "sniper": german_sniper,
+    "hands": hands
     },
 
     "items": {
@@ -106,44 +114,97 @@ list_of_items = {
 
 def find_item(choice_of_item, user, desired_type):
 
-    """Loops through all items to make sure player string input is a
-    actual item from the game. And checks if
-    they have that item in the inventory."""
-
+    """Loops through all items to make sure p
+    layer string input is an actual item from the game.
+    And checks if they have that item in the inventory.
+    Finally returns the item if it matches the desired type."""
+    # TODO: Find item should print and ask for desired type of item
+    # and for the choice of item (item name)
     for category in list_of_items.values():
-        for item in category:
-            if choice_of_item == item and item in user.player_inventory:
+        if choice_of_item in user.player_inventory:
+            for item in category.values():
+                if item.name == choice_of_item:
+                    if item.type == desired_type:
 
-                for item in category.values():
-                    if desired_type == item.type:
                         return item
+        else:
+            return False
 
-                    else:
-                        return False
-            else:
-                return False
+    return False
 
-def repair_item(item_to_repair):
+def get_player_item_val(choice_of_item, user):
 
-    if item_to_repair.repair_cost == False:
-        message_pop_up('This item cannot be repaired.')
+    """This function only is called after the validation by find_item
+    This function retrieves the val in player_inventory."""
+
+    for i in user.player_inventory:
+
+        if i == choice_of_item:
+            return user.player_inventory[choice_of_item]
+
+        else:
+            return False
+
+def repair_item(user):
+
+    """Updating the users weapon or
+    items to restore to default."""
+
+    print("""
+    Please type in the item's name of which you
+    would like to repair first. Then the items type, for example "weapon".
+    """)
+
+    item_name = input('# ')
+
+    print("""
+    Okay, thanks.
+
+    What type of item are you repairing?
+    A. item
+
+    B. weapon
+
+    (Type out the value Ex: weapon Do not put the letter value Ex: A)
+    """)
+
+    item_type = input('# ')
+
+    item2 = find_item(item_name, user, item_type)
+
+    if item2 == False:
+        print('Looks like that is not an item or weapon try again.')
+
+    elif item2.type == "food" or item2.name == "hands":
+        map.message_pop_up('This item cannot be repaired this usually means you selected a food.')
 
     else:
 
-        print('So you want to repair the {}, for {}?'.format(item_to_repair, item_to_repair.repair_cost))
+        cost = int(item2.ration_rate / 4)
+        print('So you want to repair the {}, for {}?'.format(item_name, cost))
 
         choice = input('# ')
 
         if 'y' in choice:
+            rations = get_player_item_val("rations", user)
+            item = get_player_item_val(item_name, user)
 
-            # Repair the item quality.
-            pass
+            if rations >= cost:
+                rations -= cost
+                item = item2.quality
+                print('Your {} has been repaired at cost of {} and now has a quality of {}. You have now have {} rations.'.format(item_name, cost, item, rations))
+
+            else:
+                print('Sorry you do not have enough rations.')
 
         elif 'n' in choice:
             print('Okay, going back to shop.')
 
-            return 'shop'
-
         else:
+            map.message_pop_up('Please choose to repair or not repair your weapon.')
 
-            message_pop_up()
+def buying_item(user):
+    """This function displays all items in the store
+    and provides a choice for the user to sell or buy one
+    of the items."""
+    pass
