@@ -19,18 +19,44 @@ class Player(object):
         "hands": items.hands,
     }
 
-    def add_to_inventory(self, newItem):
+    def add_to_inventory(self, newItem, user):
 
         """Inventory checks to make sure
         the player does not have more than 7 items"""
 
         if len(self.player_inventory) == 7:
-            return map.message_pop_up("""You already have the maximum of 7 items in your inventory,
-            looks like you will need to get rid of an item to get {}""".format(newItem))
+            print("""You already have the maximum of 7 items in your inventory,
+            looks like you will need to get rid of an item to get {}""".format(newItem.name))
+
+            print("Would you like to get rid of an item to add the {} to your inventory?".format(newItem.name))
+            choice = input('# ')
+
+            if 'y' in choice:
+                pass
+                # TODO: Call drop function and get rid of item of choice.
+
+            if 'n' in choice:
+                print('Okay redirecting you back to shop.')
+                return False
+
+            else:
+                print('Seems like you did not make a valid choice, aborting ...')
+                return False
+
+
+
+
 
         else:
             self.player_inventory[newItem.name] = newItem
             print(dedent("""Nice {} has been added to your inventory!""".format(newItem.name)))
+
+    def check_inventory(self):
+        inventory = ", ".join(self.player_inventory.keys())
+        print(dedent("""
+        #####################################################################
+        Time to take a look in my bag. I have a {} and thats it.""".format(inventory)))
+
 
     def add_to_player_health(self, health_addition):
 

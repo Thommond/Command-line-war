@@ -118,7 +118,8 @@ def find_item(choice_of_item, user, desired_type):
     layer string input is an actual item from the game.
     And checks if they have that item in the inventory.
     Finally returns the item if it matches the desired type."""
-
+    # TODO: Find item should print and ask for desired type of item
+    # and for the choice of item (item name)
     for category in list_of_items.values():
         if choice_of_item in user.player_inventory:
             for item in category.values():
@@ -133,6 +134,9 @@ def find_item(choice_of_item, user, desired_type):
 
 def get_player_item_val(choice_of_item, user):
 
+    """This function only is called after the validation by find_item
+    This function retrieves the val in player_inventory."""
+
     for i in user.player_inventory:
 
         if i == choice_of_item:
@@ -142,8 +146,6 @@ def get_player_item_val(choice_of_item, user):
             return False
 
 def repair_item(user):
-
-    # TODO: Change val in player inventory not default
 
     """Updating the users weapon or
     items to restore to default."""
@@ -173,7 +175,7 @@ def repair_item(user):
     if item2 == False:
         print('Looks like that is not an item or weapon try again.')
 
-    elif item2.type == "food":
+    elif item2.type == "food" or item2.name == "hands":
         map.message_pop_up('This item cannot be repaired this usually means you selected a food.')
 
     else:
@@ -200,3 +202,9 @@ def repair_item(user):
 
         else:
             map.message_pop_up('Please choose to repair or not repair your weapon.')
+
+def buying_item(user):
+    """This function displays all items in the store
+    and provides a choice for the user to sell or buy one
+    of the items."""
+    pass

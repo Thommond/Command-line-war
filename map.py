@@ -161,7 +161,7 @@ class Menu(Room):
 
         A. Bartering stand and Repairs
 
-        B. Inventory
+        B. Check what is in your Inventory
 
         C. Quit the game (Note: No progress will be save.)
 
@@ -187,7 +187,6 @@ class Menu(Room):
             message_pop_up()
             return "menu_enter"
 
-
 class Shop(Room):
     def enter(self):
 
@@ -199,11 +198,9 @@ class Shop(Room):
 
         A. Repair an item.
 
-        B. Buy a item
+        B. Buy or Sell
 
-        C. Sell items for rations
-
-        D. Back to menu
+        C. Back to menu
 
         """))
 
@@ -214,35 +211,20 @@ class Shop(Room):
             return 'shop'
 
         elif 'B' in choice:
-            return 'buying'
+            return 'buy_sell'
 
         elif 'C' in choice:
-            return 'selling'
-
-        elif 'D' in choice:
-            return 'drop'
-
-        elif 'E' in choice:
             return "menu_enter"
 
         else:
             message_pop_up()
             return "shop"
 
-#----------------------------------------------#
-### Rooms below are related to the Shop room ###
-#----------------------------------------------#
-
-class Inventory(Room):
-    """Tells users there inventory at the requested time."""
-
+class inventory(object):
+    """Displaying the inventory and other
+    actions related to invetory here."""
     def enter(self):
-        inventory = ", ".join(user.player_inventory.keys())
-        print(dedent("""
-        #####################################################################
-        Time to take a look in my bag. I have a {} and thats it.""".format(inventory)))
-
-        return "menu_enter"
+        pass
 
 ## Quiting has to be an option (I guess)
 
@@ -265,6 +247,15 @@ class Quit(Room):
         else:
             message_pop_up()
             return 'quit'
+
+#----------------------------------------------#
+### Rooms below are related to the Shop room ###
+#----------------------------------------------#
+
+class display(object):
+    """Where users can buy items"""
+
+
 
 #########################
 ## End of Menu options ##
@@ -639,7 +630,6 @@ class Map(object):
         # Menu options
         "menu_enter": Menu(),
         "shop": Shop(),
-        "inventory_check": Inventory(),
         "quit": Quit(),
 
         # Types of endings to the game.
