@@ -16,10 +16,10 @@ class Player(object):
         "rations": items.rations.quantity,
         "rifle": items.rifle.ration_rate,
         "gas_mask": items.gas_mask,
-        "hands": items.hands,
+        "hands": items.hands.quality,
     }
 
-    def add_to_inventory(self, newItem, user):
+    def add_to_inventory(self, newItem):
 
         """Inventory checks to make sure
         the player does not have more than 7 items"""
@@ -32,31 +32,29 @@ class Player(object):
             choice = input('# ')
 
             if 'y' in choice:
-                pass
-                # TODO: Call drop function and get rid of item of choice.
+                # TODO: Create drop method.
+                dropping = player_inventory.drop(item_name)
+                print(dedent('Okay, {} was removed from your inventory.'))
 
             if 'n' in choice:
-                print('Okay redirecting you back to shop.')
+                print(dedent('Okay redirecting you back to shop.'))
                 return False
 
             else:
-                print('Seems like you did not make a valid choice, aborting ...')
+                print(dedent('Seems like you did not make a valid choice, aborting ...'))
                 return False
-
-
-
-
 
         else:
             self.player_inventory[newItem.name] = newItem
             print(dedent("""Nice {} has been added to your inventory!""".format(newItem.name)))
 
     def check_inventory(self):
+
         inventory = ", ".join(self.player_inventory.keys())
         print(dedent("""
         #####################################################################
-        Time to take a look in my bag. I have a {} and thats it.""".format(inventory)))
-
+        Time to take a look in my bag. I have a {} and thats it.""".format(inventory)
+        ))
 
     def add_to_player_health(self, health_addition):
 
@@ -67,7 +65,7 @@ class Player(object):
             return print(dedent("You are at full health you do not need nourishment from a {}!".format(health_addition)))
 
         else:
-            # Add the health addition
+
             self.health += health_addition
 
             if self.health > 100:
@@ -77,11 +75,15 @@ class Player(object):
 
     def attack(self, weapon, victim):
 
-        # Checking if weapon broke / 1 out of 20 chance if not hands as weapon
-        if weapon.quality == 0 or range(1, 20) == 12 and weapon.name != 'hands':
+        if map.user != victim:
+            weap_quality = items.get_player_item_val(weapon.name, map.user)
+
+            if weap_quality <= 0:
+                return 'Your weapon is broken, looks like you forfit this move.'
+
+        if range(1, 20) == 12 and weapon.name != 'hands':
             print(dedent("Oh no looks like {}'s {} broke!!".format(self.name, weapon.name)))
 
-        # One in one twenty chance player or enemy will deal double damage.
         if randint(1, 10) == 4:
             victim.health -= (weapon.damage * 2)
             print("Oh no double damage!")
@@ -100,17 +102,17 @@ class Player(object):
             B. Try to escape.
             """.format(self.name)))
         else:
-            weapon.quality -= 1
-            print('Weapon quality decreased by one too {}'.format(weapon.quality))
+            weap_quality -= 1
+            print('Weapon quality decreased by one, to {}'.format(weap_quality))
             print('...')
 
+    def attack_choice(self, user_choice):
 
-    def attack_choice(self, user_choice, enemy, enemy_weapon):
         """Checking the users choice to
          limit if/else nesting"""
 
         if 'A' in user_choice:
-            return "What weapon do you want to use?"
+            return 'What is the name of your item?'
 
         elif 'B' in user_choice:
             if randint(1, 4) == 3:

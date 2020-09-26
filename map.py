@@ -5,7 +5,7 @@ from char import Player, Enemy
 import items
 
 ####################################
-#### Map Class is at the bottom ####
+#### Map Class is at the bottom####
 ####################################
 
 user = Player("level_one_intro", 100)
@@ -23,9 +23,9 @@ def message_pop_up(message="Please select an option below and type in the termin
     ###########################
     """.format(message)))
 
-# Merges all battle methods into each and every battle for the player.
+# Merges all attack methods from Player into each and every battle.
 def battles(enemy, enemy_weapon, message):
-    # TODO: Change val in player inventory not default
+
     error = False
 
     while enemy.health > 0 and user.health > 0:
@@ -34,7 +34,7 @@ def battles(enemy, enemy_weapon, message):
 
         choice = input('# ')
 
-        user_choices = user.attack_choice(choice, enemy, enemy_weapon)
+        user_choices = user.attack_choice(choice)
 
         if user_choices == None:
             error = True
@@ -52,22 +52,22 @@ def battles(enemy, enemy_weapon, message):
 
         if 'What' in user_choices:
 
-            choice = input('# ')
+            item_name = input('# ')
 
-            if items.find_item(choice, user, "weapon") == False:
-                message_pop_up(
+            if items.find_item(user, item_name, "weapon") == False:
+                message_pop_up(dedent(
                 """
                 Looks like that is not a weapon or it is not
                 in your inventory.
-                """)
+                """))
 
             else:
-                item = items.find_item(choice, user, "weapon")
-                print('Your item choice is {}'.format(item.name))
+                item = items.find_item(user, item_name, "weapon")
+                print(dedent('Your item choice is {}'.format(item.name)))
                 user.attack(item, enemy)
 
     # Going through outcomes of the battle based on importance
-    if error == True:
+    if error:
         return user.saved_room
     if user.health <= 0:
         return 'death'
@@ -221,13 +221,14 @@ class Shop(Room):
             return "shop"
 
 class inventory(object):
+
     """Displaying the inventory and other
     actions related to invetory here."""
+
     def enter(self):
         pass
 
 ## Quiting has to be an option (I guess)
-
 class Quit(Room):
 
     def enter(self):
@@ -248,13 +249,10 @@ class Quit(Room):
             message_pop_up()
             return 'quit'
 
-#----------------------------------------------#
-### Rooms below are related to the Shop room ###
-#----------------------------------------------#
-
 class display(object):
     """Where users can buy items"""
-
+    def enter(self):
+        pass
 
 
 #########################
@@ -264,9 +262,7 @@ class display(object):
 
 ## Start of the play through rooms! ##
 #------------------------------------#
-
-
-class LevelOneIntro(Room):  # child of room first room of the entire game
+class LevelOneIntro(Room):
     def enter(self):
         print(dedent("""
         Welcome! soldier what is your name?
@@ -402,7 +398,6 @@ class WarPath(Room):
         choice = input('# ')
 
         if 'menu' in choice:
-
             return 'menu_enter'
 
         elif 'A' in choice:

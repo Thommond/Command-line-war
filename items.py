@@ -2,8 +2,10 @@ import map
 from textwrap import dedent
 
 class Items(object):
+
     """Items can create and manage the state of generic game items like
     the gask mask."""
+
     def __init__(self, name, quality, ration_rate, type=False):
         self.name = name
         self.quality = quality
@@ -11,14 +13,16 @@ class Items(object):
         self.type = type
 
 class Weapons(Items):
+
     """Weapons can be used by the player to fend off
-    enimes and various other tasks."""
+    enemies and various other tasks."""
 
     def __init__(self, damage, name, quality, ration_rate, type=False):
         self.damage = damage
         super().__init__(name, quality, ration_rate, type)
 
     def check_quality(item):
+
         """Notifies player of their weapons quality
         status and passes values to battle in the player class."""
 
@@ -38,22 +42,18 @@ class Weapons(Items):
 
 
 class Foods(Items):
+
     """Food heals or gives extra abilites to a player."""
 
-    def __init__(self, health_addition, quantity, name, ration_rate, type=False, ability=False):
-        self.health_addition = health_addition
+    def __init__(self, health_add, quantity, name, ration_rate, type=False, ability=False):
+        self.health_add = health_add
         self.quantity = quantity
         super().__init__(name, ration_rate, ration_rate, type)
         self.ability = ability
 
-
-
     def abilities(sentence_of_ability):
         if self.ability == True:
             print(sentence_of_ability)
-
-
-# Store inventory and fint_item check
 
 # Classical items
 
@@ -112,23 +112,44 @@ list_of_items = {
     }
 };
 
-def find_item(choice_of_item, user, desired_type):
+def find_item(user, name=False, desired_type=False):
 
     """Loops through all items to make sure p
     layer string input is an actual item from the game.
     And checks if they have that item in the inventory.
     Finally returns the item if it matches the desired type."""
-    # TODO: Find item should print and ask for desired type of item
-    # and for the choice of item (item name)
-    for category in list_of_items.values():
-        if choice_of_item in user.player_inventory:
-            for item in category.values():
-                if item.name == choice_of_item:
-                    if item.type == desired_type:
 
-                        return item
-        else:
-            return False
+    if not name:
+        print(dedent("""What is the weapons name?"""))
+
+        item_name = input('# ')
+
+    else:
+        item_name = name
+
+    if not desired_type:
+
+        print(dedent("""What type of item is this?
+
+        A. item
+
+        B. weapon
+
+        C. food
+        """))
+
+        item_type = input('# ')
+    else:
+        item_type = desired_type
+
+    for category in list_of_items.values():
+            for item in category.values():
+                if item.name in item_name:
+                    if item.type in item_type:
+                        if item.name in user.player_inventory:
+                            return item
+                        else:
+                            return False
 
     return False
 
@@ -137,68 +158,47 @@ def get_player_item_val(choice_of_item, user):
     """This function only is called after the validation by find_item
     This function retrieves the val in player_inventory."""
 
-    for i in user.player_inventory:
+    for key in user.player_inventory:
 
-        if i == choice_of_item:
-            return user.player_inventory[choice_of_item]
+        if choice_of_item == key:
+            return user.player_inventory[key]
 
-        else:
-            return False
+    return False
 
 def repair_item(user):
 
     """Updating the users weapon or
     items to restore to default."""
 
-    print("""
-    Please type in the item's name of which you
-    would like to repair first. Then the items type, for example "weapon".
-    """)
+    item = find_item(user)
 
-    item_name = input('# ')
+    if item == False:
+        print(dedent('Looks like that is not an item or weapon try again.'))
 
-    print("""
-    Okay, thanks.
-
-    What type of item are you repairing?
-    A. item
-
-    B. weapon
-
-    (Type out the value Ex: weapon Do not put the letter value Ex: A)
-    """)
-
-    item_type = input('# ')
-
-    item2 = find_item(item_name, user, item_type)
-
-    if item2 == False:
-        print('Looks like that is not an item or weapon try again.')
-
-    elif item2.type == "food" or item2.name == "hands":
+    elif item.type == "food" or item.name == "hands":
         map.message_pop_up('This item cannot be repaired this usually means you selected a food.')
 
     else:
 
-        cost = int(item2.ration_rate / 4)
-        print('So you want to repair the {}, for {}?'.format(item_name, cost))
+        cost = int(item.ration_rate / 4)
+        print(dedent('So you want to repair the {}, for {}?'.format(item.name, cost)))
 
         choice = input('# ')
 
         if 'y' in choice:
             rations = get_player_item_val("rations", user)
-            item = get_player_item_val(item_name, user)
+            player_item = get_player_item_val(item.name, user)
 
             if rations >= cost:
                 rations -= cost
-                item = item2.quality
-                print('Your {} has been repaired at cost of {} and now has a quality of {}. You have now have {} rations.'.format(item_name, cost, item, rations))
+                player_item = item.quality
+                print(dedent('Your {} has been repaired at cost of {} and now has a quality of {}. You have now have {} rations.'.format(item.name, cost, item.quality, rations)))
 
             else:
                 print('Sorry you do not have enough rations.')
 
         elif 'n' in choice:
-            print('Okay, going back to shop.')
+            print(dedent('Okay, going back to shop.'))
 
         else:
             map.message_pop_up('Please choose to repair or not repair your weapon.')
