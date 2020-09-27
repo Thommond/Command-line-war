@@ -50,11 +50,13 @@ class Player(object):
 
     def check_inventory(self):
 
-        inventory = ", ".join(self.player_inventory.keys())
-        print(dedent("""
-        #####################################################################
-        Time to take a look in my bag. I have a {} and thats it.""".format(inventory)
-        ))
+        inventory = [i for i in self.player_inventory.values()]
+        print(inventory)
+        inventory_val = [i for i in self.player_inventory.keys()]
+        print(inventory_val)
+
+    def drop(self):
+        pass 
 
     def add_to_player_health(self, health_addition):
 
