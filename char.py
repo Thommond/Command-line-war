@@ -14,8 +14,8 @@ class Player(object):
     # What the player currently is "holding"
     player_inventory = {
         "rations": items.rations.quantity,
-        "rifle": items.rifle.ration_rate,
-        "gas_mask": items.gas_mask,
+        "rifle": items.rifle.quality,
+        "gas_mask": items.gas_mask.quality,
         "hands": items.hands.quality,
     }
 
@@ -45,18 +45,37 @@ class Player(object):
                 return False
 
         else:
-            self.player_inventory[newItem.name] = newItem
+
+            if newItem.type == "food":
+                self.player_inventory[newItem.name] = newItem.health_addition
+            elif newItem.type == "weapon" or "item":
+                self.player_inventory[newItem.name] = newItem.quality
+
             print(dedent("""Nice {} has been added to your inventory!""".format(newItem.name)))
 
     def check_inventory(self):
 
-        inventory = [i for i in self.player_inventory.values()]
-        print(inventory)
-        inventory_val = [i for i in self.player_inventory.keys()]
-        print(inventory_val)
+        invent_val = [i for i in self.player_inventory.values()]
+        invent_name = [i for i in self.player_inventory.keys()]
+
+        print(dedent("""\
+        Below are the contents of your inventory!!!
+        ______________________________________________________________
+        Name         |  Quality if weapon or item or Quantity if food
+        """))
+
+        for val in range(0, len(invent_name)):
+
+            print(dedent("""
+            #################################################
+            #{}                 ## {}                       #
+            #################################################
+            """.format(invent_name[val], invent_val[val])))
+
+
 
     def drop(self):
-        pass 
+        pass
 
     def add_to_player_health(self, health_addition):
 

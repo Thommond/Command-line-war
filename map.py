@@ -188,8 +188,9 @@ class Menu(Room):
             message_pop_up()
             return "menu_enter"
 
-class Buy_sell(object):
+class Buy_sell(Room):
     """Where users can buy items"""
+
     def enter(self):
 
         print(dedent("""
@@ -209,7 +210,9 @@ class Buy_sell(object):
         choice = input('# ')
 
         if 'A' in choice:
-            items.buy_item()
+            buying = items.buy_item()
+            if buying == False:
+                return 'shop'
         elif 'B' in choice:
             items.sell_item()
         elif 'C' in choice:
@@ -218,6 +221,7 @@ class Buy_sell(object):
             return 'menu_enter'
         else:
             message_pop_up()
+
 
 # Quiting has to be an option (I guess)
 class Quit(Room):
@@ -294,8 +298,10 @@ class Inventory(Room):
 
         if 'A' in choice:
             user.check_inventory()
+            return 'shop'
         elif 'B' in choice:
-            user.add_to_inventory()
+            user.drop()
+            return 'shop'
         elif 'C' in choice:
             return 'shop'
         else:

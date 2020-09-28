@@ -55,6 +55,7 @@ class Foods(Items):
         if self.ability == True:
             print(sentence_of_ability)
 
+
 # Classical items
 
 gas_mask = Items("gas_mask", 10, 10, "item")
@@ -94,25 +95,35 @@ meth = Foods(30, 1, "meth", 7, "food")
 list_of_items = {
     "weapons": {
 
+    "bazooka": bazooka,
+    "german_pistol": german_pistol,
+    "glock": glock,
+    "hands": hands,
+    "machine_gun": machine_gun,
     "rifle": rifle,
     "sniper": german_sniper,
-    "hands": hands
+
     },
 
     "items": {
 
+    "boots": boots,
+    "bullet_plate": bullet_plate,
     "gas_mask": gas_mask,
-    "boots": boots
+    "helmet": helmet
+
      },
 
     "food": {
 
+    "choc": chocolate,
     "rations": rations,
     "meth": meth
+
     }
 };
 
-def find_item(user, name=False, desired_type=False):
+def find_item(user, name=False, desired_type=False, buying=False):
 
     """Loops through all items to make sure p
     layer string input is an actual item from the game.
@@ -120,7 +131,9 @@ def find_item(user, name=False, desired_type=False):
     Finally returns the item if it matches the desired type."""
 
     if not name:
-        print(dedent("""What is the weapons name?"""))
+        print(dedent("""
+        What is the weapons name?
+        """))
 
         item_name = input('# ')
 
@@ -129,7 +142,10 @@ def find_item(user, name=False, desired_type=False):
 
     if not desired_type:
 
-        print(dedent("""What type of item is this?
+        print(dedent("""
+        What type of item is this?
+
+        Note: (Type out full anwser not letter.)
 
         A. item
 
@@ -145,11 +161,15 @@ def find_item(user, name=False, desired_type=False):
     for category in list_of_items.values():
             for item in category.values():
                 if item.name in item_name:
-                    if item.type in item_type:
-                        if item.name in user.player_inventory:
+
+                    if buying != True:
+                        if item.type in item_type:
+                            if item.name in user.player_inventory:
+                                return item
+                    else:
+                        if item.type in item_type:
                             return item
-                        else:
-                            return False
+
 
     return False
 
@@ -176,12 +196,16 @@ def repair_item(user):
         print(dedent('Looks like that is not an item or weapon try again.'))
 
     elif item.type == "food" or item.name == "hands":
-        map.message_pop_up('This item cannot be repaired this usually means you selected a food.')
+        map.message_pop_up(dedent("""
+        This item cannot be repaired this
+        usually means you selected a food.
+        """))
 
     else:
 
         cost = int(item.ration_rate / 4)
-        print(dedent('So you want to repair the {}, for {}?'.format(item.name, cost)))
+        print(dedent("""So you want to repair the {},
+        for {}?""".format(item.name, cost)))
 
         choice = input('# ')
 
@@ -192,19 +216,88 @@ def repair_item(user):
             if rations >= cost:
                 rations -= cost
                 player_item = item.quality
-                print(dedent('Your {} has been repaired at cost of {} and now has a quality of {}. You have now have {} rations.'.format(item.name, cost, item.quality, rations)))
+                print(dedent("""
+                Your {} has been repaired at cost of {} and
+                now has a quality of {}. You have now have {}
+                rations.
+                """.format(item.name, cost, item.quality, rations)))
 
             else:
-                print('Sorry you do not have enough rations.')
+                print(dedent('Sorry you do not have enough rations.'))
 
         elif 'n' in choice:
             print(dedent('Okay, going back to shop.'))
 
         else:
-            map.message_pop_up('Please choose to repair or not repair your weapon.')
+            map.message_pop_up(dedent("""
+            Please choose to repair
+            or not repair your weapon.
+            """))
 
-def buying_item(user):
-    """This function displays all items in the store
-    and provides a choice for the user to sell or buy one
-    of the items."""
+
+def buy_item():
+
+    print(dedent(
+    """
+    If you do not know name and type of item then type 'list'.
+    (Expand terminal list is big!)
+
+    other wise press enter to continue
+    """
+    ))
+
+    choice = input('# ')
+
+    if 'list' in choice:
+        list_items()
+
+    weap = find_item(map.user, buying=True)
+
+    if weap:
+        rations = get_player_item_val('rations', map.user)
+        in_invent = get_player_item_val(weap.name, map.user)
+
+    else:
+        print(dedent('Not an item dude!'))
+        return False
+
+    if in_invent is not False:
+        print(dedent("""
+        That weapon is already in your inventory you can not two!
+        """))
+        return False
+
+    print(dedent("""
+    You would like to buy the {} for
+    {} rations?
+    """.format(weap.name, weap.ration_rate)))
+
+    choice = input('# ')
+
+    if 'y' in choice:
+
+        if rations >= weap.ration_rate:
+
+            adding = map.user.add_to_inventory(weap)
+
+            if adding:
+                rations -= weapon.ration_rate
+                print(dedent("""
+                Purchase success! You now
+                have the {} in your inventory.
+                """.format(weap.name)))
+            else:
+                return False
+
+        else:
+            print(dedent("""
+            Looks like you do not have enough rations!
+            """))
+            return False
+
+def sell_item():
+    pass
+
+
+def sell_item():
     pass
