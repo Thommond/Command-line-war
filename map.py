@@ -8,7 +8,7 @@ import items
 #### Map Class is at the bottom####
 ####################################
 
-user = Player("level_one_intro", 100)
+user = Player("level_one_intro", "sgt's_office", 100)
 error = False
 
 # For error handling to catch users attention
@@ -27,7 +27,7 @@ def message_pop_up(message=dedent("Please select an option below and type in the
 def battles(enemy, enemy_weapon, message):
 
     error = False
-
+    print(type(enemy.health))
     while enemy.health > 0 and user.health > 0:
 
         enemy.attack(enemy_weapon, user)
@@ -68,16 +68,20 @@ def battles(enemy, enemy_weapon, message):
 
     # Going through outcomes of the battle based on importance
     if error:
+        print(dedent('Looks like there was an error.'))
         return user.saved_room
     if user.health <= 0:
         return 'death'
     elif enemy.health <= 0:
         print(dedent(message))
+        return False
     elif escaped:
         print(escaped)
+        return user.next_room
     else:
         message_pop_up(dedent("""Error notify the creator of this issue. In the mean time sorry
         for your inconvience."""))
+
 
 ###                                ###
 ###  Possible Endings to the game  ###
@@ -338,11 +342,11 @@ class LevelOneIntro(Room):
 
 class SgtsOffice(Room):
     def enter(self):
-        # Forced introduction with optional choice to go to rules
 
         """Reminder for users to read the rules before playing."""
 
         user.saved_room = "sgt's_office"
+        user.next_room = "path_to_war"
 
         print(dedent("""
         Welcome soldier I am a reminder here to tell you the
@@ -355,8 +359,6 @@ class SgtsOffice(Room):
         B. No
 
         """))
-
-        choice = input('# ')
 
         choice = input('# ')
 
@@ -377,6 +379,7 @@ class WarPath(Room):
     def enter(self):
 
         user.saved_room = 'path_to_war'
+        user.next_room = 'ship'
 
         print(dedent(
         """
@@ -478,6 +481,7 @@ class Ship(Room):
     def enter(self):
 
         user.saved_room = 'ship'
+        user.next_room = 'arrival_at_normandy'
 
         print(dedent("""
         You and all your troop are loaded on to a ship labeled the USS great leap. For a 3 day journey
@@ -558,13 +562,19 @@ class Ship(Room):
             """
             ))
 
-            battles(
+            play = battles(
             ship_mate, items.hands, """
             Everyone looks at Jimmy's dead corpse. They all start
             charging at you, and pin you to the floor. "You don't kill our own men!!!" some one screamed.
             """
             )
-            return 'discharged'
+
+            if play != False:
+                return play
+            else:
+                return 'discharged'
+
+
 
 
         elif 'C' in choice:
@@ -615,10 +625,6 @@ class NormandyBeach(Room):
 
         return 'room'
 
-
-##########################################
-#### Map Class runs through all rooms ####
-####^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^######
 
 class Map(object):
 

@@ -173,18 +173,6 @@ def find_item(user, name=False, desired_type=False, buying=False):
 
     return False
 
-def get_player_item_val(choice_of_item, user):
-
-    """This function only is called after the validation by find_item
-    This function retrieves the val in player_inventory."""
-
-    for key in user.player_inventory:
-
-        if choice_of_item == key:
-            return user.player_inventory[key]
-
-    return False
-
 def repair_item(user):
 
     """Updating the users weapon or
@@ -210,8 +198,8 @@ def repair_item(user):
         choice = input('# ')
 
         if 'y' in choice:
-            rations = get_player_item_val("rations", user)
-            player_item = get_player_item_val(item.name, user)
+            rations = map.user.get_player_item_val("rations", user)
+            player_item = map.user.get_player_item_val(item.name, user)
 
             if rations >= cost:
                 rations -= cost
@@ -234,7 +222,6 @@ def repair_item(user):
             or not repair your weapon.
             """))
 
-
 def buy_item():
 
     print(dedent(
@@ -254,8 +241,8 @@ def buy_item():
     weap = find_item(map.user, buying=True)
 
     if weap:
-        rations = get_player_item_val('rations', map.user)
-        in_invent = get_player_item_val(weap.name, map.user)
+        rations = map.user.get_player_item_val('rations', map.user)
+        in_invent = map.user.get_player_item_val(weap.name, map.user)
 
     else:
         print(dedent('Not an item dude!'))
@@ -299,5 +286,84 @@ def sell_item():
     pass
 
 
-def sell_item():
-    pass
+def list_items():
+
+    print(dedent('Warning! This list will be large, type enter to continue'))
+
+
+    choice = input('# ')
+
+    print(dedent("""
+                #                       #
+    Type        #      item             #
+    #####################################
+    """))
+
+    for category in list_of_items:
+
+        for item in category:
+
+            print(dedent("""
+            {}        # {}          #
+            """.format(item.type, item.name)))
+    yes = True
+
+    while yes:
+
+        print(dedent("""
+        Would you like to look into the details of an item?
+
+        Press enter for yes and type 'no' if not
+        """))
+
+        choice = input('# ')
+
+        if 'no' in choice:
+            break
+
+        item_choice = find_item()
+
+        if item_choice.type == 'weapon':
+
+            print(dedent("""
+
+            Details of the {}
+            ########################
+            Damage  | {}
+            ########################
+            Quality | {}
+            ########################
+            Ration_rate | {}
+
+            """.format(item_choice.name, item_choice.damage,
+            item_choice.quality, item_choice.ration_rate)))
+
+        elif item_choice.type == 'food':
+            qualities.pop(0)
+
+            print(dedent("""
+
+            Details of the {}
+            ########################
+            Quality | {}
+            ########################
+            Ration_rate | {}
+
+            """.format(item_choice.name,
+            item_choice.quality, item_choice.ration_rate)))
+
+        elif itme_choice.type == 'item':
+
+            print(dedent("""
+
+            Details of the {}
+            ########################
+            Health Addition  | {}
+            ########################
+            Ration_rate | {}
+
+            """.format(item_choice.name,
+            item_choice.health_add, item_choice.ration_rate)))
+
+        else:
+            print(dedent('Looks like we had some trouble, make sure to report this.'))

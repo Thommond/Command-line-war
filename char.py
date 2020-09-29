@@ -6,8 +6,9 @@ import items
 class Player(object):
     """The player class manages all methods and attributes with
     the main character the user is playing."""
-    def __init__(self, saved_room, health, name=False):
+    def __init__(self, saved_room, next_room, health, name=False):
         self.saved_room = saved_room
+        self.next_room = next_room
         self.health = health
         self.name = name
 
@@ -31,12 +32,11 @@ class Player(object):
             print("Would you like to get rid of an item to add the {} to your inventory?".format(newItem.name))
             choice = input('# ')
 
-            if 'y' in choice:
-                # TODO: Create drop method.
+            if 'ye' in choice:
                 dropping = player_inventory.drop(item_name)
                 print(dedent('Okay, {} was removed from your inventory.'))
 
-            if 'n' in choice:
+            if 'no' in choice:
                 print(dedent('Okay redirecting you back to shop.'))
                 return False
 
@@ -58,10 +58,11 @@ class Player(object):
         invent_val = [i for i in self.player_inventory.values()]
         invent_name = [i for i in self.player_inventory.keys()]
 
+
         print(dedent("""\
         Below are the contents of your inventory!!!
         ______________________________________________________________
-        Name         |  Quality if weapon or item or Quantity if food
+        Name         | If weapon or item then 'Quality' and if food 'Quantity'
         """))
 
         for val in range(0, len(invent_name)):
@@ -75,7 +76,9 @@ class Player(object):
 
 
     def drop(self):
-        pass
+
+        is_it = self.get_player_item_val()
+
 
     def add_to_player_health(self, health_addition):
 
@@ -97,7 +100,7 @@ class Player(object):
     def attack(self, weapon, victim):
 
         if map.user != victim:
-            weap_quality = items.get_player_item_val(weapon.name, map.user)
+            weap_quality = self.get_player_item_val(weapon.name, map.user)
 
             if weap_quality <= 0:
                 return 'Your weapon is broken, looks like you forfit this move.'
@@ -144,6 +147,18 @@ class Player(object):
         else:
             return "Please choose either 'A' or 'B'"
 
+    def get_player_item_val(self, choice_of_item, user):
+
+        """This function only is called after the validation by find_item
+        This function retrieves the val in player_inventory."""
+
+        for key in user.player_inventory:
+
+            if choice_of_item == key:
+                return user.player_inventory[key]
+
+        return False
+
 
 class Enemy(Player):
 
@@ -151,5 +166,5 @@ class Enemy(Player):
     weapons, and math."""
 
     def __init__(self, health, name, boss=False):
-        super().__init__(self, health, name)
+        super().__init__(self, health, health, name)
         self.boss = boss
