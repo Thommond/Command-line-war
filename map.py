@@ -5,15 +5,15 @@ from char import Player, Enemy
 import items
 
 ####################################
-#### Map Class is at the bottom ####
+#### Map Class is at the bottom####
 ####################################
 
-user = Player("level_one_intro", 100)
+user = Player("level_one_intro", "sgt's_office", 100)
 error = False
 
 # For error handling to catch users attention
 
-def message_pop_up(message="Please select an option below and type in the terminal."):
+def message_pop_up(message=dedent("Please select an option below and type in the terminal.")):
     print(dedent("""
     ######## IMPORTANT ########
     ###########################
@@ -23,23 +23,22 @@ def message_pop_up(message="Please select an option below and type in the termin
     ###########################
     """.format(message)))
 
-# Merges all battle methods into each and every battle for the player.
+# Merges all attack methods from Player into each and every battle.
 def battles(enemy, enemy_weapon, message):
-    # TODO: Change val in player inventory not default
-    error = False
 
+    error = False
     while enemy.health > 0 and user.health > 0:
 
         enemy.attack(enemy_weapon, user)
 
         choice = input('# ')
 
-        user_choices = user.attack_choice(choice, enemy, enemy_weapon)
+        user_choices = user.attack_choice(choice)
 
         if user_choices == None:
             error = True
-            message_pop_up("""Due to your choice of neither A or B the room was
-            reset, sorry for your inconvience. """)
+            message_pop_up(dedent("""Due to your choice of neither A or B the room was
+            reset, sorry for your inconvience. """))
             break
 
         if user_choices != False:
@@ -52,32 +51,36 @@ def battles(enemy, enemy_weapon, message):
 
         if 'What' in user_choices:
 
-            choice = input('# ')
+            item_name = input('# ')
 
-            if items.find_item(choice, user, "weapon") == False:
-                message_pop_up(
+            if items.find_item(user, item_name, "weapon") == False:
+                message_pop_up(dedent(
                 """
                 Looks like that is not a weapon or it is not
                 in your inventory.
-                """)
+                """))
 
             else:
-                item = items.find_item(choice, user, "weapon")
-                print('Your item choice is {}'.format(item.name))
+                item = items.find_item(user, item_name, "weapon")
+                print(dedent('Your item choice is {}'.format(item.name)))
                 user.attack(item, enemy)
 
     # Going through outcomes of the battle based on importance
-    if error == True:
+    if error:
+        print(dedent('Looks like there was an error.'))
         return user.saved_room
     if user.health <= 0:
         return 'death'
     elif enemy.health <= 0:
         print(dedent(message))
+        return False
     elif escaped:
         print(escaped)
+        return user.next_room
     else:
-        message_pop_up("""Error notify the creator of this issue. In the mean time sorry
-        for your inconvience.""")
+        message_pop_up(dedent("""Error notify the creator of this issue. In the mean time sorry
+        for your inconvience."""))
+
 
 ###                                ###
 ###  Possible Endings to the game  ###
@@ -159,13 +162,14 @@ class Menu(Room):
         #####################################################################
         Welcome to the menu! How can I help you soldier?
 
-        A. Bartering stand and Repairs
+        A. Bartering stand and Repairs.
+        Note: (Option above has full list of items.)
 
-        B. Check what is in your Inventory
+        B. Inventory related.
 
-        C. Quit the game (Note: No progress will be save.)
+        C. Quit the game (Note: No progress will be save.).
 
-        D. Back to game
+        D. Back to game.
 
         """))
 
@@ -175,7 +179,7 @@ class Menu(Room):
             return "shop"
 
         elif 'B' in choice:
-            return "inventory_check"
+            return "inventory"
 
         elif 'C' in choice:
             return "quit"
@@ -187,54 +191,14 @@ class Menu(Room):
             message_pop_up()
             return "menu_enter"
 
-class Shop(Room):
-    def enter(self):
-
-        print(dedent("""
-        #####################################################################
-        Welcome to the American depot soldier, or
-        what they call jimmy's bartering stand. I can repair weapons, trade,
-        and much more. What do you need?
-
-        A. Repair an item.
-
-        B. Buy or Sell
-
-        C. Back to menu
-
-        """))
-
-        choice = input("# ")
-
-        if 'A' in choice:
-            repair = items.repair_item(user)
-            return 'shop'
-
-        elif 'B' in choice:
-            return 'buy_sell'
-
-        elif 'C' in choice:
-            return "menu_enter"
-
-        else:
-            message_pop_up()
-            return "shop"
-
-class inventory(object):
-    """Displaying the inventory and other
-    actions related to invetory here."""
-    def enter(self):
-        pass
-
-## Quiting has to be an option (I guess)
-
+# Quiting has to be an option (I guess)
 class Quit(Room):
 
     def enter(self):
 
-        message_pop_up("""
+        message_pop_up(dedent("""
         Are you sure you want to quit? You made it so far! Remember
-        no progress will be saved. (Type yes to quit and no to go back to menu.)""")
+        no progress will be saved. (Type yes to quit and no to go back to menu.)"""))
 
         choice = input("# ")
 
@@ -248,25 +212,85 @@ class Quit(Room):
             message_pop_up()
             return 'quit'
 
-#----------------------------------------------#
-### Rooms below are related to the Shop room ###
-#----------------------------------------------#
+class Shop(Room):
+    def enter(self):
 
-class display(object):
-    """Where users can buy items"""
+        print(dedent("""
+        #####################################################################
+        Welcome to the American depot soldier, or
+        what they call jimmy's bartering stand. I can repair weapons, trade,
+        and much more. What do you need?
 
+        A. Repair an item.
 
+        B. Buy an item
+
+        C. Sell an item
+
+        D. List all items in game.
+
+        E. Back to menu
+
+        """))
+
+        choice = input("# ")
+
+        if 'A' in choice:
+            repair = items.repair_items(user)
+            return 'menu_enter'
+
+        elif 'B' in choice:
+            buy = items.buy_items()
+            return "menu_enter"
+        elif 'C' in choice:
+            items.sell_items()
+            return 'menu_enter'
+        elif 'D' in choice:
+            items.list_items()
+            return 'menu_enter'
+
+        elif 'E' in choice:
+            return "menu_enter"
+
+        else:
+            message_pop_up()
+            return "shop"
+
+class Inventory(Room):
+
+    """Displaying the inventory and other
+    actions related to invetory here."""
+
+    def enter(self):
+        print(dedent("""
+        Please choose an option for your inventory.
+
+        A. Check what is in your inventory.
+
+        B. Drop an item in your inventory.
+
+        C. Back to the main menu.
+
+        """))
+
+        choice = input('# ')
+
+        if 'A' in choice:
+            user.check_inventory()
+            return 'menu_enter'
+        elif 'B' in choice:
+            user.drop()
+            return 'menu_enter'
+        elif 'C' in choice:
+            return 'menu_enter'
+        else:
+            message_pop_up()
 
 #########################
-## End of Menu options ##
+## Start of game rooms ##
 #########################
 
-
-## Start of the play through rooms! ##
-#------------------------------------#
-
-
-class LevelOneIntro(Room):  # child of room first room of the entire game
+class LevelOneIntro(Room):
     def enter(self):
         print(dedent("""
         Welcome! soldier what is your name?
@@ -293,80 +317,32 @@ class LevelOneIntro(Room):  # child of room first room of the entire game
 
 class SgtsOffice(Room):
     def enter(self):
-        # Forced introduction with optional choice to go to rules
 
-        """Introduction to the game. Telling the rules to the player
-        so they get the jist. (That is why it is quite lengthy)"""
+        """Reminder for users to read the rules before playing."""
 
         user.saved_room = "sgt's_office"
+        user.next_room = "path_to_war"
 
         print(dedent("""
-        Welcome soldier I am here to give you the ropes.
-        (Enter to continue or 'skip' to skip.)
+        Welcome soldier I am a reminder here to tell you the
+        make sure to read the Rules.md file!
+
+        Did you read the rules and your ready to play??
+
+        A. yes
+
+        B. No
+
         """))
 
         choice = input('# ')
 
-        if 'skip' in choice:
-            return 'path_to_war'
-
-        print(dedent("""
-        First things first, you want to make it out alive and safe home to your family.
-        """))
-
-        input('# ')
-
-        print(dedent("""
-        Number two is you have 100 starting health, overtime your health will go down due to
-        exhaustion and battles.
-        """))
-
-        input('# ')
-
-        print(dedent("""
-        You start with 10 rations that is basic food, they give you a little boost of health, 10 health
-        points to be exact. You can possibly find more food, and other health items on the way so be looking out!
-        """))
-
-        input('# ')
-
-        print(dedent("""
-        You also start with a basic american rifle, and you can get other guns and accessories later if you are
-        smart. You start out like every soldier. Just a thing of note each weapon deals a certian amount of
-        damage to opponents and other things like doors or items. To find out your weapons damage, quality or possibly
-        ammo just go to your menu. You can also find out your health, info about the enemies types you meant, and
-        more at the Menu.
-        """))
-
-        input('# ')
-
-        print(dedent("""
-        To get to menu you can simply text "menu" in the command line then choose where in the menu you would like to
-        go by texting that option. The menu option is avaliable at the begining of each room before you make a choice.
-        """))
-
-        input('# ')
-
-        print(dedent("""
-        For more info you can go to the Rules portion of the menu.
-        """))
-
-        input('# ')
-
-        print(dedent("""
-        Yeah, I know that was a lot did you get it all?
-        (Type yes to continue)
-        """))
-
-        choice = input('# ')
-
-        if 'menu' in choice:
+        if 'C' in choice:
             return 'menu_enter'
-
-        if 'yes' in choice:
-
+        elif 'A' in choice:
             return "path_to_war"
-
+        elif 'B' in choice:
+            return 'quit'
         else:
             message_pop_up()
             return "sgt's_office"
@@ -378,6 +354,7 @@ class WarPath(Room):
     def enter(self):
 
         user.saved_room = 'path_to_war'
+        user.next_room = 'ship'
 
         print(dedent(
         """
@@ -402,7 +379,6 @@ class WarPath(Room):
         choice = input('# ')
 
         if 'menu' in choice:
-
             return 'menu_enter'
 
         elif 'A' in choice:
@@ -480,6 +456,7 @@ class Ship(Room):
     def enter(self):
 
         user.saved_room = 'ship'
+        user.next_room = 'arrival_at_normandy'
 
         print(dedent("""
         You and all your troop are loaded on to a ship labeled the USS great leap. For a 3 day journey
@@ -560,13 +537,19 @@ class Ship(Room):
             """
             ))
 
-            battles(
+            play = battles(
             ship_mate, items.hands, """
             Everyone looks at Jimmy's dead corpse. They all start
             charging at you, and pin you to the floor. "You don't kill our own men!!!" some one screamed.
             """
             )
-            return 'discharged'
+
+            if play != False:
+                return play
+            else:
+                return 'discharged'
+
+
 
 
         elif 'C' in choice:
@@ -618,10 +601,6 @@ class NormandyBeach(Room):
         return 'room'
 
 
-##########################################
-#### Map Class runs through all rooms ####
-####^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^######
-
 class Map(object):
 
     rooms = {
@@ -629,6 +608,7 @@ class Map(object):
 
         # Menu options
         "menu_enter": Menu(),
+        "inventory": Inventory(),
         "shop": Shop(),
         "quit": Quit(),
 
