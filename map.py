@@ -191,41 +191,6 @@ class Menu(Room):
             message_pop_up()
             return "menu_enter"
 
-class Buy_sell(Room):
-    """Where users can buy items"""
-
-    def enter(self):
-
-        print(dedent("""
-
-        Welcome to the Buy and Selling Trade!
-
-        A. Buy an item.
-
-        B. Sell an item.
-
-        C. List out all items and details
-        (Please expand terminal text will be large!)
-
-        D. Back to the menu.
-        """))
-
-        choice = input('# ')
-
-        if 'A' in choice:
-            buying = items.buy_item()
-            if buying == False:
-                return 'shop'
-        elif 'B' in choice:
-            items.sell_item()
-        elif 'C' in choice:
-            items.list_items()
-        elif 'D' in choice:
-            return 'menu_enter'
-        else:
-            message_pop_up()
-
-
 # Quiting has to be an option (I guess)
 class Quit(Room):
 
@@ -258,22 +223,33 @@ class Shop(Room):
 
         A. Repair an item.
 
-        B. Buy or Sell
+        B. Buy an item
 
-        C. Back to menu
+        C. Sell an item
+
+        D. List all items in game.
+
+        E. Back to menu
 
         """))
 
         choice = input("# ")
 
         if 'A' in choice:
-            repair = items.repair_item(user)
-            return 'shop'
+            repair = items.repair_items(user)
+            return 'menu_enter'
 
         elif 'B' in choice:
-            return 'buy_sell'
-
+            buy = items.buy_items()
+            return "menu_enter"
         elif 'C' in choice:
+            items.sell_items()
+            return 'menu_enter'
+        elif 'D' in choice:
+            items.list_items()
+            return 'menu_enter'
+
+        elif 'E' in choice:
             return "menu_enter"
 
         else:
@@ -633,7 +609,6 @@ class Map(object):
         # Menu options
         "menu_enter": Menu(),
         "inventory": Inventory(),
-        "buy_sell": Buy_sell(),
         "shop": Shop(),
         "quit": Quit(),
 

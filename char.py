@@ -79,7 +79,7 @@ class Player(object):
 
         valid_item = items.find_item(map.user)
 
-        if valid_item is not False:
+        if valid_item:
 
             item = self.get_player_item_val(valid_item.name, map.user)
 

@@ -173,7 +173,7 @@ def find_item(user, name=False, desired_type=False, buying=False):
 
     return False
 
-def repair_item(user):
+def repair_items(user):
 
     """Updating the users weapon or
     items to restore to default."""
@@ -222,7 +222,7 @@ def repair_item(user):
             or not repair your weapon.
             """))
 
-def buy_item():
+def buy_items():
 
     print(dedent(
     """
@@ -238,11 +238,11 @@ def buy_item():
     if 'list' in choice:
         list_items()
 
-    weap = find_item(map.user, buying=True)
+    item = find_item(map.user, buying=True)
 
-    if weap:
+    if item:
         rations = map.user.get_player_item_val('rations', map.user)
-        in_invent = map.user.get_player_item_val(weap.name, map.user)
+        in_invent = map.user.get_player_item_val(item.name, map.user)
 
     else:
         print(dedent('Not an item dude!'))
@@ -257,22 +257,22 @@ def buy_item():
     print(dedent("""
     You would like to buy the {} for
     {} rations?
-    """.format(weap.name, weap.ration_rate)))
+    """.format(item.name, item.ration_rate)))
 
     choice = input('# ')
 
     if 'y' in choice:
 
-        if rations >= weap.ration_rate:
+        if rations >= item.ration_rate:
 
-            adding = map.user.add_to_inventory(weap)
+            transaction = map.user.add_to_inventory(item)
 
-            if adding:
-                rations -= weapon.ration_rate
+            if transaction:
+                rations -= item.ration_rate
                 print(dedent("""
                 Purchase success! You now
                 have the {} in your inventory.
-                """.format(weap.name)))
+                """.format(item.name)))
             else:
                 return False
 
@@ -282,8 +282,21 @@ def buy_item():
             """))
             return False
 
-def sell_item():
-    pass
+def sell_items():
+    valid_item = find_item(map.user)
+    rations = map.user.get_player_item_val('rations', map.user)
+    if valid_item:
+        item = map.user.get_player_item_val(valid_item.name, map.user)
+        if item:
+            map.user.player_inventory.pop(valid_item.name)
+            rations += valid_item.ration_rate
+            print(dedent('The {} has been sold successfully!'.format(valid_item.name)))
+        else:
+            map.message_pop_up(dedent('Not a valid item, try again.'))
+            return False
+    else:
+        map.message_pop_up(dedent('Not a valid item, try again.'))
+
 
 
 def list_items():
@@ -299,9 +312,9 @@ def list_items():
     #####################################
     """))
 
-    for category in list_of_items:
+    for category in list_of_items.values():
 
-        for item in category:
+        for item in category.values():
 
             print(dedent("""
             {}        # {}          #
@@ -321,49 +334,51 @@ def list_items():
         if 'no' in choice:
             break
 
-        item_choice = find_item()
+        item_choice = find_item(map.user, buying=True)
 
-        if item_choice.type == 'weapon':
+        if item_choice:
 
-            print(dedent("""
+            if item_choice.type == 'weapon':
 
-            Details of the {}
-            ########################
-            Damage  | {}
-            ########################
-            Quality | {}
-            ########################
-            Ration_rate | {}
+                print(dedent("""
 
-            """.format(item_choice.name, item_choice.damage,
-            item_choice.quality, item_choice.ration_rate)))
+                Details of the {}
+                ########################
+                Damage  | {}
+                ########################
+                Quality | {}
+                ########################
+                Ration_rate | {}
 
-        elif item_choice.type == 'food':
-            qualities.pop(0)
+                """.format(item_choice.name, item_choice.damage,
+                item_choice.quality, item_choice.ration_rate)))
 
-            print(dedent("""
+            elif item_choice.type == 'food':
+                qualities.pop(0)
 
-            Details of the {}
-            ########################
-            Quality | {}
-            ########################
-            Ration_rate | {}
+                print(dedent("""
 
-            """.format(item_choice.name,
-            item_choice.quality, item_choice.ration_rate)))
+                Details of the {}
+                ########################
+                Quality | {}
+                ########################
+                Ration_rate | {}
 
-        elif itme_choice.type == 'item':
+                """.format(item_choice.name,
+                item_choice.quality, item_choice.ration_rate)))
 
-            print(dedent("""
+            elif itme_choice.type == 'item':
 
-            Details of the {}
-            ########################
-            Health Addition  | {}
-            ########################
-            Ration_rate | {}
+                print(dedent("""
 
-            """.format(item_choice.name,
-            item_choice.health_add, item_choice.ration_rate)))
+                Details of the {}
+                ########################
+                Health Addition  | {}
+                ########################
+                Ration_rate | {}
+
+                """.format(item_choice.name,
+                item_choice.health_add, item_choice.ration_rate)))
 
         else:
             print(dedent('Looks like we had some trouble, make sure to report this.'))
