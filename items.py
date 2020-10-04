@@ -132,7 +132,7 @@ def find_item(user, name=False, desired_type=False, buying=False):
 
     if not name:
         print(dedent("""
-        What is the weapons name?
+        What is the items name?
         """))
 
         item_name = input('# ')

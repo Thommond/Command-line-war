@@ -25,16 +25,16 @@ class Player(object):
         """Inventory checks to make sure
         the player does not have more than 7 items"""
 
-        if len(self.player_inventory) == 7:
+        if len(self.player_inventory) >= 7:
             print("""You already have the maximum of 7 items in your inventory,
             looks like you will need to get rid of an item to get {}""".format(newItem.name))
 
             print("Would you like to get rid of an item to add the {} to your inventory?".format(newItem.name))
-            choice = input('# ')
+            item_name = input('# ')
 
-            if 'ye' in choice:
-                dropping = player_inventory.drop(item_name)
-                print(dedent('Okay, {} was removed from your inventory.'))
+            if 'yes' in choice:
+                dropping = player_inventory.drop()
+                print(dedent('Okay, {} was removed from your inventory.'.format(item_name)))
 
             if 'no' in choice:
                 print(dedent('Okay redirecting you back to shop.'))
@@ -51,7 +51,7 @@ class Player(object):
             elif newItem.type == "weapon" or "item":
                 self.player_inventory[newItem.name] = newItem.quality
 
-            print(dedent("""Nice {} has been added to your inventory!""".format(newItem.name)))
+            print(dedent("""Nice, the {} has been added to your inventory!""".format(newItem.name)))
 
     def check_inventory(self):
 
@@ -77,7 +77,25 @@ class Player(object):
 
     def drop(self):
 
-        is_it = self.get_player_item_val()
+        valid_item = items.find_item(map.user)
+
+        if valid_item is not False:
+
+            item = self.get_player_item_val(valid_item.name, map.user)
+
+            if item is not False:
+                self.player_inventory.pop(valid_item.name)
+                print(dedent('The {} has been removed from your inventory.'.format(valid_item.name)))
+            else:
+                map.message_pop_up(dedent('Not a valid item, try again.'))
+                return item
+        else:
+            map.message_pop_up(dedent('Not an item, try again.'))
+            return valid_item
+
+        # print that the item has been removed
+        # if the item cannot be removed or does not exist then
+            # return false and print error.
 
 
     def add_to_player_health(self, health_addition):

@@ -27,7 +27,6 @@ def message_pop_up(message=dedent("Please select an option below and type in the
 def battles(enemy, enemy_weapon, message):
 
     error = False
-    print(type(enemy.health))
     while enemy.health > 0 and user.health > 0:
 
         enemy.attack(enemy_weapon, user)
@@ -294,7 +293,7 @@ class Inventory(Room):
 
         B. Drop an item in your inventory.
 
-        C. Back to the shop.
+        C. Back to the main menu.
 
         """))
 
@@ -302,12 +301,12 @@ class Inventory(Room):
 
         if 'A' in choice:
             user.check_inventory()
-            return 'shop'
+            return 'menu_enter'
         elif 'B' in choice:
             user.drop()
-            return 'shop'
+            return 'menu_enter'
         elif 'C' in choice:
-            return 'shop'
+            return 'menu_enter'
         else:
             message_pop_up()
 
