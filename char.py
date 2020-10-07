@@ -6,6 +6,7 @@ import items
 class Player(object):
     """The player class manages all methods and attributes with
     the main character the user is playing."""
+
     def __init__(self, saved_room, next_room, health, name=False):
         self.saved_room = saved_room
         self.next_room = next_room
@@ -36,7 +37,7 @@ class Player(object):
                 dropping = player_inventory.drop()
                 print(dedent('Okay, {} was removed from your inventory.'.format(item_name)))
 
-            if 'no' in choice:
+            elif 'no' in choice:
                 print(dedent('Okay redirecting you back to shop.'))
                 return False
 
@@ -51,7 +52,10 @@ class Player(object):
             elif newItem.type == "weapon" or "item":
                 self.player_inventory[newItem.name] = newItem.quality
 
-            print(dedent("""Nice, the {} has been added to your inventory!""".format(newItem.name)))
+            print(dedent("""
+            ##############################################
+            Nice, the {} has been added to your inventory!
+            """.format(newItem.name)))
 
     def check_inventory(self):
 
@@ -59,7 +63,7 @@ class Player(object):
         invent_name = [i for i in self.player_inventory.keys()]
 
 
-        print(dedent("""\
+        print(dedent("""
         Below are the contents of your inventory!!!
         ______________________________________________________________
         Name         | If weapon or item then 'Quality' and if food 'Quantity'
@@ -69,7 +73,7 @@ class Player(object):
 
             print(dedent("""
             #################################################
-            #{}                 ## {}                       #
+            #{}                 ## {}
             #################################################
             """.format(invent_name[val], invent_val[val])))
 
@@ -92,10 +96,6 @@ class Player(object):
         else:
             map.message_pop_up(dedent('Not an item, try again.'))
             return valid_item
-
-        # print that the item has been removed
-        # if the item cannot be removed or does not exist then
-            # return false and print error.
 
 
     def add_to_player_health(self, health_addition):
