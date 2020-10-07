@@ -32,7 +32,7 @@ class Weapons(Items):
         elif item.quality == 0:
             return 'Your weapon is broke!!'
 
-        elif item.quality > 3:
+        elif item.quality < 3:
             return """Quality is {} remember to either repair or
             replace your weapons soon!""".format(weapon.quality)
 
@@ -57,7 +57,6 @@ class Foods(Items):
 
 
 # Classical items
-
 gas_mask = Items("gas_mask", 10, 10, "item")
 
 boots = Items("boots", 10, 15)
@@ -73,18 +72,17 @@ hands = Weapons(.5, "hands", 100, 0, "weapon")
 
 german_sniper = Weapons(10, "sniper", 12, 20, "weapon")
 
-mp40 = Weapons(5, "mp40", 18, 15, "weapon")
+mp40 = Weapons(5, "mp40", 18, 17, "weapon")
 
-glock = Weapons(3, "glock", 30, 8, "weapon")
+glock = Weapons(3, "glock", 30, 10, "weapon")
 
 german_pistol = Weapons(4, "g-pistol", 25, 10, "weapon")
 
-machine_gun = Weapons(5, "machine_gun", 5, 25, "weapon")
+machine_gun = Weapons(5, "machine_gun", 15, 12, "weapon")
 
-bazooka = Weapons(25, "bazooka", 1, 100, "weapon")
+bazooka = Weapons(25, "bazooka", 5, 100, "weapon")
 
 # Food
-
 rations = Foods(5, 10, "rations", 1, "food")
 
 chocolate = Foods(20, 1, "chocolate", 5, "food")
@@ -181,19 +179,21 @@ def repair_items(user):
     item = find_item(user)
 
     if item == False:
-        print(dedent('Looks like that is not an item or weapon try again.'))
+        print(dedent('Looks like that is not an item, or it is not in your inventory.'))
 
     elif item.type == "food" or item.name == "hands":
         map.message_pop_up(dedent("""
         This item cannot be repaired this
-        usually means you selected a food.
+        usually means you selected a food or your hands.
         """))
 
     else:
 
         cost = int(item.ration_rate / 4)
-        print(dedent("""So you want to repair the {},
-        for {}?""".format(item.name, cost)))
+        print(dedent("""
+        So you want to repair the {}, for {}?
+        (Type yes to continue)
+        """.format(item.name, cost)))
 
         choice = input('# ')
 
@@ -245,12 +245,12 @@ def buy_items():
         in_invent = map.user.get_player_item_val(item.name, map.user)
 
     else:
-        print(dedent('Not an item dude!'))
+        print(dedent('Make sure to type in proper item name and type.'))
         return False
 
     if in_invent is not False:
         print(dedent("""
-        That weapon is already in your inventory you can not two!
+        That weapon is already in your inventory you cant have two!
         """))
         return False
 
@@ -264,17 +264,12 @@ def buy_items():
     if 'y' in choice:
 
         if rations >= item.ration_rate:
-
+            rations -= item.ration_rate
             transaction = map.user.add_to_inventory(item)
-
-            if transaction:
-                rations -= item.ration_rate
-                print(dedent("""
-                Purchase success! You now
-                have the {} in your inventory.
-                """.format(item.name)))
-            else:
-                return False
+            print(dedent("""
+            Purchase success! You now have the {}
+            in your inventory. You now have {} rations.
+            """.format(item.name, rations)))
 
         else:
             print(dedent("""
@@ -289,8 +284,11 @@ def sell_items():
         item = map.user.get_player_item_val(valid_item.name, map.user)
         if item:
             map.user.player_inventory.pop(valid_item.name)
-            rations += valid_item.ration_rate
-            print(dedent('The {} has been sold successfully!'.format(valid_item.name)))
+            rations += valid_item.ration_rate / 2
+            print(dedent("""
+            The {} has been sold successfully!
+            You now have a total of {} rations.
+            """.format(valid_item.name, rations.quantity)))
         else:
             map.message_pop_up(dedent('Not a valid item, try again.'))
             return False
@@ -317,7 +315,9 @@ def list_items():
         for item in category.values():
 
             print(dedent("""
-            {}        # {}          #
+            ##############################
+            {}        #{}
+            ##############################
             """.format(item.type, item.name)))
     yes = True
 
@@ -354,7 +354,6 @@ def list_items():
                 item_choice.quality, item_choice.ration_rate)))
 
             elif item_choice.type == 'food':
-                qualities.pop(0)
 
                 print(dedent("""
 
@@ -367,7 +366,7 @@ def list_items():
                 """.format(item_choice.name,
                 item_choice.quality, item_choice.ration_rate)))
 
-            elif itme_choice.type == 'item':
+            elif item_choice.type == 'item':
 
                 print(dedent("""
 
@@ -378,7 +377,7 @@ def list_items():
                 Ration_rate | {}
 
                 """.format(item_choice.name,
-                item_choice.health_add, item_choice.ration_rate)))
+                item_choice.quality, item_choice.ration_rate)))
 
         else:
-            print(dedent('Looks like we had some trouble, make sure to report this.'))
+            print(dedent('That is not an item or you mistyped a piece of info. Feel free to try again.'))

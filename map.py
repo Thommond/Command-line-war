@@ -299,21 +299,19 @@ class LevelOneIntro(Room):
         user.name = input('# ')
 
         if user.name == 'Brian':
-            return "completed"
+            user.add_to_inventory(items.bazooka)
 
-        else:
+        print(dedent("Okay, {} you have been drafted!".format(user.name)))
+        print(dedent("""
+        Your family is worried sick. World war
+        two is raging across europe, you turned 18 just
+        weeks ago. The military needs extra troops on the
+        ground agaist the Nazi's. The Nazi's have infested
+        Europe like a cockroch colony. You will be assigned
+        to Unit 179.
+        """))
 
-            print(dedent("Okay, {} you have been drafted!".format(user.name)))
-            print(dedent("""
-            Your family is worried sick. World war
-            two is raging across europe, you turned 18 just
-            weeks ago. The military needs extra troops on the
-            ground agaist the Nazi's. The Nazi's have infested
-            Europe like a cockroch colony. You will be assigned
-            to Unit 179.
-            """))
-
-            return "sgt's_office"
+        return "sgt's_office"
 
 class SgtsOffice(Room):
     def enter(self):
@@ -342,7 +340,8 @@ class SgtsOffice(Room):
         elif 'A' in choice:
             return "path_to_war"
         elif 'B' in choice:
-            return 'quit'
+            message_pop_up('Go read the Rules.md file!')
+            exit(0)
         else:
             message_pop_up()
             return "sgt's_office"
@@ -505,7 +504,7 @@ class Ship(Room):
         C. Watch the fight to see who wins.
 
         D. Go back to your room.
-        "
+        
         """))
 
         choice = input('# ')
@@ -568,8 +567,8 @@ class Ship(Room):
             print(dedent(
             """
             You hurry back to your room. Just in time to catch Kyle in action, harboring
-            two glocks. You say "Hey, kyle I know we are not suppose to have those looks
-            like there is one for me and you."
+            two glocks. You say "Hey, kyle I know we are not suppose to have those, but I
+            can forget about it if there is one for me and you."
             """
             ))
 
@@ -578,9 +577,9 @@ class Ship(Room):
             print(dedent(
             """
             "Okay, {} I will give you one. But hush up these guns are not invented yet."
-            """))
+            """.format(user.name)))
 
-            user.player_inventory["glock"] = items.glock
+            user.add_to_inventory(items.glock)
 
             print(dedent('You now have a {} in your inventory.'.format(items.glock.name)))
 
