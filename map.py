@@ -70,10 +70,11 @@ def battles(enemy, enemy_weapon, message):
         print(dedent('Looks like there was an error.'))
         return user.saved_room
     if user.health <= 0:
+        print(dedent(message))
         return 'death'
     elif enemy.health <= 0:
         print(dedent(message))
-        return False
+        return user.next_room
     elif escaped:
         print(escaped)
         return user.next_room
@@ -335,8 +336,9 @@ class SgtsOffice(Room):
 
         choice = input('# ')
 
-        if 'C' in choice:
+        if 'menu' in choice:
             return 'menu_enter'
+
         elif 'A' in choice:
             return "path_to_war"
         elif 'B' in choice:
@@ -494,7 +496,7 @@ class Ship(Room):
         """))
 
         print(dedent("""
-        "Jimmy lays a punch and then Timothy. The fight starts to get rough.
+        Jimmy lays a punch and then Timothy. The fight starts to get rough.
         What will you do?
 
         A. Try to stop Jimmy by talking sense to the crowd.
@@ -504,7 +506,7 @@ class Ship(Room):
         C. Watch the fight to see who wins.
 
         D. Go back to your room.
-        
+
         """))
 
         choice = input('# ')
@@ -513,9 +515,6 @@ class Ship(Room):
 
         if 'menu' in choice:
             return 'menu_enter'
-
-        elif 'eat' in choice:
-            pass
 
         elif 'A' in choice:
             print(dedent("""
@@ -547,9 +546,6 @@ class Ship(Room):
                 return play
             else:
                 return 'discharged'
-
-
-
 
         elif 'C' in choice:
             print(dedent("""
@@ -595,7 +591,126 @@ class NormandyBeach(Room):
 
     def enter(self):
 
-        user.saved_room = 'arrival_at_normandy'
+        user.saved_room = 'normandy'
+        user.next_room = 'hell_beach'
+
+        print(dedent("""
+
+        Sgt said
+
+        "GENTAL MEN! ITS TIME TO PROVE YOUR WORTH.
+
+        In fifthteen minutes we will reach the shores of normandy
+        for our planned assualt off occupied france. Prepare your
+        gear and make peace with your God."
+        """))
+
+        input('# ')
+
+        print(dedent("""
+        The USS Great Leap finally reaches the point of dock. All your
+        fellow soldiers rush in the beach ships. You hop in the ship, packed
+        like sardieens the ship struggles to the shore. Just when the front gate opens...
+        """))
+
+        input('# ')
+
+        print(dedent("""
+        BANG!
+
+        The entire front of the ship is blown to oblivian. An artillary
+        blast took out 20 of your peers. Lucky for you, you were in the back
+        of the shipand live to die another day. A few others including your
+        SGT voided the blast.
+
+        "OKAY YOU SORRY BASTARDS, WE SAW THE FATE OF OUR MEN BUT THAT WILL NOT
+        STOP YOU NOW. GET YOUR RIFLES AND CHARGE OR I'LL KILL YOU MYSELF." sgt screamed over the rapid machine gun fire.
+
+        A. Charge in the beach with your peers.
+
+        B. Stay back and give cover fire.
+
+        C. Hide in the water and hope you live.
+
+        D. Scope out the flow of the beach.
+        """))
+
+        input('# ')
+
+        if 'menu' in choice:
+            return 'menu_enter'
+        if 'A' in choice:
+            print(dedent("""
+            Just like a fresh cadet from New York would you charge the beach.
+            However, in 5 seconds you bit the bullet of a mp40. 7 bullets in
+            your body falls to the ground in an instant. You slowly bleed out
+            until a artillary blast gives you unintentional mersy.
+            """))
+
+            return 'death'
+
+        elif 'B' in choice:
+
+            print(dedent("""
+            A calculated move you offer your cover fire to protect the rushing cadets.
+            Sgt approves you and 15 others to hold the line in prone position. Lucky for
+            the cadets you have their back. More than half make it to a guard tower where
+            they hold their position.
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            Quick thinking {}. Take a few grenades it
+            could come in handy. said Sgt
+            """.format(user.name)))
+
+            return user.next_room
+
+            print(dedent(''))
+        elif 'C' in choice:
+
+            print(dedent("""
+            Too afraid to face the beach you cowar in the water watching
+            your fellow soldiers fight life and limb. Unlucky for you the
+            Sgt meant what he said.
+            """))
+
+            sgt = Enemy(25, 'Sargent Bowers')
+
+            battle(
+            sgt, items.glock,
+            """
+            Looks like the Sgt was quite a challenge. You coward.
+            """
+            )
+
+        elif 'D' in choice:
+            print(dedent("""Your eyes skim the beach on the left you see a trailing pile
+            of dead bodies along the lines of the barb wire. On your right you spot
+            a machine gunner plowing down every soldier attempting to conquer the beach.
+            Finally, dead ahead 100 meeters you see a small structure and a few soldiers
+            holding their ground. Better than nothing..."""))
+
+            input('# ')
+
+            print(dedent("""
+            You dash towards the group, and take
+            a hit in the shoulder on the way. You made it... barely.
+            """))
+
+            user.health -= 20
+
+            print(dedent('Your health is now down to {}'.format(user.health)))
+
+            return user.next_room
+
+        else:
+            message_pop_up()
+            return user.saved_room
+
+
+
 
         return 'room'
 
@@ -620,8 +735,8 @@ class Map(object):
         "sgt's_office": SgtsOffice(),
         "path_to_war": WarPath(),
         "ship": Ship(),
-        "arrival_at_normandy": NormandyBeach(),
-        # "hell_on_beach": NormandyBeachHell(),
+        "normandy": NormandyBeach(),
+        # "hell_beach": NormandyBeachHell(),
         # "quick_and_easy": NormandySafePlace(),
         # "damn_machine_gunner": DamnMachineGunner(), # a battle
         # "ambush": AmbushFoxHole(), # a battle
