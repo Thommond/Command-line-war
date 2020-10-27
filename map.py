@@ -65,6 +65,8 @@ def battles(enemy, enemy_weapon, message):
                 print(dedent('Your item choice is {}'.format(item.name)))
                 user.attack(item, enemy)
 
+
+
     # Going through outcomes of the battle based on importance
     if error:
         print(dedent('Looks like there was an error.'))
@@ -74,6 +76,19 @@ def battles(enemy, enemy_weapon, message):
         return 'death'
     elif enemy.health <= 0:
         print(dedent(message))
+        ration = user.get_player_item_val("rations", user)
+        rando = randint(1, 4)
+        if rando == 1:
+            ration += 2
+            print("You got two rations from battle.")
+        elif rando == 2:
+            ration += 10
+            print("you got ten rations from battle.")
+        elif rando == 3:
+            print(dedent("You get nothing from this battle."))
+        elif rando == 4:
+            ration += 5
+            print("You got five ration from battle.")
         return user.next_room
     elif escaped:
         print(escaped)
@@ -168,9 +183,11 @@ class Menu(Room):
 
         B. Inventory related.
 
-        C. Quit the game (Note: No progress will be save.).
+        C. Eat
 
-        D. Back to game.
+        D. Quit the game (Note: No progress will be save.).
+
+        E. Back to game.
 
         """))
 
@@ -183,9 +200,13 @@ class Menu(Room):
             return "inventory"
 
         elif 'C' in choice:
-            return "quit"
+            user.add_to_player_health()
+            return 'menu_enter'
 
         elif 'D' in choice:
+            return "quit"
+
+        elif 'E' in choice:
             return user.saved_room
 
         else:
@@ -457,7 +478,7 @@ class Ship(Room):
     def enter(self):
 
         user.saved_room = 'ship'
-        user.next_room = 'arrival_at_normandy'
+        user.next_room = 'normandy'
 
         print(dedent("""
         You and all your troop are loaded on to a ship labeled the USS great leap. For a 3 day journey
@@ -542,10 +563,8 @@ class Ship(Room):
             """
             )
 
-            if play != False:
-                return play
-            else:
-                return 'discharged'
+            return 'discharged'
+
 
         elif 'C' in choice:
             print(dedent("""
@@ -583,7 +602,7 @@ class Ship(Room):
             message_pop_up()
             return 'ship'
 
-        return "arrival_at_normandy"
+        return user.next_room
 
 class NormandyBeach(Room):
     """First landing at france. Our player has to navigate through
@@ -635,10 +654,11 @@ class NormandyBeach(Room):
         D. Scope out the flow of the beach.
         """))
 
-        input('# ')
+        choice = input('# ')
 
         if 'menu' in choice:
             return 'menu_enter'
+
         if 'A' in choice:
             print(dedent("""
             Just like a fresh cadet from New York would you charge the beach.
@@ -661,13 +681,12 @@ class NormandyBeach(Room):
             input('# ')
 
             print(dedent("""
-            Quick thinking {}. Take a few grenades it
+            Quick thinking {}. Have a grenade it
             could come in handy. said Sgt
             """.format(user.name)))
 
-            return user.next_room
+            add_to_inventory("grenade")
 
-            print(dedent(''))
         elif 'C' in choice:
 
             print(dedent("""
@@ -681,16 +700,19 @@ class NormandyBeach(Room):
             battle(
             sgt, items.glock,
             """
-            Looks like the Sgt was quite a challenge. You coward.
+            Looks like the Sgt was quite a challenge. You ran to a structure
+            where it looks like soldiers are held up.
             """
             )
 
         elif 'D' in choice:
-            print(dedent("""Your eyes skim the beach on the left you see a trailing pile
+            print(dedent("""
+            Your eyes skim the beach on the left you see a trailing pile
             of dead bodies along the lines of the barb wire. On your right you spot
             a machine gunner plowing down every soldier attempting to conquer the beach.
-            Finally, dead ahead 100 meeters you see a small structure and a few soldiers
-            holding their ground. Better than nothing..."""))
+            Finally, dead ahead 100 meters you see a small structure and a few soldiers
+            holding their ground. Better than nothing...
+            """))
 
             input('# ')
 
@@ -699,9 +721,10 @@ class NormandyBeach(Room):
             a hit in the shoulder on the way. You made it... barely.
             """))
 
-            user.health -= 20
+            user.health -= 30
 
-            print(dedent('Your health is now down to {}'.format(user.health)))
+            print(dedent("""Your health is now down to {} because you got shot
+            in the arm on the way to the structure.""".format(user.health)))
 
             return user.next_room
 
@@ -709,10 +732,150 @@ class NormandyBeach(Room):
             message_pop_up()
             return user.saved_room
 
+class Hell_beach(object):
 
 
+    def enter(self):
+
+        print(dedent("""
+        Are you okay? a soldier exclaimed.
+        """))
+
+        input('# ')
+
+        print(dedent("""
+        Well, sorry I asked we don't have time to talk. Two machine
+        gunners have us pinned. Only 11 of use left, but I guess 12
+        counting you. We are going to storm the left he reloads Every
+        7 minutes, for about 30 seconds.
+        """))
+
+        input('# ')
+
+        print(dedent("""
+        Alright, here goes nothing!
+
+        A. Charge to the left with the rest of the troops.
+
+        B. Sneak to the right to see if you can catch the other gunner by suprise.
+
+        C. Lead the CHARGE
+
+        D. Prone down and fire your weapon at the gunner.
+
+        """))
+
+        choice = input('# ')
+
+        if 'A' in choice:
+
+            print(dedent("""
+            The men scatter across the beach running towards the left gunner
+            and rifle in hand. You seen 5 brother in total get mowed down before
+            a brother gets the gunner with a rifle fire. They storm the gunners
+            hide out and kill two more and get one prisoner.
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            Looks like you found 3 rations on the dead bodies. lucky you.
+            """))
+
+            rations = user.get_player_item_val("rations", user)
+
+            rations += 3
+
+            print('You now have {} rations'.format(rations))
+
+        elif 'B' in choice:
+            print(dedent('''
+            Everyone charges to the left. You swiftly move to the right to
+            confront the right side machine gunner.
+            '''))
+
+            input('# ')
+
+            print(dedent('''
+            Your about to take the shot when, the gunner spots you and blasts
+            to infinity. You never stood a chance.
+            '''))
+
+            return 'death'
+
+        elif 'C' in choice:
+            print(dedent('''
+            You yell, "Hey I will lead the charge".
+
+            Everyone in the troop agrees.
+            '''))
+
+            input('# ')
+
+            print(dedent('''
+            One, two, three CHARGE!
+
+            Everyone runs with enthusiams towards the
+            machine gunner. Four men are mowed down almost
+            instantly. But you got in a lucky shot and nailed the
+            gunner right on his ass. You all quickly take the
+            hideout and get 3 men hostage.
+            '''))
+
+            input('# ')
+
+            print(dedent('''
+            Hey, brother you did a great job out there a soldier said.
+
+            We all pitched in and for what it is worth we want to give you
+            this.
+            '''))
+
+            input('# ')
+
+            print(dedent('All the men point at the machine gun and offer it to you.'))
+
+            user.add_to_inventory(items.machine_gun)
+
+        elif 'D' in choice:
+
+            print(dedent('''
+
+            The troops charge and you keep firing at the machine gunners position.
+            It keeps him busy for most of the time and only 2 men were lost. They
+            take the hideout with shear force and signal you to run towards them.
+            '''))
+
+            input('# ')
+
+            print(dedent("""
+            You dash across the no mans land and dodge sniper fire. The men cover
+            you as much as they can.
+
+            you whisper "thanks guys I owe you one"
+
+            a soldier responds "count us even you had our asses."
+            """))
+
+            input('# ')
+
+            print(dedent('"Here dude take this" he hands you a ration.'))
+
+            rations = user.get_player_item_val("rations", user)
+            rations += 1
+            
+        else:
+            return user.saved_room
 
         return 'room'
+
+class SafePlace(Room):
+
+    def enter(self):
+
+        return 'room'
+
+
 
 
 class Map(object):
@@ -736,8 +899,8 @@ class Map(object):
         "path_to_war": WarPath(),
         "ship": Ship(),
         "normandy": NormandyBeach(),
-        # "hell_beach": NormandyBeachHell(),
-        # "quick_and_easy": NormandySafePlace(),
+        "hell_beach": Hell_beach(),
+        "quick": SafePlace(),
         # "damn_machine_gunner": DamnMachineGunner(), # a battle
         # "ambush": AmbushFoxHole(), # a battle
         # "captured": Captured(),

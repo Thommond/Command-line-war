@@ -57,13 +57,13 @@ class Foods(Items):
 
 
 # Classical items
-gas_mask = Items("gas_mask", 10, 10, "item")
+gas_mask = Items("gas_mask", 10, 10, "apparel")
 
 boots = Items("boots", 10, 15)
 
-bullet_plate = Items("bullet_plate", 30, 25, "item")
+bullet_plate = Items("bullet_plate", 30, 25, "apparel")
 
-helmet = Items("helmet", 15, 20, "item")
+helmet = Items("helmet", 15, 20, "apparel")
 
 #   Weapons
 rifle = Weapons(2.5, "rifle", 20, 4, "weapon")
@@ -81,6 +81,10 @@ german_pistol = Weapons(4, "g-pistol", 25, 10, "weapon")
 machine_gun = Weapons(5, "machine_gun", 15, 12, "weapon")
 
 bazooka = Weapons(25, "bazooka", 5, 100, "weapon")
+
+grenade = Weapons(30, "grenade", 1, 25, "weapon")
+
+shot_gun = Weapons(20, "shot_gun", 12, 20, "weapon")
 
 # Food
 rations = Foods(5, 10, "rations", 1, "food")
@@ -100,10 +104,12 @@ list_of_items = {
     "machine_gun": machine_gun,
     "rifle": rifle,
     "sniper": german_sniper,
+    "grenade": grenade,
+    "shot_gun": shot_gun,
 
     },
 
-    "items": {
+    "apparel": {
 
     "boots": boots,
     "bullet_plate": bullet_plate,
@@ -145,7 +151,7 @@ def find_item(user, name=False, desired_type=False, buying=False):
 
         Note: (Type out full anwser not letter.)
 
-        A. item
+        A. apparel
 
         B. weapon
 
@@ -366,7 +372,7 @@ def list_items():
                 """.format(item_choice.name,
                 item_choice.quality, item_choice.ration_rate)))
 
-            elif item_choice.type == 'item':
+            elif item_choice.type == 'apparel':
 
                 print(dedent("""
 
