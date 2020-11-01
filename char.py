@@ -176,7 +176,7 @@ class Player(object):
             return 'What is the name of your item?'
 
         elif 'B' in user_choice:
-
+            # IDEA: Should there be limit on flee?
             if randint(1, 4) == 3:
                 return False
             else:

@@ -45,16 +45,13 @@ class Foods(Items):
 
     """Food heals or gives extra abilites to a player."""
 
-    def __init__(self, health_add, quantity, name, ration_rate, type=False, ability=False):
+    def __init__(self, health_add, quantity, name, ration_rate, type=False):
         self.health_add = health_add
         self.quantity = quantity
         super().__init__(name, ration_rate, ration_rate, type)
-        self.ability = ability
 
-    def abilities(sentence_of_ability):
-        if self.ability == True:
-            print(sentence_of_ability)
-
+# TODO: Make the apperal add to health and in attack check fro
+# apparel first then subtract until no appearal then health
 
 # Classical items
 gas_mask = Items("gas_mask", 10, 10, "apparel")

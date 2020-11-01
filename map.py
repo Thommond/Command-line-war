@@ -687,6 +687,8 @@ class NormandyBeach(Room):
 
             add_to_inventory("grenade")
 
+            return user.next_room
+
         elif 'C' in choice:
 
             print(dedent("""
@@ -697,13 +699,15 @@ class NormandyBeach(Room):
 
             sgt = Enemy(25, 'Sargent Bowers')
 
-            battle(
+            battles(
             sgt, items.glock,
             """
             Looks like the Sgt was quite a challenge. You ran to a structure
             where it looks like soldiers are held up.
             """
             )
+
+            return user.next_room
 
         elif 'D' in choice:
             print(dedent("""
@@ -736,6 +740,9 @@ class Hell_beach(object):
 
 
     def enter(self):
+
+        user.saved_room = 'hell_beach'
+        user.next_room = 'quick'
 
         print(dedent("""
         Are you okay? a soldier exclaimed.
@@ -788,6 +795,8 @@ class Hell_beach(object):
 
             print('You now have {} rations'.format(rations))
 
+            return user.next_room
+
         elif 'B' in choice:
             print(dedent('''
             Everyone charges to the left. You swiftly move to the right to
@@ -834,8 +843,16 @@ class Hell_beach(object):
             input('# ')
 
             print(dedent('All the men point at the machine gun and offer it to you.'))
+            print(dedent('Do you want the machine gun? (type yes to accept)'))
 
-            user.add_to_inventory(items.machine_gun)
+            choice = input('# ')
+
+            if 'yes' in choice:
+                user.add_to_inventory(items.machine_gun)
+            else:
+                print(dedent('Your loss, a soldier exclaimed.'))
+
+            return user.next_room
 
         elif 'D' in choice:
 
@@ -863,16 +880,316 @@ class Hell_beach(object):
 
             rations = user.get_player_item_val("rations", user)
             rations += 1
-            
+
+            return user.next_room
+
         else:
+            message_pop_up()
             return user.saved_room
 
-        return 'room'
 
 class SafePlace(Room):
 
     def enter(self):
 
+        user.saved_room = 'quick'
+        user.next_room = 'gunner'
+
+        print(dedent("""
+
+        Six brutal hours have passed in the hideout. You and the men sit
+        and lick your wounds. Its almost dark and the battle ground has
+        finally begun to quiet down.
+
+        A. Stay in the hideout till morning.
+
+        B. Advise a sneak attack on the rest of the enemy troops.
+
+        C. Draw enemy attention.
+
+        D. Retreat back to rubble in the water.
+        """))
+
+        choice = input('# ')
+
+        if 'A' in choice:
+
+            print(dedent("""
+            You and the troops agree to wait out the night in the
+            hideout. You hear bits of rifle fire in the night and just
+            enough screaming to remember even in your dreams, you are
+            not at home you are at war.
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            You wake up just before sunrise and alert the others. "Hey guys"
+            you stated "its almost sun rise we need to make a move".
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            Whoosh!
+
+            You look at the slit in the hideout and see an incoming...
+
+            "No! Not now" you think.
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            "Grenade!" You yelled.
+
+            A. Jump on grenade.
+
+            B. Don't jump on grenade.
+
+            """))
+
+            choice = input('# ')
+
+            if 'A' in choice:
+
+                print(dedent("""
+                You dashed and landed on the grenade. Closing
+                your eyes in these last moments you think of your wife and
+                how sad she will be alone, all alone.
+                """))
+
+                input('# ')
+
+                print(dedent("""
+                You open your eyes...
+
+                And...
+                And...
+                Wait what?
+                """))
+
+                print("""
+                One of your fellow soldiers comes up to you and says
+
+                "Luck for you and us it was a dud"
+
+                "You showed more bravery than any man I know here take these."
+
+                He handed you 20 rations.
+                """)
+
+                rations = user.get_player_item_val('rations', user)
+                rations += 20
+
+            else:
+
+                print(dedent('Another soldier dashes and jumps on the grenade'))
+
+                input('# ')
+
+                print(dedent("""Boom! The grenade splits the man into pieces shards
+                of bone, flesh and metal all over the hideout."""))
+
+                input('# ')
+
+                print(dedent("""
+
+                Ring Ring Ring Ring Ring
+
+                "I can't hear myself think" you screamed
+                """))
+
+                input('# ')
+
+                print(dedent("""
+                Finally when it all stoped your relucantally realized you are
+                the only one who is not dead, or wish they were.
+                """))
+
+            return user.next_room
+
+        elif 'B' in choice:
+
+            print(dedent("""
+            Hey, Guys we take night to our advantage. Lets attack now
+            they think we are down but we can do it. You encouraged the
+            troops.
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            Yeah, I think this could work said the troops.
+
+            So, you all prepare bandage up your wounds and load
+            your fire arms. So what is the plan?
+            """))
+
+            print(dedent("""
+            You whisper "Half of us stay back the remaining half
+            slowly charge the gunner while being covered. If all goes
+            well then the gunner will focus on what he sees the fire
+            troops which will give us a edge."
+
+            They all nod.
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            What are you all waiting for lets go!
+
+            At first all seems to go well every troop remaining is in
+            position, but then.
+
+            Flick
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            What you and your plan forgot to account for was spot lights!
+
+            The germans can see everyone the machinge gunner practiclly
+            enjoys the slaughter.
+
+            You run back to the hideout while your fellow men are killed
+            like a dog in the street.
+            """))
+
+            return user.next_room
+
+        elif 'C' in choice:
+
+            print(dedent("""
+            You scream and wave your hands to get enemy attention.
+            """))
+
+            print(dedent("""
+            Spot lights turn on and go right on the hideout and from
+            this point on the hideout is under constant fire.
+
+            Then you say with a relucantally at "least we did not try to
+            attack."
+            """))
+
+            return user.next_room
+
+        elif 'D' in choice:
+
+            print(dedent("""
+            You panic and tell the men you and them should go back to
+            the beach.
+
+            "No that would be suicide." said one soldier.
+            """))
+
+            print(dedent("""
+            You and one other then run back to the beach and then the lights
+            turn on and before you know it spot light are on you. Not long after
+            the light turn on you feel bullets rip through your chest. You fall
+            to the floor slowly bleed out in misery.
+            """))
+
+            return 'death'
+
+        else:
+            message_pop_up()
+            return user.saved_room
+
+class MachineGun(Room):
+
+    def enter(self):
+
+        user.saved_room = 'gunner'
+        user.next_room = 'ambush'
+
+        print(dedent("""
+        So we are back where we started and it is mid day.
+        Its only a matter of time you thought to yourself.
+
+        You grab your weapon, what now?
+
+        A. Play dead
+
+        B. Keep fire at the enemy lines
+
+        C. Hold tight with weapon in hand
+
+        D. Make one last charge at the gunner.
+        """))
+
+        choice = input('# ')
+
+        if 'A' in choice:
+
+            print(dedent("""
+            You lay in the hideout with other corps and rot and for
+            a few hours you think you will be fine.
+            """))
+
+            return user.next_room
+
+        elif 'B' in choice:
+
+            if rand_int(1, 2) == 2:
+                print(dedent("""
+                You hold ground and even kill the machine gunner quite
+                a accomplishment.
+
+                While holding your own you searched your comrades bodies
+                and found quite a bounty 6 rations.
+                """))
+                rations = user.get_player_item_val('rations', user)
+                rations += 6
+
+            else:
+
+                print(dedent("""
+                During your hold out little did you accound for being
+                outnumbered eighteen to one. You did put up a fight, but
+                quickly you were...
+                """))
+
+            return user.next_room
+
+        elif 'C' in choice:
+
+            print(dedent("""
+            You hide in the hideout weapon in hand thinking you are prepared
+            for anything But...
+            """))
+
+            input('# ')
+
+            print(dedent("""Pop! You accidently pulled your own trigger and blasted
+            half you head out. Still alive you try to craw and reach your hand to
+            a dead soldiers gun. But you never reached it, it took you a full hour
+            to bleed to death."""))
+
+            return 'death'
+
+        elif 'D' in choice:
+
+            gunner = Enemy(20, 'machine gunner')
+            print(dedent("""You make a stand and head on the gunner
+            from the hide out, just you and him"""))
+
+            battles(gunner, items.machine_gun,
+            """
+            You finally got the battle you were asking for to avenge
+            your fellow men. Hopefully it turned out in your favor.
+            """)
+
+            return user.next_room
+
+        else:
+            message_pop_up()
+            return user.next_room
+class Ambush(object):
+
+    def enter(self):
         return 'room'
 
 
@@ -894,6 +1211,7 @@ class Map(object):
         "death": Death(),
         "discharged": Discharged(),
 
+        # Rooms of game
         "level_one_intro": LevelOneIntro(),
         "sgt's_office": SgtsOffice(),
         "path_to_war": WarPath(),
@@ -901,8 +1219,8 @@ class Map(object):
         "normandy": NormandyBeach(),
         "hell_beach": Hell_beach(),
         "quick": SafePlace(),
-        # "damn_machine_gunner": DamnMachineGunner(), # a battle
-        # "ambush": AmbushFoxHole(), # a battle
+        "gunner": MachineGun(),
+        "ambush": Ambush(),
         # "captured": Captured(),
         # "torcher": Torcher(), # a possible battle
         # "afriend": Friend(),
