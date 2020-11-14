@@ -204,4 +204,3 @@ class Enemy(Player):
 
     def __init__(self, health, name, boss=False):
         super().__init__(self, health, health, name)
-        self.boss = boss

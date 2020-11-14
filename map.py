@@ -117,7 +117,36 @@ class Death(Room):
 
     def enter(self):
 
-        print("You died a soldiers death that is all that matters.")
+        print("""You died a soldiers death that is all that matters.
+
+                                             ____
+                              __,---'     `--.__
+                           ,-'                ; `.
+                          ,'                  `--.`--.
+                         ,'                       `._ `-.
+                         ;                     ;     `-- ;
+                       ,-'-_       _,-~~-.      ,--      `.
+                       ;;   `-,;    ,'~`.__    ,;;;    ;  ;
+                       ;;    ;,'  ,;;      `,  ;;;     `. ;
+                       `:   ,'    `:;     __/  `.;      ; ;
+                        ;~~^.   `.   `---'~~    ;;      ; ;
+                        `,' `.   `.            .;;;     ;'
+                        ,',^. `.  `._    __    `:;     ,'
+                        `-' `--'    ~`--'~~`--.  ~    ,'
+                       /;`-;_ ; ;. /. /   ; ~~`-.     ;
+-._                   ; ;  ; `,;`-;__;---;      `----'
+   `--.__             ``-`-;__;:  ;  ;__;
+ ...     `--.__                `-- `-'
+`--.:::...     `--.__                ____
+    `--:::::--.      `--.__    __,--'    `.
+        `--:::`;....       `--'       ___  `.
+            `--`-:::...     __           )  ;
+                  ~`-:::...   `---.      ( ,'
+                      ~`-:::::::::`--.   `-.
+                          ~`-::::::::`.    ;
+                              ~`--:::,'   ,'
+                                   ~~`--'~
+        """)
         exit(1)
 
 class Discharged(Room):
@@ -419,14 +448,14 @@ class WarPath(Room):
                 items.rations.quantity += 5
                 print(dedent("You now have {} rations.".format(items.rations.quantity)))
 
-            elif randint(1, 100) == 33:
+            elif randint(1, 50) == 33:
                 print(dedent("""
                 Uh Oh! Your sgt caught you playing poker under the table,
                 the group blames you. You are in big trouble."""))
 
                 return 'discharged'
 
-            elif randint(1, 3) == 2:
+            elif randint(1, 50) == 14:
                 print(dedent("""
                 Wow!!! Looks like you were in an all stakes game with a bazooka
                 gunner. You won it all! You now have a bazooka in you midst."""))
@@ -774,6 +803,9 @@ class Hell_beach(object):
 
         choice = input('# ')
 
+        if 'menu' in choice:
+            return 'menu_enter'
+
         if 'A' in choice:
 
             print(dedent("""
@@ -912,6 +944,9 @@ class SafePlace(Room):
 
         choice = input('# ')
 
+        if 'menu' in choice:
+            return 'menu_enter'
+
         if 'A' in choice:
 
             print(dedent("""
@@ -951,6 +986,9 @@ class SafePlace(Room):
 
             choice = input('# ')
 
+            if 'menu' in choice:
+                return 'menu_enter'
+
             if 'A' in choice:
 
                 print(dedent("""
@@ -988,7 +1026,10 @@ class SafePlace(Room):
 
                 input('# ')
 
-                print(dedent("""Boom! The grenade splits the man into pieces shards
+                print(dedent("""Boom!
+
+
+                The grenade splits the man into pieces shards
                 of bone, flesh and metal all over the hideout."""))
 
                 input('# ')
@@ -1122,11 +1163,14 @@ class MachineGun(Room):
 
         choice = input('# ')
 
+        if 'menu' in choice:
+            return 'menu_enter'
+
         if 'A' in choice:
 
             print(dedent("""
             You lay in the hideout with other corps and rot and for
-            a few hours you think you will be fine.
+            a few hours you say "We will be fine."
             """))
 
             return user.next_room
@@ -1163,18 +1207,25 @@ class MachineGun(Room):
 
             input('# ')
 
-            print(dedent("""Pop! You accidently pulled your own trigger and blasted
+            print(dedent("""
+            Pop! You accidently pulled your own trigger and blasted
             half you head out. Still alive you try to craw and reach your hand to
             a dead soldiers gun. But you never reached it, it took you a full hour
-            to bleed to death."""))
+            to bleed to death.
+            """))
 
             return 'death'
 
         elif 'D' in choice:
 
             gunner = Enemy(20, 'machine gunner')
-            print(dedent("""You make a stand and head on the gunner
-            from the hide out, just you and him"""))
+
+            print(dedent("""
+            You make a stand and head on the gunner
+            from the hide out, just you and him
+            """))
+
+            input('# ')
 
             battles(gunner, items.machine_gun,
             """
@@ -1186,8 +1237,230 @@ class MachineGun(Room):
 
         else:
             message_pop_up()
-            return user.next_room
+            return user.saved_room
+
 class Ambush(object):
+
+    def enter(self):
+
+        user.saved_room = 'ambush'
+        user.next_room = 'captured'
+
+        print(dedent("""
+        AN AMBUSH a soldier cried.
+        """))
+
+        input('# ')
+
+        print(dedent("""
+        You hear foot steps louder than a thunder and the
+        rustling of machinery on a verge of being on top of
+        you. "The line must have been pushed back" a soldier
+        exclaimed. "we have to get out of here!". A soldier ran
+        out of the hide out gun blazing and was shot down cold.
+        You said "No one move..."
+
+        A. Instruct surrender.
+
+        B. Hold the hideout.
+
+        C. Push out of the hideout and put up a fight.
+        """))
+
+        if 'menu' in choice:
+            return 'menu_enter'
+
+        elif 'A' in choice:
+            print(dedent("""
+
+            "we have to surrender there is no way out" you said.
+
+            "but, but, we can't surrender to these scum!" a soldier
+            screamed.
+
+            "Do you want to die here just to make a point, we can
+            fight another day!" you yelled.
+
+            "Okay, Okay"
+            """))
+
+            input('# ')
+
+            print(dedent("""
+
+            You pull out a little white cloth an wave it out the window,
+            it is a crisp morning so the German troop luckly don't mistake
+            your arm for a gun.
+
+            "Hände hoch oder ich schieße!"
+
+            A german soldier instructed to get our attention.
+
+            The german speaker of the group said "he wants us to come
+            out with our hands up or he will shoot."
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            Everyone walks out and almost immediately are stripped of
+            weapons and cargo.
+
+            Everyone hops in a truck with a few other rough looking lads.
+            """))
+
+            return user.next_room
+
+        elif 'B' in choice:
+
+            print(dedent("""
+
+            "we have to make a plan to hold the fort" you said.
+
+            "But we could be killed there are so many of them" exclaimed a soldier
+
+            "Yeah, better die fighting for our country then captured
+            in a german prisoner of war camp."
+
+            Everyone gets into their positions to hold the fort and you
+            give the instruction to fire.
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            In the distance you see...
+            """))
+
+            input('# ')
+
+            print(dedent("""
+            Tiger!!!!!
+
+            WHOOSH
+            """))
+
+            print(dedent("""
+
+                ░░░░░░███████ ]▄▄▄▄▄▄▄▄▃
+                ▂▄▅█████████▅▄▃▂
+                I███████████████████].
+                ◥⊙▲⊙▲⊙▲⊙▲⊙▲⊙▲⊙◤
+
+            BOOM!
+
+            Little did you know the only option was
+            surrender, the germans had a tiger tank
+            sighted on that fort since 5am.
+
+            """))
+
+            return 'death'
+
+        elif 'C' in choice:
+            print(dedent("""
+            "we have to get ready to charge" you said.
+
+            "We have no idea whats in store for us, there
+            is no way we should charge did you not witness
+            what happened to reg? You know the guy who ran out
+            15 minutes ago??"
+
+            Everyone agrees to surrender, but you.
+
+            So, you pull out your gun and start to fire.
+
+            Everyone screamed "NOOO" then...
+
+            """))
+
+            print(dedent("""
+            You were sniped to the ground while the rest of the men came
+            out with hands up.
+            """))
+
+            return 'death'
+
+        else:
+            message_pop_up()
+            return user.saved_room
+
+
+
+
+
+class Captured(object):
+
+    def enter(self):
+        user.saved_room = 'captured'
+        user.next_room = 'torcher'
+
+        print(dedent("""
+
+        On the truck you are given prisoner numbers. Everyone
+        on the vehicle is rightfully disappointed and distraught
+        at their next step in the fight.
+
+        Rolling on in the muddy fields of france you are headed for
+        german heart land.
+
+        "Hey, what is going on?" you asked.
+
+        "Well, we are being put into prisoner of war camps just 100 miles off
+        of berlin. At least that is what we hope."
+
+        "What do you mean?" you asked curiously.
+
+        "Well, pal there are rumors that we could be headed
+        to work camps, or even death camps"
+
+        "That would be against the convention" you stated.
+
+        "Well, welcome to cold heartless fight of 1944"
+
+        "whats your name?" you asked
+
+        "well I am Jacob Krowter, but people call me Slide"
+
+        "I am {}, so why do they call you Slide, Slide?"
+
+        "Well I slide right out of the enemy hands you see."
+
+        """.format(user.name)))
+
+        input('# ')
+
+        print(dedent("""
+
+        A. Ask Slide and the others to attempt to take the truck.
+
+        B. Wait for the ride and see your fate.
+
+        C. Plea with a German officer to let you go.
+
+        D. Run off the truck as fast as you can.
+
+        """))
+
+        choice = input('# ')
+
+        if 'menu' in choice:
+            return 'menu_enter'
+
+        elif 'A' in choice:
+            pass
+        elif 'B' in choice:
+            pass
+        elif 'C' in choice:
+            pass
+        elif 'D' in choice:
+            pass
+
+        else:
+            message_pop_up()
+            return user.saved_room
+
+class Torcher(object):
 
     def enter(self):
         return 'room'
@@ -1221,8 +1494,8 @@ class Map(object):
         "quick": SafePlace(),
         "gunner": MachineGun(),
         "ambush": Ambush(),
-        # "captured": Captured(),
-        # "torcher": Torcher(), # a possible battle
+        "captured": Captured(),
+        "torcher": Torcher(), # a possible battle
         # "afriend": Friend(),
         # "rescued": Rescued(), # a battle
         # "muddy": Muddy(),
