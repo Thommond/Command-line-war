@@ -1416,7 +1416,7 @@ class Captured(object):
 
         "That would be against the convention" you stated.
 
-        "Well, welcome to cold heartless fight of 1944"
+        "Well, welcome to the cold heartless fight of 1944"
 
         "whats your name?" you asked
 
@@ -1448,6 +1448,157 @@ class Captured(object):
             return 'menu_enter'
 
         elif 'A' in choice:
+
+            print(dedent("""
+
+            "Hey, Slide" you whispered
+
+            "Yes, what do you need {}"
+
+            "You talk about sliding out of enemies
+            hands right?"
+
+            "Sure, thats the name of the game..."
+
+            "I was thinking we could take the truck"
+
+            "a german soldier over heard"
+
+            "Nein!" the soldier screamed
+            """))
+
+            input('# ')
+
+            print(dedent("""
+
+            "Guess it would have been helpful for me
+            to tell you the German soldiers her speak English." Slide stated.
+
+            "Yeah just maybe"
+
+            Then the german put a bullet in your brain.
+
+            """))
+
+            return 'death'
+
+        elif 'B' in choice:
+
+            return user.next_room
+
+        elif 'C' in choice:
+            print(dedent("""
+
+            "Please, pity me I can't do this any more!"
+
+            "Halt die Klappe!" said a German Solider as he hit you in the
+            side of the head.
+
+            "You should'nt of done that" said Slide
+
+            "Now they will see you as weak in the camps."
+
+            "I don't care Slide it was worth it look." you said.
+
+
+            You Showed slide that you stole the soldiers knife.
+            """))
+
+            return 'torcher'
+
+        elif 'D' in choice:
+
+            print(dedent("""
+
+            You take advantage of the opportunity of darkness then run for it
+            out of the truck. You are quick and make it to a patch of forest.
+            Lucky you that you grabbed your inventory on the way out.
+
+            The Germans dash to catch up, and two are dead close.
+
+            """))
+
+            if randint(1, 2) == 1:
+
+                print(dedent("The men shot you on site."))
+
+            else:
+
+                Twins = Enemy('German Twins', 50)
+
+                battles(Twins, items.german_sniper,
+
+                """
+                You look around and glace at the dead bodies then
+                you said "serves them right". Unfortunatly for you
+                the twins where the least of your problems.
+
+                "Feuer!"
+
+                A small battalion of german men set fire to the forest and
+                three bullets hit you in the legs. Then the germans hall
+                your wounded body back on the truck.
+
+                Slide said with excuastion "They are going to have fun with you."
+
+                """
+                )
+
+                return user.next_room
+
+        else:
+            message_pop_up()
+            return user.saved_room
+
+class Torcher(object):
+
+    def enter(self):
+
+        user.saved_room = 'torcher'
+        user.next_room = 'afriend'
+
+        print(dedent("""
+
+        The Truck and German soldiers all around you slowly stumbles through
+        the French country side. It has been hours and finally night is starting
+        to fall. Then in the distance you see a insustrial builing nothing like
+        usual prisoner of war camps.
+
+        "Oh no, No you can't do this" cowared a newly caught French rebel.
+
+        "Ja, du Dummkopf wir konnen."
+        """))
+
+        input("# ")
+
+        print(dedent("""
+
+        "Well my friend looks like I was Unfortunatly right" said Slide.
+
+        "Yeah, but how they will be crucified when they loose."
+
+        "No, my friend not when, if" Slide said with a sigh.
+
+        """))
+
+        input("# ")
+
+        print(dedent("""
+
+        The Germans then push all the soldiers off the trucks like cattle
+        and move all of you into a gravel yard.
+
+        "Ah, home sweet home" said slide
+
+        "But, not for long" he whispered.
+
+        """))
+
+        if 'menu' in choice:
+
+            return 'menu_enter'
+
+        elif 'A' in choice:
             pass
         elif 'B' in choice:
             pass
@@ -1460,12 +1611,10 @@ class Captured(object):
             message_pop_up()
             return user.saved_room
 
-class Torcher(object):
+class Afriend(object):
 
     def enter(self):
         return 'room'
-
-
 
 
 class Map(object):
@@ -1496,7 +1645,7 @@ class Map(object):
         "ambush": Ambush(),
         "captured": Captured(),
         "torcher": Torcher(), # a possible battle
-        # "afriend": Friend(),
+        "afriend": Friend(),
         # "rescued": Rescued(), # a battle
         # "muddy": Muddy(),
         # "clever_soldier": Clever(),
