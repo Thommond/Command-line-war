@@ -1592,10 +1592,152 @@ class Torcher(object):
 
         "But, not for long" he whispered.
 
+        The open yard was filled with men at work digging and
+        picking at the ground.
+
+        "This is a labor camp, it will be hell" said Slide
+
+
+        A. Follow orders and see where life takes you.
+
+        B. Ask slide about an escape plan.
+
+        C. Resist the germans.
+
+        D. Ask around the camp.
         """))
 
         if 'menu' in choice:
 
+            return 'menu_enter'
+
+        elif 'A' in choice:
+            print(dedent("""
+            Like a good little soldier that you are you follow
+            the Germans order to a tee.
+
+            Slide thinks you play a great game of pretend.
+
+            "Hey, we are escaping tommrow night" said Slide.
+
+            "You are allowed in, but tell no one"
+            """))
+
+            return user.next_room
+
+
+        elif 'B' in choice:
+            print(dedent("""
+            You take a quick look around to get familiar with your surrounding
+            then you remember why Slide has his name.
+
+            "Hey, Slide can I talk to you for a second?" you exclaimed.
+
+            "Sure, make it quick Germans do not like when we deviate from
+            our work, you know in a work camp." he said sarcastily
+
+            "I am wondering if you are planing some type of escape."
+
+            "Woah, no way I know my place"
+
+            You realized that you turned both yourself and him in
+            since you said the word "escape" to loud and close to a
+            German officer.
+
+            Then you run up to the officer and in a instance you are
+            shot.
+            """))
+
+            return 'death'
+
+
+        elif 'C' in choice:
+            print(dedent(
+            """
+            You walk with malice towards a German officer, but get
+            interupted by slide.
+
+            "I would not do that if I were you, they will kill you for fun." he said.
+
+            "Thanks, I may have been the fool" you stated.
+
+            "I am planing a escape tommorow night, I will let you know more soon" Slide exclaimed.
+
+            The night falls and soon it is time.
+            """
+            ))
+
+            return user.next_room
+
+        elif 'D' in choice:
+
+            print(dedent("""
+            You gaze around the gravel yard. You see a few groups
+            of diggers, guard towers in each corner of the camp, you
+            walk up to the first group
+
+            "Hey I am {}, I was wondering if you could let me know
+            how this place works, you know what we are digging for
+            why we are not a prison of war."
+
+            A Tall bald gentalmen laughed and said "You really don't know
+            the jist do you?"
+
+            "We are digging our own graves bud. You will too, don't let the
+            germans know but they are loosing the war. They will take anyone
+            to the death camps even you lot."
+
+            You looked at him astonished, then quick right behind you a German soldier
+            pushed you into a dug portion of the hole then...
+
+
+            """))
+
+            input('# ')
+
+            print(dedent(
+            """
+            BANG!
+
+            You where a example to stay on task.
+            """))
+
+            return 'death'
+
+
+
+        else:
+            message_pop_up()
+            return user.saved_room
+
+class Afriend(object):
+
+    def enter(self):
+
+
+        user.saved_room = 'afriend'
+        user.next_room = 'rescued'
+
+
+        print(dedent("""
+        All of a sudden Germans come rushing in the barracks where
+        you sleep. And grab Slide, and a few others.
+
+        With a sigh of relief when you are not dragged away like a dead
+        man you realize this is your only chance of escape.
+
+        A. Run away while the soldiers are occupied with Slide.
+
+        B. Defend Slide and the others fight back.
+
+        C. Do nothing and see what happens.
+
+        D. Tell you germans it was your doing.
+        """))
+
+        choice = input('# ')
+
+        if 'menu' in choice:
             return 'menu_enter'
 
         elif 'A' in choice:
@@ -1606,15 +1748,17 @@ class Torcher(object):
             pass
         elif 'D' in choice:
             pass
-
         else:
             message_pop_up()
             return user.saved_room
 
-class Afriend(object):
+
+
+class Rescued(object):
 
     def enter(self):
         return 'room'
+
 
 
 class Map(object):
@@ -1644,18 +1788,18 @@ class Map(object):
         "gunner": MachineGun(),
         "ambush": Ambush(),
         "captured": Captured(),
-        "torcher": Torcher(), # a possible battle
+        "torcher": Torcher(),
         "afriend": Friend(),
-        # "rescued": Rescued(), # a battle
+        "rescued": Rescued(),
         # "muddy": Muddy(),
         # "clever_soldier": Clever(),
         # "escaped_and_free": EscapedFree(),
-        # "enemy_lines": EnemyLines(), # a battle
+        # "enemy_lines": EnemyLines(),
         # "evation": Evation(),
-        # "stay_quiet": StayQuiet(), # possible battle
+        # "stay_quiet": StayQuiet(),
         # "attic": Attic(),
         # "rats": Rats(),
-        # "the_road": Road(), # boss battle
+        # "the_road": Road(),
         # "to_paris": ToParis(),
         # "murika" Murika() #Ending
     }
