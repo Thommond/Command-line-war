@@ -17,7 +17,6 @@ class Player(object):
     player_inventory = {
         "rations": items.rations.quantity,
         "rifle": items.rifle.quality,
-        "gas_mask": items.gas_mask.quality,
         "hands": items.hands.quality,
     }
 
@@ -49,7 +48,7 @@ class Player(object):
 
             if newItem.type == "food":
                 self.player_inventory[newItem.name] = newItem.health_addition
-            elif newItem.type == "weapon" or "item":
+            elif newItem.type == "weapon":
                 self.player_inventory[newItem.name] = newItem.quality
 
             print(dedent("""

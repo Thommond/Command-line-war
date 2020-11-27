@@ -1267,6 +1267,8 @@ class Ambush(object):
         C. Push out of the hideout and put up a fight.
         """))
 
+        choice = input('# ')
+
         if 'menu' in choice:
             return 'menu_enter'
 
@@ -1741,13 +1743,50 @@ class Afriend(object):
             return 'menu_enter'
 
         elif 'A' in choice:
-            pass
+            print(dedent("""
+            You dash as fast as possible and let slide deal with them on
+            his own. An Ice cold move, unlucky for you the Germans we not
+            occupied enough.
+            """))
+
+            return 'death'
+
         elif 'B' in choice:
-            pass
+            print(dedent("""
+            You yell, hey you will need me too. Then you punch
+            a German soldier in the jaw. They all pounced on you then
+            cuffed you both.
+
+            "That was not much help" Slide said sarcasticly.
+            """))
+
+            return 'rescued'
+
         elif 'C' in choice:
-            pass
+
+            print(dedent("""
+            You watch as Slide is taken away from the
+            camp and the rest of the men sigh then go back to the barracks or
+            their duties.
+
+            A few minutes later you see the Germans come out of a hut and throw
+            Slides body down a ditch. You can't bare yourself anymore so you
+            run at the germans and never look back.
+            """))
+
+            return 'death'
+
+
         elif 'D' in choice:
-            pass
+            print(dedent("""
+            You tell the Germans that it was you and you still
+            do not know what Slide did. You just wanted to protect
+            your friend. Then Slide says "Hell no it was us both"
+            they haul both of you to an office a few paces up.
+            """))
+
+            return 'rescued'
+
         else:
             message_pop_up()
             return user.saved_room
@@ -1757,7 +1796,109 @@ class Afriend(object):
 class Rescued(object):
 
     def enter(self):
-        return 'room'
+        user.saved_room = 'rescued'
+        user.next_room = 'completed'
+
+        print(dedent("""
+        You and Slide are in the camps director office
+        and the German soldiers keep their heads down while
+        they call for the director's attention.
+        """))
+
+        input('# ')
+
+        print(dedent("""
+        They said "Director these men were planning an escape and
+        have caused a up in moral among the camp what should we do?"
+
+        The director replied "Well gentalmen we have pleanty of graves
+        need digging as you know we have to leave this camp soon and we
+        can't take baggage like these men. Make them watch their comrades
+        die and then kill them."
+        """))
+
+        input("# ")
+
+        print(dedent("""
+        On the way out all of a sudden...
+        """))
+
+        input("# ")
+
+        print(dedent("""
+        Whoosh, BANG! American soldiers come out of no where and kill
+        a whole band of German guards.
+
+        A. Join the americans
+
+        B. Cower and see who wins
+
+        C. Help the Germans to get a favor
+
+        D. Run away
+        """))
+
+        choice = input('# ')
+
+        if 'menu' in choice:
+            return 'menu_enter'
+
+        elif 'A' in choice:
+
+            German = Enemy(25, 'German Soldier')
+
+            print(dedent("""
+            You pick up your rifle and join in the fight for
+            the Americans shooting at any German you can find to help
+            the cause.
+            """))
+
+            battles(
+            German,
+            items.mp40,
+            "German scum..."
+            )
+
+            return user.next_room
+
+        elif 'B' in choice:
+            print(dedent("""
+            You cower in a corner and later
+            see the Americans win the fight you come out of hiding in shame.
+            """))
+
+            return 'discharged'
+
+        elif 'C' in choice:
+            America = Enemy(100, 'American Soldier')
+            print(dedent("""
+            You pick up a mp40 and start shooting at the Americans
+            Slide is wondering what you are doing... so you shoot him to.
+            """))
+
+            input("# ")
+
+            battles(
+            America,
+            items.bazooka,
+            "You picked the wrong fight"
+            )
+
+            print(dedent("""A whole band of American soldiers surround you and
+            open fire. Slide joins in and says "man you went nuts" """))
+
+            return 'death'
+
+        elif 'D' in choice:
+            print(dedent("""
+            You dash away from the camp, but by mistake a American
+            shoots you thinking you are an enemy, who is fleeing.
+            """))
+
+            return 'death'
+        else:
+            message_pop_up()
+            return user.saved_room
 
 
 
@@ -1789,19 +1930,9 @@ class Map(object):
         "ambush": Ambush(),
         "captured": Captured(),
         "torcher": Torcher(),
-        "afriend": Friend(),
+        "afriend": Afriend(),
         "rescued": Rescued(),
-        # "muddy": Muddy(),
-        # "clever_soldier": Clever(),
-        # "escaped_and_free": EscapedFree(),
-        # "enemy_lines": EnemyLines(),
-        # "evation": Evation(),
-        # "stay_quiet": StayQuiet(),
-        # "attic": Attic(),
-        # "rats": Rats(),
-        # "the_road": Road(),
-        # "to_paris": ToParis(),
-        # "murika" Murika() #Ending
+        # TODO?: Could add more rooms and levels to make game more robust.
     }
 
     def __init__(self, start_room):

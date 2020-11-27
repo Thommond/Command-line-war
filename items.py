@@ -50,18 +50,6 @@ class Foods(Items):
         self.quantity = quantity
         super().__init__(name, ration_rate, ration_rate, type)
 
-# TODO: Make the apperal add to health and in attack check fro
-# apparel first then subtract until no appearal then health
-
-# Classical items
-gas_mask = Items("gas_mask", 10, 10, "apparel")
-
-boots = Items("boots", 10, 15)
-
-bullet_plate = Items("bullet_plate", 30, 25, "apparel")
-
-helmet = Items("helmet", 15, 20, "apparel")
-
 #   Weapons
 rifle = Weapons(2.5, "rifle", 20, 4, "weapon")
 
@@ -106,15 +94,6 @@ list_of_items = {
 
     },
 
-    "apparel": {
-
-    "boots": boots,
-    "bullet_plate": bullet_plate,
-    "gas_mask": gas_mask,
-    "helmet": helmet
-
-     },
-
     "food": {
 
     "choc": chocolate,
@@ -148,11 +127,9 @@ def find_item(user, name=False, desired_type=False, buying=False):
 
         Note: (Type out full anwser not letter.)
 
-        A. apparel
+        A. weapon
 
-        B. weapon
-
-        C. food
+        B. food
         """))
 
         item_type = input('# ')
@@ -363,19 +340,6 @@ def list_items():
                 Details of the {}
                 ########################
                 Quality | {}
-                ########################
-                Ration_rate | {}
-
-                """.format(item_choice.name,
-                item_choice.quality, item_choice.ration_rate)))
-
-            elif item_choice.type == 'apparel':
-
-                print(dedent("""
-
-                Details of the {}
-                ########################
-                Health Addition  | {}
                 ########################
                 Ration_rate | {}
 
