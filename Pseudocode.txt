@@ -1,5 +1,0 @@
-Item class manages items and their attributes such as ammo or depreciation and damage.
-
-Player class manages the state of players health and if they have a certain item.
-
-sRoom class manages the text and other attributes of a room such as enemies.

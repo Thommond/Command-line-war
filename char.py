@@ -17,21 +17,20 @@ class Player(object):
     player_inventory = {
         "rations": items.rations.quantity,
         "rifle": items.rifle.quality,
-        "gas_mask": items.gas_mask.quality,
         "hands": items.hands.quality,
     }
 
     def add_to_inventory(self, newItem):
 
         """Inventory checks to make sure
+        (hands do not count thats why 7)
         the player does not have more than 7 items"""
 
-        if len(self.player_inventory) >= 7:
+        if len(self.player_inventory) >= 8:
             print("""You already have the maximum of 7 items in your inventory,
             looks like you will need to get rid of an item to get {}""".format(newItem.name))
 
             print("Would you like to get rid of an item to add the {} to your inventory?".format(newItem.name))
-            item_name = input('# ')
 
             if 'yes' in choice:
                 dropping = player_inventory.drop()
@@ -49,7 +48,7 @@ class Player(object):
 
             if newItem.type == "food":
                 self.player_inventory[newItem.name] = newItem.health_addition
-            elif newItem.type == "weapon" or "item":
+            elif newItem.type == "weapon":
                 self.player_inventory[newItem.name] = newItem.quality
 
             print(dedent("""
@@ -79,39 +78,57 @@ class Player(object):
 
 
 
-    def drop(self):
+    def drop(self, validated=False):
 
-        valid_item = items.find_item(map.user)
+        if validated == False:
+            valid_item = items.find_item(map.user)
 
-        if valid_item:
+            if valid_item:
 
-            item = self.get_player_item_val(valid_item.name, map.user)
+                item = self.get_player_item_val(valid_item.name, map.user)
 
-            if item is not False:
-                self.player_inventory.pop(valid_item.name)
-                print(dedent('The {} has been removed from your inventory.'.format(valid_item.name)))
+                if item:
+                    self.player_inventory.pop(valid_item.name)
+                    print(dedent('The {} has been removed from your inventory.'.format(valid_item.name)))
+                else:
+                    map.message_pop_up(dedent('Not a valid item, try again.'))
+                    return item
             else:
-                map.message_pop_up(dedent('Not a valid item, try again.'))
-                return item
+                map.message_pop_up(dedent('Not an item, try again.'))
+                return valid_item
         else:
-            map.message_pop_up(dedent('Not an item, try again.'))
-            return valid_item
+            self.player_inventory.pop(valid_item.name)
+            print(dedent('The {} has been removed from your inventory.'.format(valid_item.name)))
 
 
-    def add_to_player_health(self, health_addition):
+
+    def add_to_player_health(self):
 
         """Calculating player health
         additions depending the food"""
 
         if self.health == 100:
-            return print(dedent("You are at full health you do not need nourishment from a {}!".format(health_addition)))
+            return print(dedent("You are at full health you do not need nourishment."))
 
         else:
 
-            self.health += health_addition
+            valid_food = items.find_item(map.user, desired_type="food")
 
-            if self.health > 100:
-                self.health = 100
+            if valid_food:
+                food = map.user.get_player_item_val(valid_food.name, map.user)
+
+                if food:
+
+                    if food == 1:
+
+                        dropping = player_inventory.drop(validated=True)
+
+                    elif food > 1:
+                        self.health += valid_food.health_add
+                        food -= 1
+
+                    if self.health > 100:
+                       self.health = 100
 
             return print(dedent("Your health is now {}".format(self.health)))
 
@@ -142,6 +159,7 @@ class Player(object):
             A. Attack back using a weapon from your inventory.
 
             B. Try to escape.
+
             """.format(self.name)))
         else:
             weap_quality -= 1
@@ -157,9 +175,9 @@ class Player(object):
             return 'What is the name of your item?'
 
         elif 'B' in user_choice:
+            # IDEA: Should there be limit on flee?
             if randint(1, 4) == 3:
                 return False
-
             else:
                 return "Well looks like your escape attempt failed."
         else:
@@ -185,4 +203,3 @@ class Enemy(Player):
 
     def __init__(self, health, name, boss=False):
         super().__init__(self, health, health, name)
-        self.boss = boss
